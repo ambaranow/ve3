@@ -17,7 +17,31 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "@config/*": [
+        "src/app/config/*"
+      ],
+      "@models/*": [
+        "src/app/models/*"
+      ],
+      "@services/*": [
+        "src/app/services/*"
+      ],
+      "@components/*": [
+        "src/app/components/*"
+      ],
+      "@directives/*": [
+        "src/app/directives/*"
+      ],
+      "@pipes/*": [
+        "src/app/pipes/*"
+      ],
+      "@validators/*": [
+        "src/app/validators/*"
+      ]
+    }
+
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,

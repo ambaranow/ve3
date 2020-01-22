@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { VideoObj } from './video-obj';
+import { VideoObj } from '@models/video-obj';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ReadFile } from 'ngx-file-helpers';
 

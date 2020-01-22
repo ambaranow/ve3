@@ -3,7 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { VideoFileService } from './video-file.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { HelpersService } from './helpers.service';
-import { VideoObj } from './video-obj';
+import { VideoObj } from '@models/video-obj';
 
 @Injectable({
   providedIn: 'root'

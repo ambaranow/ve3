@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild, ElementRef, ViewEncapsulation } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { VideoObj } from '../video-obj';
-import { VideoFileService } from '../video-file.service';
-import { VideoWorkService } from '../video-work.service';
-import { HelpersService } from '../helpers.service';
+import { VideoObj } from '@models/video-obj';
+import { VideoFileService } from '@services/video-file.service';
+import { VideoWorkService } from '@services/video-work.service';
+import { HelpersService } from '@services/helpers.service';
 
 @Component({
   selector: 'app-editor-area',
@@ -59,11 +59,6 @@ export class EditorAreaComponent implements OnInit {
     });
     this.videoWorkService.fileInfoSubj.subscribe(async info => {
       this.videoFileService.setFileInfo(info);
-      // if (info && info.durationMs) {
-      //   this.videoWorkService.getKeyFrames(this.sourceVideo).then(res => {
-      //     this.keyFrames = res;
-      //   });
-      // }
       if (info && info.durationMs) {
         const kfSubs = this.videoWorkService.keyFrameSubj.subscribe(src => {
           if (src) {

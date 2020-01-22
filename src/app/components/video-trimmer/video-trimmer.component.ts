@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
-import { VideoWorkService } from '../video-work.service';
-import { HelpersService } from '../helpers.service';
+import { VideoWorkService } from '@services/video-work.service';
+import { HelpersService } from '@services/helpers.service';
 
 @Component({
   selector: 'app-video-trimmer',
