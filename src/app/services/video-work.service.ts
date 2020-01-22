@@ -65,7 +65,7 @@ export class VideoWorkService {
         -ss ${ss} \
         -i ${f.file.name} \
         -f image2 \
-        -frames 1 \
+        -frames:v 1 \
         frame.bmp \
       `);
       const imageFile = await this.worker.read('frame.bmp');
@@ -181,9 +181,10 @@ export class VideoWorkService {
     const outputFileName = this.videoFileService.targetVideo.file.name;
     const outputFileType = this.videoFileService.targetVideo.file.type;
     if (params.duration) {
+      // https://trac.ffmpeg.org/wiki/Seeking
       await this.worker.run(`
-        -i ${inputFileName} \
         -ss ${params.start} \
+        -i ${inputFileName} \
         -t ${params.duration} \
         -loglevel info \
         -c copy -y ${outputFileName}
