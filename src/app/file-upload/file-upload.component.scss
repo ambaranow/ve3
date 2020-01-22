@@ -1,0 +1,24 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.file-picker {
+  height: 150px;
+  text-align: center;
+  background-color: rgba(199,199,199,.2);
+  border: 1px dashed  rgba(199,199,199,1);
+  cursor: pointer;
+
+  span {
+    display: block;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 24px;
+    i {
+      font-size: 32px;
+      vertical-align: middle;
+    }
+  }
+}

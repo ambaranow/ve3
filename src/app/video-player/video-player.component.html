@@ -1,0 +1,15 @@
+    <video
+      id="elSourceVideo"
+      #elSourceVideo
+      class="video-js"
+      controls
+      preload="auto"
+      width="640"
+      height="264"
+      poster=""
+      data-setup="{}">
+      <source
+        [src]="sourceVideo.src"
+        type="{{sourceVideo.type}}"
+        />
+    </video>

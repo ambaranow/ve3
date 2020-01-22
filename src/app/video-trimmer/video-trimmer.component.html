@@ -1,0 +1,24 @@
+<div class="trim">
+  <app-keyframes-line
+    *ngIf="keyFrames.length"
+    [keyFrames]="keyFrames"></app-keyframes-line>
+
+  <div class="trim-shadow trim-shadow__min" [ngStyle]="{width: shadowSize('min')}"></div>
+  <div class="trim-shadow trim-shadow__max" [ngStyle]="{width: shadowSize('max')}"></div>
+
+  <mat-slider class="trim-min" *ngIf="durationMs && keyFrames.length" thumbLabel="true" min="0" max="{{durationMs}}"
+    step="1"
+    [(ngModel)]="trim.min" (change)="setRange($event, 'min')" [displayWith]="helpersService.ms2TimeString"
+    value="{{trim.min}}"></mat-slider>
+  <mat-slider class="trim-max" *ngIf="durationMs && keyFrames.length" thumbLabel="true" min="0" max="{{durationMs}}"
+    step="1"
+    [(ngModel)]="trim.max" (change)="setRange($event, 'max')" [displayWith]="helpersService.ms2TimeString"
+    value="{{durationMs}}"></mat-slider>
+</div>
+<div class="trim-actions" *ngIf="durationMs && keyFrames.length">
+  <div class="trim-actions__left"></div>
+  <div class="trim-actions__main">
+    <button mat-flat-button color="accent" (click)="actionTrim($event)" *ngIf="trim.max < durationMs || trim.min > 0">Trim</button>
+  </div>
+  <div class="trim-actions__right"></div>
+</div>

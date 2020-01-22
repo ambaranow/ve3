@@ -1,0 +1,54 @@
+<mat-progress-bar
+  *ngIf="progress > 0 && progress < 100"
+  class="editor-progress"
+  mode="determinate"
+  [color]="'accent'"
+  [value]="progress"
+  ></mat-progress-bar>
+
+
+<div class="editor-video">
+  <div class="editor-video__container">
+    <div class="editor-video__player">
+      <div *ngIf="fileUploaded && sourceVideo">
+        <div class="video-wrapper">
+          <video id="elSourceVideo" #elSourceVideo class="video-js" controls preload="auto" width="640" height="264" poster=""
+            data-setup="{}">
+            <source [src]="sourceVideo.src" type="{{sourceVideo.type}}" />
+          </video>
+        </div>
+      </div>
+    </div>
+    <div class="editor-video__player">
+      <div *ngIf="fileUploaded && targetVideo">
+        <div class="video-wrapper">
+          <video id="elTargetVideo" #elTargetVideo class="video-js" controls preload="auto" width="640" height="264" poster=""
+            data-setup="{}">
+            <source [src]="targetVideo.src" type="{{targetVideo.type}}" />
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-video-trimmer [keyFrames]="keyFrames"></app-video-trimmer>
+  <div>
+    <form [formGroup]="form" class="upload-form">
+      <!-- Загрузка файла -->
+      <app-file-upload class="file-upload__ctrl"
+        formControlName="fileCtrl"
+        *ngIf="!fileUploaded"
+        [acceptType]="'video/*'"
+        (fileUploaded)="onFilePicked($event)"
+        [title]="'Drag video file, or click here'">
+      </app-file-upload>
+    </form>
+  </div>
+</div>
+
+  <!-- <form [formGroup]="form">
+</form>
+
+<app-ffmpeg
+  *ngIf="fileUploaded"
+  [afterFilePicked]="afterFilePicked"></app-ffmpeg> -->

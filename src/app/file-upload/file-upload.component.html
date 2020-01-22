@@ -1,0 +1,13 @@
+<div class="file-picker"
+    ngxFilePicker
+    ngxFileDropzone
+    #filePicker="ngxFilePicker"
+    [accept]="acceptType"
+    [readMode]="readModeType"
+    (filePick)="onFilePicked($event)"
+    (fileDrop)="onFilePicked($event)">
+  <span>
+    {{ title }}:
+    <i class="material-icons">add_to_queue</i>
+  </span>
+</div>

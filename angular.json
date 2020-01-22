@@ -28,9 +28,15 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
+              "./node_modules/video.js/dist/video-js.min.css",
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "./node_modules/@ffmpeg/ffmpeg/dist/ffmpeg.min.js",
+              "./node_modules/video.js/dist/video.min.js"
+            ],
+            "webWorkerTsConfig": "tsconfig.worker.json"
           },
           "configurations": {
             "production": {
@@ -93,9 +99,14 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
+              "./node_modules/video.js/dist/video-js.min.css",
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "./node_modules/@ffmpeg/ffmpeg/dist/ffmpeg.min.js",
+              "./node_modules/video.js/dist/video.min.js"
+            ]
           }
         },
         "lint": {
@@ -104,7 +115,8 @@
             "tsConfig": [
               "tsconfig.app.json",
               "tsconfig.spec.json",
-              "e2e/tsconfig.json"
+              "e2e/tsconfig.json",
+              "tsconfig.worker.json"
             ],
             "exclude": [
               "**/node_modules/**"
@@ -124,6 +136,7 @@
           }
         }
       }
-    }},
+    }
+  },
   "defaultProject": "ve"
 }
