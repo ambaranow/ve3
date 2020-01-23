@@ -55,7 +55,7 @@ export class VideoWorkService {
   async getFileInfo(f: VideoObj) {
     console.log('getFileInfo')
     const start = (new Date()).getTime();
-    const outputFileName = this.helpersService.getPreviewFileName(this.id);
+    const outputFileName = this.helpersService.getPreviewFileName();
     if (!this.isInited) {
       await this.init();
       // write source

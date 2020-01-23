@@ -57,22 +57,26 @@ export class HelpersService {
     return res;
   }
 
-  getFileName(f) {
-    const { name } = f;
-    return name.replace(/\s/g, '+');
-  }
+  // getFileName(f) {
+  //   const { name } = f;
+  //   return name.replace(/\s/g, '+');
+  // }
 
   getExtension(n: string) {
     const extensionRegExp = /\.([0-9a-z]{1,5})$/i;
     return (n.match(extensionRegExp)[1]).toLowerCase();
   }
 
-  getTargetFileName(n: string, id: string) {
-    return 'target_' + id + '.' + this.getExtension(n);
+  getSourceFileName(n: string) {
+    return 'source.' + this.getExtension(n);
   }
 
-  getPreviewFileName(id: string) {
-    return 'preview_' + id + '.mp4';
+  getTargetFileName(n: string) {
+    return 'target.' + this.getExtension(n);
+  }
+
+  getPreviewFileName() {
+    return 'preview.mp4';
   }
 
   getFps(fileinfo: { time: any; }, frames: number) {
