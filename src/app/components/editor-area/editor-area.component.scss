@@ -1,17 +1,4 @@
 .upload-form {
   width: 100%;
 }
-.editor-progress.mat-progress-bar {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  z-index: 999;
-  &.mat-accent .mat-progress-bar-buffer {
-    background-color: rgba(0, 0, 0, 0.3);
-  }
-  &.mat-accent .mat-progress-bar-background {
-    fill: rgba(0, 0, 0, 0.2);
-  }
-}
 

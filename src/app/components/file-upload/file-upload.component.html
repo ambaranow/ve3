@@ -1,13 +1,19 @@
 <div class="file-picker"
     ngxFilePicker
     ngxFileDropzone
-    #filePicker="ngxFilePicker"
+    #veFilePicker="ngxFilePicker"
     [accept]="acceptType"
     [readMode]="readModeType"
+    (readStart)="onReadStart($event)"
+    (readEnd)="onReadEnd($event)"
     (filePick)="onFilePicked($event)"
     (fileDrop)="onFilePicked($event)">
-  <span>
-    {{ title }}:
-    <i class="material-icons">add_to_queue</i>
-  </span>
-</div>
+    <span *ngIf="!fileUploadProgress">
+      {{ title }}:
+      <i class="material-icons">add_to_queue</i>
+    </span>
+    <span *ngIf="fileUploadProgress">
+      Upload in progress...
+      <i class="material-icons">hourglass_empty</i>
+    </span>
+  </div>

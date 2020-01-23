@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { VideoFileService } from '@services/video-file.service';
 import { VideoObj } from '@models/video-obj';
 import { Subscription } from 'rxjs';
+import { VideoWorkService } from '@services/video-work.service';
 
 @Component({
   selector: 've-video-preview',
@@ -11,10 +12,12 @@ import { Subscription } from 'rxjs';
 export class VideoPreviewComponent implements OnInit, OnDestroy {
 
   previewVideo: VideoObj;
-  previewVideoSubs: Subscription;
+  previewVideoSubs: Subscription[] = [];
+  progress: number = undefined;
 
   constructor(
     private videoFileService: VideoFileService,
+    private videoWorkService: VideoWorkService,
   ) { }
 
   ngOnInit() {
@@ -22,12 +25,25 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.previewVideoSubs.unsubscribe();
+    for (const subs of this.previewVideoSubs) {
+      subs.unsubscribe();
+    }
   }
 
   init() {
-    this.previewVideoSubs = this.videoFileService.previewVideoSubj.subscribe(f => {
-      this.previewVideo = f;
-    });
+    this.previewVideoSubs.push(
+      this.videoFileService.previewVideoSubj.subscribe(f => {
+        this.previewVideo = f;
+      })
+    );
+    this.previewVideoSubs.push(
+      this.videoWorkService.progress.subscribe(res => {
+        if (typeof res === 'number' && (res > 0 || res < 100)) {
+          this.progress = res;
+        } else {
+          this.progress = 0;
+        }
+      })
+    );
   }
 }

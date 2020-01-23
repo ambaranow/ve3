@@ -1,7 +1,16 @@
-<div class="preview-video">
-  <div *ngIf="previewVideo" class="video-preview">
+<div class="preview-video" [ngClass]="{'preview-video__empty': !previewVideo?.src}">
+  <div class="video-preview">
     <div class="video-wrapper">
+      <mat-progress-bar
+        *ngIf="progress > 0 && progress < 100 && !previewVideo?.src"
+        class="video-load"
+        mode="determinate"
+        [color]="'accent'"
+        [value]="progress"
+        ></mat-progress-bar>
+
       <video
+        *ngIf="previewVideo?.src"
         id="elPreviewVideo"
         #elPreviewVideo
         class="video-js"

@@ -3,10 +3,12 @@ import {
   Output,
   EventEmitter,
   forwardRef,
-  Input
+  Input,
+  ViewChild
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { ReadFile } from 'ngx-file-helpers';
+import { ReadFile, FilePickerDirective } from 'ngx-file-helpers';
+import { ViewService } from '@services/view.service';
 
 @Component({
   selector: 'app-file-upload',
@@ -24,15 +26,23 @@ export class FileUploadComponent implements ControlValueAccessor {
   private pickedFile: ReadFile;
   private propagateChange: (value) => void;
   private onTouched: () => void;
+  private fileUploadProgress = false;
 
   @Input() title: string;
 
   @Input() acceptType: string;
   @Input() readModeType: string;
 
+  @Output() fileUploadStart = new EventEmitter<any>();
   @Output() fileUploaded = new EventEmitter<ReadFile>();
 
-  constructor() {}
+
+  constructor(
+    private viewService: ViewService,
+    ) {}
+
+  @ViewChild('veFilePicker', {static: false})
+  private filePicker: FilePickerDirective;
 
   // the method set in registerOnChange, it is just
   // a placeholder for a method that takes one parameter,
@@ -53,15 +63,28 @@ export class FileUploadComponent implements ControlValueAccessor {
     this.disabled = isDisabled;
   }
 
+
+  onReadStart() {
+    // console.log('onReadStart')
+    this.fileUploadStart.emit();
+    this.viewService.loaderOn();
+    this.fileUploadProgress = true;
+  }
   /**
    * Вызывается при добавлении файла
    * @param $event - event
    */
   onFilePicked($event: ReadFile) {
+    // console.log('onFilePicked')
+    this.viewService.loaderOff();
     this.fileUploaded.emit($event);
     this.pickedFile = $event;
     this.file = $event.underlyingFile;
     this.propagateChange(this.file);
+    this.fileUploadProgress = false;
   }
-
+  onReadEnd() {
+    // console.log('onReadEnd')
+    this.filePicker.reset();
+  }
 }

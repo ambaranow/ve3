@@ -9,6 +9,23 @@
     width: 100%;
     max-width: 100%;
     position: relative;
+    background: rgba(199,199,199,.4);
+  }
+  &-load {
+    &.mat-progress-bar {
+      position: absolute;
+      left: 0;
+      top: 100%;
+      width: 100%;
+      height: 8px;
+      z-index: 1;
+      &.mat-accent .mat-progress-bar-buffer {
+        background-color: rgba(0, 0, 0, 0.3);
+      }
+      &.mat-accent .mat-progress-bar-background {
+        fill: rgba(0, 0, 0, 0.2);
+      }
+    }
   }
   &-js {
     max-width: 100%;
