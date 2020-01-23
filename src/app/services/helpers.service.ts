@@ -57,10 +57,22 @@ export class HelpersService {
     return res;
   }
 
-  getTargetFileName(n: string, id: string) {
+  getFileName(f) {
+    const { name } = f;
+    return name.replace(/\s/g, '+');
+  }
+
+  getExtension(n: string) {
     const extensionRegExp = /\.([0-9a-z]{1,5})$/i;
-    const extension = n.match(extensionRegExp)[1];
-    return 'v_' + id + '.' + extension.toLowerCase();
+    return (n.match(extensionRegExp)[1]).toLowerCase();
+  }
+
+  getTargetFileName(n: string, id: string) {
+    return 'target_' + id + '.' + this.getExtension(n);
+  }
+
+  getPreviewFileName(id: string) {
+    return 'preview_' + id + '.mp4';
   }
 
   getFps(fileinfo: { time: any; }, frames: number) {

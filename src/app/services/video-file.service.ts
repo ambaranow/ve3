@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { VideoObj } from '@models/video-obj';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ReadFile } from 'ngx-file-helpers';
+import { HelpersService } from './helpers.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,16 +14,15 @@ export class VideoFileService {
   sourceVideoSubj: BehaviorSubject<VideoObj> = new BehaviorSubject<VideoObj>(null);
   targetVideo: VideoObj;
   targetVideoSubj: BehaviorSubject<VideoObj> = new BehaviorSubject<VideoObj>(null);
+  previewVideo: VideoObj;
+  previewVideoSubj: BehaviorSubject<VideoObj> = new BehaviorSubject<VideoObj>(null);
+
   sourceFileInfo;
 
   constructor(
     private sanitizer: DomSanitizer,
+    private helpersService: HelpersService,
   ) { }
-
-  getFileName(f) {
-    const { name } = f;
-    return name.replace(/\s/g, '+');
-  }
 
   getSource() {
     return this.sourceVideo;
@@ -32,36 +32,54 @@ export class VideoFileService {
     return this.targetVideo;
   }
 
+  getView() {
+    return this.previewVideo;
+  }
+
   setSource(sourceVideo: ReadFile) {
     this.sourceVideo = {
       src: this.sanitizer.bypassSecurityTrustUrl(sourceVideo.content),
-      file: new File([this.dataURLtoU8arr(sourceVideo.content)], this.getFileName(sourceVideo), { type: sourceVideo.type }),
+      file: new File([this.dataURLtoU8arr(sourceVideo.content)], this.helpersService.getFileName(sourceVideo), { type: sourceVideo.type }),
       type: sourceVideo.type
     };
     this.sourceVideoSubj.next(this.sourceVideo);
   }
 
-  setTarget(targetVideo) {
+  setTarget(targetVideo: { data: any; type: string; name?: string; }) {
     this.targetVideo = {
       src: this.sanitizer.bypassSecurityTrustUrl(
         URL.createObjectURL(
           new Blob([targetVideo.data], { type: targetVideo.type })
         )
       ),
-      file: new File([targetVideo.data], this.getFileName(targetVideo), { type: targetVideo.type }),
+      file: new File([targetVideo.data], this.helpersService.getFileName(targetVideo), { type: targetVideo.type }),
       type: targetVideo.type
     };
     this.targetVideoSubj.next(this.targetVideo);
   }
 
+  setPreview(previewVideo: { data: any; type: string; name?: string; }) {
+    this.previewVideo = {
+      src: this.sanitizer.bypassSecurityTrustUrl(
+        URL.createObjectURL(
+          new Blob([previewVideo.data], { type: previewVideo.type })
+        )
+      ),
+      file: new File([previewVideo.data], this.helpersService.getFileName(previewVideo), { type: previewVideo.type }),
+      type: previewVideo.type
+    };
+    this.previewVideoSubj.next(this.previewVideo);
+  }
+
   getFileInfo() {
     return this.sourceFileInfo;
   }
-  setFileInfo(info) {
+
+  setFileInfo(info: any) {
     this.sourceFileInfo = info;
   }
 
-  dataURLtoU8arr(dataurl) {
+  dataURLtoU8arr(dataurl: string) {
     const arr = dataurl.split(',');
     const bstr = atob(arr[1]);
     let n = bstr.length;

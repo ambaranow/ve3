@@ -1,0 +1,21 @@
+<div class="preview-video">
+  <div *ngIf="previewVideo" class="video-preview">
+    <div class="video-wrapper">
+      <video
+        id="elPreviewVideo"
+        #elPreviewVideo
+        class="video-js"
+        controls
+        preload="auto"
+        width="640"
+        height="264"
+        poster=""
+        data-setup="{}"
+      >
+        <source
+          [src]="previewVideo.src"
+          type="{{previewVideo.type}}" />
+      </video>
+    </div>
+  </div>
+</div>

@@ -4,6 +4,7 @@ import { VideoObj } from '@models/video-obj';
 import { VideoFileService } from '@services/video-file.service';
 import { VideoWorkService } from '@services/video-work.service';
 import { HelpersService } from '@services/helpers.service';
+import { ViewService } from '@services/view.service';
 
 @Component({
   selector: 'app-editor-area',
@@ -20,6 +21,7 @@ export class EditorAreaComponent implements OnInit {
   progress: number = undefined;
 
   constructor(
+    private viewService: ViewService,
     private videoFileService: VideoFileService,
     private videoWorkService: VideoWorkService,
     private helpersService: HelpersService,
@@ -27,7 +29,7 @@ export class EditorAreaComponent implements OnInit {
 
   @ViewChild('elSourceVideo', {static: false})
   // получим прямой доступ к исходному видео
-  private _elSourceVideo: ElementRef;
+  // private _elSourceVideo: ElementRef;
 
   ngOnInit() {
     this.generateForm();
@@ -46,38 +48,45 @@ export class EditorAreaComponent implements OnInit {
     });
   }
 
-  async onFilePicked($event) {
-    this.videoFileService.setSource($event);
-    this.sourceVideo = this.videoFileService.getSource();
+  onFilePicked($event) {
+    this.viewService.loaderOn();
     this.fileUploaded = true;
-    await this.videoWorkService.getFileInfo(this.sourceVideo);
-    this.videoFileService.targetVideoSubj.subscribe(f => {
-      this.targetVideo = null;
-      setTimeout(() => {
-        this.targetVideo = f;
-      });
+    this.videoFileService.setSource($event);
+    this.videoWorkService.getFileInfo(this.videoFileService.getSource()).then(r => {
+
+    }).finally(() => {
+      this.viewService.loaderOff();
     });
-    this.videoWorkService.fileInfoSubj.subscribe(async info => {
-      this.videoFileService.setFileInfo(info);
-      if (info && info.durationMs) {
-        const kfSubs = this.videoWorkService.keyFrameSubj.subscribe(src => {
-          if (src) {
-            this.keyFrames.push(src);
-          }
-        });
-        const n = [];
-        const ind = Math.round(info.durationMs / 20);
-        for (let i = 0; i < info.durationMs; i++) {
-          if (i % ind === 0) {
-            n.push(this.helpersService.ms2TimeString(i));
-          }
-        }
-        this.videoWorkService.getKeyFrames2(n, this.sourceVideo).then(res => {
-          this.keyFrames = res;
-          kfSubs.unsubscribe();
-        });
-      }
-    });
+
+
+    // this.sourceVideo = this.videoFileService.getSource();
+    // this.videoFileService.targetVideoSubj.subscribe(f => {
+    //   this.targetVideo = null;
+    //   setTimeout(() => {
+    //     this.targetVideo = f;
+    //   });
+    // });
+    // this.videoWorkService.fileInfoSubj.subscribe(async info => {
+    //   this.videoFileService.setFileInfo(info);
+    //   if (info && info.durationMs) {
+    //     const kfSubs = this.videoWorkService.keyFrameSubj.subscribe(src => {
+    //       if (src) {
+    //         this.keyFrames.push(src);
+    //       }
+    //     });
+    //     const n = [];
+    //     const ind = Math.round(info.durationMs / 20);
+    //     for (let i = 0; i < info.durationMs; i++) {
+    //       if (i % ind === 0) {
+    //         n.push(this.helpersService.ms2TimeString(i));
+    //       }
+    //     }
+    //     this.videoWorkService.getKeyFrames2(n, this.sourceVideo).then(res => {
+    //       this.keyFrames = res;
+    //       kfSubs.unsubscribe();
+    //     });
+    //   }
+    // });
   }
 
 }

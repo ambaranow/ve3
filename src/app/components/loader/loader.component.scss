@@ -1,0 +1,20 @@
+.loader {
+  &-overlay {
+    position: fixed;
+    z-index: 999;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(255,255,255,0.5);
+    width: 100vw;
+    height: 100vh;
+  }
+  &-spinner {
+    position: fixed;
+    z-index: 999;
+    top: 50%;
+    left: 50%;
+    margin: -50px 0 0 -50px;
+  }
+}
