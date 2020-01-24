@@ -20,6 +20,8 @@ export class VideoTrimmerComponent implements OnInit {
     max: '0'
   };
 
+  keyFrames = [];
+
   constructor(
     private videoWorkService: VideoWorkService,
     private helpersService: HelpersService,
@@ -28,8 +30,6 @@ export class VideoTrimmerComponent implements OnInit {
   @Input()
   fileInfo;
 
-  @Input()
-  keyFrames;
 
   ngOnInit() {
     this.videoWorkService.fileInfoSubj.subscribe(info => {

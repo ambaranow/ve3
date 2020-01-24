@@ -11,7 +11,7 @@ import { MatProgressSpinnerModule } from '@angular/material';
 @NgModule({
   declarations: [
     AppComponent,
-    LoaderComponent
+    LoaderComponent,
   ],
   imports: [
     BrowserModule,

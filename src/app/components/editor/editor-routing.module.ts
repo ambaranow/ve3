@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { VideoPreviewComponent } from '@components/video-preview/video-preview.component';
 import { VideoTrimmerComponent } from '@components/video-trimmer/video-trimmer.component';
+import { EmptyComponent } from '@components/empty/empty.component';
 
 
 const editorRoutes: Routes = [
-  { path: 'video', component: VideoTrimmerComponent, outlet: 'actions' },
+  // { path: 'video', component: EmptyComponent, outlet: 'actions'},
+  { path: 'trim', component: VideoTrimmerComponent }
 ];
 
 @NgModule({

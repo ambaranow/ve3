@@ -11,6 +11,7 @@ import { FileUploadModule } from '../file-upload/file-upload.module';
 import { VideoTrimmerModule } from '../video-trimmer/video-trimmer.module';
 import { VideoPreviewComponent } from '@components/video-preview/video-preview.component';
 import { NavigationComponent } from '@components/navigation/navigation.component';
+import { EmptyComponent } from '@components/empty/empty.component';
 
 
 @NgModule({
@@ -18,6 +19,7 @@ import { NavigationComponent } from '@components/navigation/navigation.component
     EditorComponent,
     NavigationComponent,
     VideoPreviewComponent,
+    EmptyComponent,
   ],
   exports: [EditorComponent],
   imports: [
