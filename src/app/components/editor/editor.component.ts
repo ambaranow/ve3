@@ -7,12 +7,12 @@ import { HelpersService } from '@services/helpers.service';
 import { ViewService } from '@services/view.service';
 
 @Component({
-  selector: 'app-editor-area',
-  templateUrl: './editor-area.component.html',
-  styleUrls: ['./editor-area.component.scss'],
+  selector: 've-editor',
+  templateUrl: './editor.component.html',
+  styleUrls: ['./editor.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class EditorAreaComponent implements OnInit {
+export class EditorComponent implements OnInit {
   form: FormGroup;
   fileUploaded = false;
   sourceVideo: VideoObj;

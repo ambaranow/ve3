@@ -3,7 +3,7 @@ import { VideoWorkService } from '@services/video-work.service';
 import { HelpersService } from '@services/helpers.service';
 
 @Component({
-  selector: 'app-video-trimmer',
+  selector: 've-video-trimmer',
   templateUrl: './video-trimmer.component.html',
   styleUrls: ['./video-trimmer.component.scss'],
   encapsulation: ViewEncapsulation.None

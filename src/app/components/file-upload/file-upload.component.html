@@ -9,11 +9,11 @@
     (filePick)="onFilePicked($event)"
     (fileDrop)="onFilePicked($event)">
     <span *ngIf="!fileUploadProgress">
-      {{ title }}:
       <i class="material-icons">add_to_queue</i>
+      {{ title }}:
     </span>
     <span *ngIf="fileUploadProgress">
-      Upload in progress...
       <i class="material-icons">hourglass_empty</i>
+      Reading file...
     </span>
   </div>

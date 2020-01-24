@@ -1,3 +1,5 @@
+<ve-navigation *ngIf="fileUploaded"></ve-navigation>
+
 <form [formGroup]="form" class="upload-form">
   <!-- Загрузка файла -->
   <app-file-upload class="file-upload__ctrl"
@@ -9,8 +11,3 @@
   </app-file-upload>
 </form>
 
-<ve-video-preview
-  *ngIf="fileUploaded"
-></ve-video-preview>
-
-<!-- <router-outlet></router-outlet> -->
