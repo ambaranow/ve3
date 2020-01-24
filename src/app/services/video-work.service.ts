@@ -144,7 +144,7 @@ export class VideoWorkService {
     const outputFileName = this.helpersService.getTargetFileName(n);
     const previewFileName = this.helpersService.getPreviewFileName();
     const outputFileType = this.videoFileService.sourceVideo.file.type;
-    if (params.end) {
+    // if (params.end) {
       // https://trac.ffmpeg.org/wiki/Seeking
       // await this.worker.run(`
       //   -i ${inputFileName} \
@@ -154,14 +154,15 @@ export class VideoWorkService {
       //   -async 1 \
       //   -y ${outputFileName}
       //   `);
-      await this.worker.run(`
-        -i ${inputFileName} \
-        -ss ${params.start} \
-        -to ${params.end} \
-        -loglevel info \
-        -y ${outputFileName}
-      `);
-    }
+    await this.worker.run(`
+      -i ${inputFileName} \
+      -ss ${params.start} \
+      -to ${params.end} \
+      -async 1 \
+      -loglevel info \
+      -y ${outputFileName}
+    `);
+    // }
     // if (params.end) {
     //   await this.worker.trim(
     //     inputFileName,
