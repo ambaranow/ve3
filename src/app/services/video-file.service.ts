@@ -39,7 +39,11 @@ export class VideoFileService {
   setSource(sourceVideo: ReadFile) {
     this.sourceVideo = {
       src: this.sanitizer.bypassSecurityTrustUrl(sourceVideo.content),
-      file: new File([this.dataURLtoU8arr(sourceVideo.content)], this.helpersService.getSourceFileName(sourceVideo.name), { type: sourceVideo.type }),
+      file: new File(
+        [this.dataURLtoU8arr(sourceVideo.content)],
+        this.helpersService.getSourceFileName(sourceVideo.name),
+        { type: sourceVideo.type }
+        ),
       type: sourceVideo.type
     };
     this.sourceVideoSubj.next(this.sourceVideo);
@@ -52,7 +56,7 @@ export class VideoFileService {
           new Blob([targetVideo.data], { type: targetVideo.type })
         )
       ),
-      file: new File([targetVideo.data], this.helpersService.getTargetFileName(name), { type: targetVideo.type }),
+      file: new File([targetVideo.data], this.helpersService.getTargetFileName(targetVideo.name), { type: targetVideo.type }),
       type: targetVideo.type
     };
     this.targetVideoSubj.next(this.targetVideo);

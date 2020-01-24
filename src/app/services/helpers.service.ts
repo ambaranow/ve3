@@ -64,6 +64,7 @@ export class HelpersService {
 
   getExtension(n: string) {
     const extensionRegExp = /\.([0-9a-z]{1,5})$/i;
+    console.log(n.match(extensionRegExp))
     return (n.match(extensionRegExp)[1]).toLowerCase();
   }
 

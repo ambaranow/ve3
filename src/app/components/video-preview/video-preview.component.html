@@ -10,7 +10,7 @@
         ></mat-progress-bar>
 
       <video
-        *ngIf="previewVideo?.src"
+        *ngIf="previewVideo && previewVideo.src"
         id="elPreviewVideo"
         #elPreviewVideo
         class="video-js"

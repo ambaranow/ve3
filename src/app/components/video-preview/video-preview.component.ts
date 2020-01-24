@@ -33,7 +33,12 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
   init() {
     this.previewVideoSubs.push(
       this.videoFileService.previewVideoSubj.subscribe(f => {
-        this.previewVideo = f;
+        this.previewVideo = null;
+        console.log(this.previewVideo)
+        setTimeout(() => {
+          this.previewVideo = f;
+          console.log(this.previewVideo)
+        });
       })
     );
     this.previewVideoSubs.push(

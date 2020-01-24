@@ -53,7 +53,6 @@ export class EditorComponent implements OnInit {
     this.fileUploaded = true;
     this.videoFileService.setSource($event);
     this.videoWorkService.getFileInfo(this.videoFileService.getSource()).then(r => {
-
     }).finally(() => {
       this.viewService.loaderOff();
     });

@@ -53,9 +53,9 @@ export class VideoWorkService {
   }
 
   async getFileInfo(f: VideoObj) {
-    console.log('getFileInfo')
+    // console.log('getFileInfo')
     const start = (new Date()).getTime();
-    const outputFileName = this.helpersService.getPreviewFileName();
+    const previewFileName = this.helpersService.getPreviewFileName();
     if (!this.isInited) {
       await this.init();
       // write source
@@ -70,26 +70,28 @@ export class VideoWorkService {
           result.durationMs = this.helpersService.timeString2ms(result.time);
         }
         // console.log(result)
-        this.fileInfoSubj.next(result);
+        // this.fileInfoSubj.next(result);
       }
     });
     const isCopy = this.helpersService.getExtension(f.file.name) === 'mp4' ?
                   '-c copy' : '';
-    console.log('isCopy = ' + isCopy)
-    console.log('outputFileName = ' + outputFileName)
+    // console.log('isCopy = ' + isCopy)
+    // console.log('outputFileName = ' + outputFileName)
     await this.worker.run(`
       -i ${f.file.name} \
       -loglevel info \
       ${isCopy} \
-      -y ${outputFileName}
+      -y ${previewFileName}
       `);
-    const { data } = await this.worker.read(outputFileName);
+    const { data } = await this.worker.read(previewFileName);
     const previewFile = {
       data,
-      type: f.file.type,
-      name: outputFileName
+      type: 'video/mp4',
+      name: previewFileName
     };
     this.videoFileService.setPreview(previewFile);
+
+    this.fileInfoSubj.next(result);
     messSubscriber.unsubscribe();
     const end = (new Date()).getTime();
     console.log('Duration getFileInfo() = ' + this.helpersService.ms2TimeString(end - start));
@@ -97,14 +99,15 @@ export class VideoWorkService {
   }
 
 
-  async getKeyFrames2(n: string[], f: VideoObj) {
+  async getKeyFrames(n: string[]) {
     const start = (new Date()).getTime();
     if (!this.isInited) {
       await this.init();
-      await this.worker.write(f.file.name, f.file);
     }
+    const f: VideoObj = this.videoFileService.getSource();
     const keyFrames = [];
     for (const ss of n) {
+      console.log(ss)
       await this.worker.run(`
         -ss ${ss} \
         -i ${f.file.name} \
@@ -136,33 +139,59 @@ export class VideoWorkService {
     if (!this.isInited) {
       await this.init();
     }
-    const inputFileName = this.videoFileService.sourceVideo.file.name;
-    const outputFileName = this.videoFileService.targetVideo.file.name;
-    const outputFileType = this.videoFileService.targetVideo.file.type;
-    if (params.duration) {
-      // https://trac.ffmpeg.org/wiki/Seeking
-      await this.worker.run(`
-        -ss ${params.start} \
-        -i ${inputFileName} \
-        -t ${params.duration} \
-        -loglevel info \
-        -c copy -y ${outputFileName}
-        `);
-    }
+    const n = this.videoFileService.sourceVideo.file.name;
+    const inputFileName = this.helpersService.getSourceFileName(n);
+    const outputFileName = this.helpersService.getTargetFileName(n);
+    const previewFileName = this.helpersService.getPreviewFileName();
+    const outputFileType = this.videoFileService.sourceVideo.file.type;
     if (params.end) {
-      await this.worker.trim(
-        inputFileName,
-        outputFileName,
-        params.start,
-        params.end);
+      // https://trac.ffmpeg.org/wiki/Seeking
+      // await this.worker.run(`
+      //   -i ${inputFileName} \
+      //   -ss ${params.start} \
+      //   -t ${params.duration} \
+      //   -loglevel info \
+      //   -async 1 \
+      //   -y ${outputFileName}
+      //   `);
+      await this.worker.run(`
+        -i ${inputFileName} \
+        -ss ${params.start} \
+        -to ${params.end} \
+        -loglevel info \
+        -y ${outputFileName}
+      `);
     }
-    const { data } = await this.worker.read(outputFileName);
+    // if (params.end) {
+    //   await this.worker.trim(
+    //     inputFileName,
+    //     outputFileName,
+    //     params.start,
+    //     params.end);
+    // }
+    const tFile = await this.worker.read(outputFileName);
     const targetFile = {
-      data,
+      data: tFile.data,
       type: outputFileType,
       name: outputFileName
     };
     this.videoFileService.setTarget(targetFile);
+    const isCopy = this.helpersService.getExtension(outputFileName) === 'mp4' ?
+                  '-c copy' : '';
+    await this.worker.run(`
+      -i ${outputFileName} \
+      -loglevel info \
+      ${isCopy} \
+      -y ${previewFileName}
+    `);
+    const pFile = await this.worker.read(previewFileName);
+    const previewFile = {
+      data: pFile.data,
+      type: 'video/mp4',
+      name: previewFileName
+    };
+    this.videoFileService.setPreview(previewFile);
+
     const end = (new Date()).getTime();
     console.log('Duration trim() = ' + this.helpersService.ms2TimeString(end - start));
     this.progress.next(100);
