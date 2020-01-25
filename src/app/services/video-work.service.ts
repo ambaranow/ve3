@@ -79,7 +79,8 @@ export class VideoWorkService {
     // console.log('outputFileName = ' + outputFileName)
     await this.worker.run(`
       -i ${f.file.name} \
-      -loglevel info \
+      -hide_banner \
+      -loglevel debug \
       ${isCopy} \
       -y ${previewFileName}
       `);
@@ -133,7 +134,7 @@ export class VideoWorkService {
   }
 
 
-  async trim(params: {start: string|number, end?: string, duration?: number}) {
+  async trim(params: {ss: string|number, to: string|number, t: string|number, accurate: boolean}) {
     const start = (new Date()).getTime();
     // console.log(params)
     if (!this.isInited) {
@@ -144,57 +145,91 @@ export class VideoWorkService {
     const outputFileName = this.helpersService.getTargetFileName(n);
     const previewFileName = this.helpersService.getPreviewFileName();
     const outputFileType = this.videoFileService.sourceVideo.file.type;
-    // if (params.end) {
-      // https://trac.ffmpeg.org/wiki/Seeking
-      // await this.worker.run(`
-      //   -i ${inputFileName} \
-      //   -ss ${params.start} \
-      //   -t ${params.duration} \
-      //   -loglevel info \
-      //   -async 1 \
-      //   -y ${outputFileName}
-      //   `);
-    await this.worker.run(`
-      -i ${inputFileName} \
-      -ss ${params.start} \
-      -to ${params.end} \
-      -async 1 \
-      -loglevel info \
-      -y ${outputFileName}
-    `);
-    // }
-    // if (params.end) {
-    //   await this.worker.trim(
-    //     inputFileName,
-    //     outputFileName,
-    //     params.start,
-    //     params.end);
-    // }
-    const tFile = await this.worker.read(outputFileName);
-    const targetFile = {
-      data: tFile.data,
-      type: outputFileType,
-      name: outputFileName
-    };
-    this.videoFileService.setTarget(targetFile);
-    const isCopy = this.helpersService.getExtension(outputFileName) === 'mp4' ?
-                  '-c copy' : '';
-    await this.worker.run(`
-      -i ${outputFileName} \
-      -loglevel info \
-      ${isCopy} \
-      -y ${previewFileName}
-    `);
-    const pFile = await this.worker.read(previewFileName);
-    const previewFile = {
-      data: pFile.data,
-      type: 'video/mp4',
-      name: previewFileName
-    };
-    this.videoFileService.setPreview(previewFile);
 
-    const end = (new Date()).getTime();
-    console.log('Duration trim() = ' + this.helpersService.ms2TimeString(end - start));
-    this.progress.next(100);
+    // let command = `
+    // -y \
+    // -i ${inputFileName} \
+    // -force_key_frames ${params.ss},${params.to} \
+    // -c copy \
+    // -async 1 \
+    // tmp_${outputFileName}
+    // `;
+    // console.log(command.replace(/\s+/g, ' '))
+    // await this.worker.run(command.replace(/\s+/g, ' '));
+    // command = `
+    // -ss ${params.ss} \
+    // -i tmp_${outputFileName} \
+    // -t ${params.t} \
+    // -loglevel debug \
+    // -c copy \
+    // -avoid_negative_ts 1
+    // -async 1 \
+    // -y \
+    // ${outputFileName}
+    // `;
+    // console.log(command.replace(/\s+/g, ' '))
+    // await this.worker.run(command.replace(/\s+/g, ' '));
+    // https://stackoverflow.com/questions/55866736/ffmpeg-ss-option-is-not-accurate
+    // 3*AV_TIME_BASE / 23
+
+    // fast
+    let command = '';
+    if (!params.accurate) {
+      command = `
+      -y \
+      -ss ${params.ss} \
+      -i ${inputFileName} \
+      -to ${params.to} \
+      -loglevel debug \
+      -c copy -async 1 \
+      -avoid_negative_ts 1 \
+      tmp_${outputFileName}
+      `;
+      console.log(command.replace(/\s+/g, ' '))
+      await this.worker.run(command.replace(/\s+/g, ' '));
+    } else {
+      // accurate
+      command = `
+      -y \
+      -ss ${params.ss} \
+      -i ${inputFileName} \
+      -to ${params.to} \
+      -loglevel debug \
+      tmp_${outputFileName}
+      `;
+      console.log(command.replace(/\s+/g, ' '))
+      await this.worker.run(command.replace(/\s+/g, ' '));
+  }
+
+
+    // -avoid_negative_ts 1 или -copyts
+    await setTimeout (async () => {
+      const tFile = await this.worker.read(outputFileName);
+      const targetFile = {
+        data: tFile.data,
+        type: outputFileType,
+        name: outputFileName
+      };
+      this.videoFileService.setTarget(targetFile);
+      const isCopy = this.helpersService.getExtension(outputFileName) === 'mp4' ?
+                    '-c copy' : '';
+      await this.worker.run(`
+        -i ${outputFileName} \
+        -loglevel debug \
+        ${isCopy} \
+        -y ${previewFileName}
+      `);
+      const pFile = await this.worker.read(previewFileName);
+      const previewFile = {
+        data: pFile.data,
+        type: 'video/mp4',
+        name: previewFileName
+      };
+      this.videoFileService.setPreview(previewFile);
+
+      const end = (new Date()).getTime();
+      console.log('Duration trim() = ' + this.helpersService.ms2TimeString(end - start));
+      this.progress.next(100);
+    }, 1000)
   }
 }
