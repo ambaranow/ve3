@@ -101,6 +101,7 @@ export class VideoWorkService {
 
 
   async getKeyFrames2(n: string[]) {
+    // https://usefulangle.com/post/46/javascript-get-video-thumbnail-image-jpeg-png
     const start = (new Date()).getTime();
     const keyFrames = [];
     const video = this.videoPlayerService.getPlayer();
