@@ -106,6 +106,9 @@ export class VideoWorkService {
     const keyFrames = [];
     const video = this.videoPlayerService.getPlayer();
     console.log(video)
+    // console.log(video.currentTime())
+    // video.currentTime(1)
+    // video.play()
     // for (const ss of n) {
 
     // }

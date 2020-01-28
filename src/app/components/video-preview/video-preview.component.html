@@ -16,7 +16,7 @@
       <div>
         <video
           *ngIf="previewVideo && previewVideo.src"
-          class="video-js"
+          class="video-element video-js"
           id="previewVideoPlayer"
           controls
           preload="auto"
@@ -25,9 +25,9 @@
           poster=""
           data-setup="{}"
         >
-          <source
+          <!-- <source
             [src]="previewVideo.src"
-            type="{{previewVideo.type}}" />
+            type="{{previewVideo.type}}" /> -->
         </video>
       </div>
     </div>

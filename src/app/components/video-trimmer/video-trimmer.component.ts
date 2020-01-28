@@ -1,9 +1,10 @@
-import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, Input, ViewEncapsulation, ElementRef } from '@angular/core';
 import { VideoWorkService } from '@services/video-work.service';
 import { HelpersService } from '@services/helpers.service';
 import { ViewService } from '@services/view.service';
 import { Subscription } from 'rxjs';
 import { VideoFileService } from '@services/video-file.service';
+import { VideoPlayerService } from '@services/video-player.service';
 
 @Component({
   selector: 've-video-trimmer',
@@ -27,11 +28,13 @@ export class VideoTrimmerComponent implements OnInit {
   fileInfoSubs: Subscription;
   keyFrames = [];
   processKeyFrames = false;
+  player = undefined;
 
   constructor(
     private viewService: ViewService,
     private videoWorkService: VideoWorkService,
     private videoFileService: VideoFileService,
+    private videoPlayerService: VideoPlayerService,
     private helpersService: HelpersService,
   ) { }
 
@@ -109,8 +112,13 @@ export class VideoTrimmerComponent implements OnInit {
         n.push(this.helpersService.ms2TimeString(i));
       }
     }
-    this.videoWorkService.getKeyFrames2(n).then(res => {
-        this.keyFrames = res;
+    this.videoPlayerService.playerSubj.subscribe(player => {
+      if (player) {
+        this.player = player;
+        this.videoWorkService.getKeyFrames2(n).then(res => {
+          this.keyFrames = res;
+        });
+      }
     });
     // this.videoWorkService.getKeyFrames(n).then(res => {
     //   this.keyFrames = res;

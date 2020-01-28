@@ -4,6 +4,7 @@ import { VideoObj } from '@models/video-obj';
 import { Subscription } from 'rxjs';
 import { VideoWorkService } from '@services/video-work.service';
 import { VideoPlayerService } from '@services/video-player.service';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 've-video-preview',
@@ -13,10 +14,12 @@ import { VideoPlayerService } from '@services/video-player.service';
 export class VideoPreviewComponent implements OnInit, OnDestroy {
 
   previewVideo: VideoObj;
+  player;
   previewVideoSubs: Subscription[] = [];
   progress: number = undefined;
 
   constructor(
+    private sanitizer: DomSanitizer,
     private videoFileService: VideoFileService,
     private videoWorkService: VideoWorkService,
     private videoPlayerService: VideoPlayerService,
@@ -30,6 +33,9 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
     for (const subs of this.previewVideoSubs) {
       subs.unsubscribe();
     }
+    if (this.player) {
+      this.player.dispose();
+    }
   }
 
   init() {
@@ -37,14 +43,35 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
       this.videoFileService.previewVideoSubj.subscribe(f => {
         console.log(f)
         this.previewVideo = null;
+        this.videoPlayerService.setPlayer(undefined);
+        this.player = undefined;
         // console.log(this.previewVideo)
         setTimeout(() => {
           this.previewVideo = f;
           if (f && f.src) {
             setTimeout(() => {
-              const player = window['videojs']('previewVideoPlayer', {}, () => {
-                this.videoPlayerService.setPlayer(player);
-              });
+              this.player = window['videojs'](
+                    'previewVideoPlayer',
+                    {
+                      controls: true,
+                      autoplay: false,
+                      preload: 'true',
+                      sources: [
+                        {
+                          src: this.sanitizer.sanitize(4, f.src),
+                          type: f.type
+                        }
+                      ]
+                    },
+                    () => {
+                      setTimeout(() => {
+                        this.player.play().then(() => {
+                          this.player.pause();
+                          this.player.currentTime(0);
+                        });
+                        this.videoPlayerService.setPlayer(this.player);
+                      }, 1);
+                    });
             }, 1);
           }
         }, 1);
