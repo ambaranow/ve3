@@ -1,4 +1,5 @@
 import { Injectable, ElementRef } from '@angular/core';
+import { async } from '@angular/core/testing';
 
 @Injectable({
   providedIn: 'root'
@@ -10,20 +11,12 @@ export class VideoPlayerService {
   constructor() { }
 
   getPlayer() {
-    const getEl = () => {
-      console.log('getEl ' + this.attempts)
-      if (!this.player && this.attempts < 20) {
-        this.attempts++;
-        setTimeout(() => {
-          getEl();
-        }, 500);
-      } else {
-        console.log('>>>> this.player')
-        return this.player;
-      }
-    };
-    this.attempts = 0;
-    getEl();
+    // if (this.player) {
+      return this.player;
+    // } else if (this.attempts < 20) {
+    //   this.attempts++;
+    //   setTimeout(this.getPlayer, 500);
+    // }
   }
 
 
