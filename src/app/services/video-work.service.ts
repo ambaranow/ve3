@@ -4,6 +4,7 @@ import { VideoFileService } from './video-file.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { HelpersService } from './helpers.service';
 import { VideoObj } from '@models/video-obj';
+import { VideoPlayerService } from './video-player.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,13 +16,13 @@ export class VideoWorkService {
   progress: BehaviorSubject<number> = new BehaviorSubject<number>(-1);
   message: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   id = String((new Date()).getTime());
-  fileInfoSubj: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
   keyFrameSubj: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
   constructor(
     private sanitizer: DomSanitizer,
     private videoFileService: VideoFileService,
+    private videoPlayerService: VideoPlayerService,
     private helpersService: HelpersService,
   ) { }
 
@@ -42,7 +43,7 @@ export class VideoWorkService {
       progress: p => {
         const prgrs = (!p || p.ratio < 0 || p.ratio > 1) ? 0 : p.ratio;
         this.progress.next(Math.round(prgrs * 10000) / 100);
-        console.log(p)
+        // console.log(p)
         // console.log(prgrs)
       },
     });
@@ -65,12 +66,11 @@ export class VideoWorkService {
     const messSubscriber = this.message.subscribe(res => {
       if (res) {
         const resObj = this.helpersService.parseMessageToJson(res.message);
+        // console.log(res)
         result = {...result, ...resObj};
         if (result.time) {
           result.durationMs = this.helpersService.timeString2ms(result.time);
         }
-        // console.log(result)
-        // this.fileInfoSubj.next(result);
       }
     });
     const isCopy = this.helpersService.getExtension(f.file.name) === 'mp4' ?
@@ -91,14 +91,27 @@ export class VideoWorkService {
       name: previewFileName
     };
     this.videoFileService.setPreview(previewFile);
+    this.videoFileService.setFileInfo(result);
 
-    this.fileInfoSubj.next(result);
     messSubscriber.unsubscribe();
     const end = (new Date()).getTime();
     console.log('Duration getFileInfo() = ' + this.helpersService.ms2TimeString(end - start));
     return result;
   }
 
+
+  async getKeyFrames2(n: string[]) {
+    const start = (new Date()).getTime();
+    const keyFrames = [];
+    const video = this.videoPlayerService.getPlayer();
+    console.log(video)
+    // for (const ss of n) {
+
+    // }
+    const end = (new Date()).getTime();
+    console.log('Duration getKeyFrames() = ' + this.helpersService.ms2TimeString(end - start));
+    return keyFrames;
+  }
 
   async getKeyFrames(n: string[]) {
     const start = (new Date()).getTime();
@@ -108,7 +121,7 @@ export class VideoWorkService {
     const f: VideoObj = this.videoFileService.getSource();
     const keyFrames = [];
     for (const ss of n) {
-      console.log(ss)
+      // console.log(ss)
       await this.worker.run(`
         -ss ${ss} \
         -i ${f.file.name} \
@@ -136,7 +149,7 @@ export class VideoWorkService {
 
   async trim(params: {ss: string|number, to: string|number, t: string|number, accurate: boolean}) {
     const start = (new Date()).getTime();
-    // console.log(params)
+    console.log(params)
     if (!this.isInited) {
       await this.init();
     }
@@ -204,7 +217,7 @@ export class VideoWorkService {
 
     // -avoid_negative_ts 1 или -copyts
     await setTimeout (async () => {
-      const tFile = await this.worker.read(outputFileName);
+      const tFile = await this.worker.read('tmp_' + outputFileName);
       const targetFile = {
         data: tFile.data,
         type: outputFileType,
@@ -214,7 +227,7 @@ export class VideoWorkService {
       const isCopy = this.helpersService.getExtension(outputFileName) === 'mp4' ?
                     '-c copy' : '';
       await this.worker.run(`
-        -i ${outputFileName} \
+        -i tmp_${outputFileName} \
         -loglevel debug \
         ${isCopy} \
         -y ${previewFileName}

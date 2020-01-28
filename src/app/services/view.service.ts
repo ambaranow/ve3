@@ -15,8 +15,10 @@ export class ViewService {
 
 
   loaderOn() {
-    this.loader = true;
-    this.loaderSubj.next(true);
+    if (!this.loader) {
+      this.loader = true;
+      this.loaderSubj.next(true);
+    }
   }
 
   loaderOff() {

@@ -3,6 +3,7 @@ import { VideoWorkService } from '@services/video-work.service';
 import { HelpersService } from '@services/helpers.service';
 import { ViewService } from '@services/view.service';
 import { Subscription } from 'rxjs';
+import { VideoFileService } from '@services/video-file.service';
 
 @Component({
   selector: 've-video-trimmer',
@@ -22,6 +23,7 @@ export class VideoTrimmerComponent implements OnInit {
     max: '0'
   };
 
+  fileInfo;
   fileInfoSubs: Subscription;
   keyFrames = [];
   processKeyFrames = false;
@@ -29,12 +31,13 @@ export class VideoTrimmerComponent implements OnInit {
   constructor(
     private viewService: ViewService,
     private videoWorkService: VideoWorkService,
+    private videoFileService: VideoFileService,
     private helpersService: HelpersService,
   ) { }
 
 
   ngOnInit() {
-    this.fileInfoSubs = this.videoWorkService.fileInfoSubj.subscribe(info => {
+    this.fileInfoSubs = this.videoFileService.sourceFileInfoSubj.subscribe(info => {
       if (info && info.durationMs) {
         if (this.fileInfoSubs) {
           this.fileInfoSubs.unsubscribe();
@@ -75,6 +78,8 @@ export class VideoTrimmerComponent implements OnInit {
       ss: '' + this.trim.min / 1000, // start point
       to: '' + this.trim.max / 1000, // end point
       t: '' + (this.trim.max - this.trim.min) / 1000, // duration
+      frame_from: this.trim.min * this.fileInfo.fps / 1000,
+      frame_to: this.trim.max * this.fileInfo.fps / 1000,
       accurate: false // https://trac.ffmpeg.org/wiki/Seeking#Notes
       // false - fast but not accurate
       // between keyframes, larger than selected
@@ -93,22 +98,26 @@ export class VideoTrimmerComponent implements OnInit {
     this.processKeyFrames = true;
     const kfSubs = this.videoWorkService.keyFrameSubj.subscribe(src => {
       if (src) {
+        this.viewService.loaderOn();
         this.keyFrames.push(src);
       }
     });
     const n = [];
-    const ind = Math.round(this.durationMs / 1);
+    const ind = Math.round(this.durationMs / 10);
     for (let i = 0; i < this.durationMs; i++) {
       if (i % ind === 0) {
         n.push(this.helpersService.ms2TimeString(i));
       }
     }
-    this.viewService.loaderOn();
-    this.videoWorkService.getKeyFrames(n).then(res => {
-      this.keyFrames = res;
-      kfSubs.unsubscribe();
-      this.viewService.loaderOff();
-      this.processKeyFrames = false;
+    this.videoWorkService.getKeyFrames2(n).then(res => {
+        this.keyFrames = res;
     });
+    // this.videoWorkService.getKeyFrames(n).then(res => {
+    //   this.keyFrames = res;
+    //   kfSubs.unsubscribe();
+    //   this.fileInfo = this.videoFileService.getFileInfo();
+    //   this.viewService.loaderOff();
+    //   this.processKeyFrames = false;
+    // });
   }
 }

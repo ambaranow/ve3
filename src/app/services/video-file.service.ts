@@ -18,6 +18,7 @@ export class VideoFileService {
   previewVideoSubj: BehaviorSubject<VideoObj> = new BehaviorSubject<VideoObj>(null);
 
   sourceFileInfo;
+  sourceFileInfoSubj: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
   constructor(
     private sanitizer: DomSanitizer,
@@ -80,7 +81,14 @@ export class VideoFileService {
   }
 
   setFileInfo(info: any) {
+    if (!info.fps || parseInt(info.fps, 10) === 0) {
+      // try to set fps
+      if (!isNaN(info.frame) && info.time) {
+        info.fps = Math.round(info.frame / (this.helpersService.timeString2ms(info.time) / 1000));
+      }
+    }
     this.sourceFileInfo = info;
+    this.sourceFileInfoSubj.next(this.sourceFileInfo);
   }
 
   dataURLtoU8arr(dataurl: string) {

@@ -1,8 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { VideoFileService } from '@services/video-file.service';
 import { VideoObj } from '@models/video-obj';
 import { Subscription } from 'rxjs';
 import { VideoWorkService } from '@services/video-work.service';
+import { VideoPlayerService } from '@services/video-player.service';
 
 @Component({
   selector: 've-video-preview',
@@ -18,6 +19,7 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
   constructor(
     private videoFileService: VideoFileService,
     private videoWorkService: VideoWorkService,
+    private videoPlayerService: VideoPlayerService,
   ) { }
 
   ngOnInit() {
@@ -33,12 +35,19 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
   init() {
     this.previewVideoSubs.push(
       this.videoFileService.previewVideoSubj.subscribe(f => {
+        console.log(f)
         this.previewVideo = null;
         // console.log(this.previewVideo)
         setTimeout(() => {
           this.previewVideo = f;
-          // console.log(this.previewVideo)
-        });
+          if (f && f.src) {
+            setTimeout(() => {
+              const player = window['videojs']('previewVideoPlayer', {}, () => {
+                this.videoPlayerService.setPlayer(player);
+              });
+            }, 1);
+          }
+        }, 1);
       })
     );
     this.previewVideoSubs.push(
