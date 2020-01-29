@@ -17,8 +17,6 @@ export class VideoWorkService {
   message: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   id = String((new Date()).getTime());
 
-  keyFrameSubj: BehaviorSubject<any> = new BehaviorSubject<any>(null);
-
   constructor(
     private sanitizer: DomSanitizer,
     private videoFileService: VideoFileService,
@@ -100,56 +98,39 @@ export class VideoWorkService {
   }
 
 
-  async getKeyFrames2(n: string[]) {
-    // https://usefulangle.com/post/46/javascript-get-video-thumbnail-image-jpeg-png
+  async getKeyFrames(n: number[]) {
     const start = (new Date()).getTime();
     const keyFrames = [];
     const video = this.videoPlayerService.getPlayer();
-    console.log(video)
-    // console.log(video.currentTime())
-    // video.currentTime(1)
-    // video.play()
-    // for (const ss of n) {
-
-    // }
-    const end = (new Date()).getTime();
-    console.log('Duration getKeyFrames() = ' + this.helpersService.ms2TimeString(end - start));
-    return keyFrames;
-  }
-
-  async getKeyFrames(n: string[]) {
-    const start = (new Date()).getTime();
-    if (!this.isInited) {
-      await this.init();
-    }
-    const f: VideoObj = this.videoFileService.getSource();
-    const keyFrames = [];
-    for (const ss of n) {
-      // console.log(ss)
-      await this.worker.run(`
-        -ss ${ss} \
-        -i ${f.file.name} \
-        -f image2 \
-        -frames:v 1 \
-        frame.bmp \
-      `);
-      const imageFile = await this.worker.read('frame.bmp');
-      const type = 'image/bmp';
-      const src = this.sanitizer.bypassSecurityTrustUrl(
-        URL.createObjectURL(
-          new Blob([imageFile.data], { type })
-        )
-      );
+    const canvas = document.createElement('canvas');
+    const videoEl = video.children_[0];
+    canvas.width = video.width_;
+    canvas.height = video.height_;
+    const ctx = canvas.getContext('2d');
+    let runnerIndex = 0;
+    const setKeyFrame = () => {
+      ctx.drawImage(videoEl, 0, 0, video.width_, video.height_);
+      const src = canvas.toDataURL();
       if (src) {
-        this.keyFrameSubj.next(src);
         keyFrames.push(src);
       }
-    }
+      runnerIndex++;
+      if (runnerIndex < n.length) {
+        runner(runnerIndex);
+      } else {
+        videoEl.removeEventListener('timeupdate', setKeyFrame);
+        video.currentTime(0);
+      }
+    };
+    videoEl.addEventListener('timeupdate', setKeyFrame);
+    const runner = (i: number) => {
+      video.currentTime(n[i]);
+    };
+    runner(runnerIndex);
     const end = (new Date()).getTime();
     console.log('Duration getKeyFrames() = ' + this.helpersService.ms2TimeString(end - start));
     return keyFrames;
   }
-
 
   async trim(params: {ss: string|number, to: string|number, t: string|number, accurate: boolean}) {
     const start = (new Date()).getTime();

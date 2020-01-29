@@ -98,25 +98,21 @@ export class VideoTrimmerComponent implements OnInit {
     if (this.processKeyFrames || !this.durationMs) {
       return;
     }
-    this.processKeyFrames = true;
-    const kfSubs = this.videoWorkService.keyFrameSubj.subscribe(src => {
-      if (src) {
-        this.viewService.loaderOn();
-        this.keyFrames.push(src);
-      }
-    });
     const n = [];
     const ind = Math.round(this.durationMs / 10);
     for (let i = 0; i < this.durationMs; i++) {
       if (i % ind === 0) {
-        n.push(this.helpersService.ms2TimeString(i));
+        n.push(Math.round(i / 1000));
       }
     }
+    this.viewService.loaderOn();
     this.videoPlayerService.playerSubj.subscribe(player => {
       if (player) {
         this.player = player;
-        this.videoWorkService.getKeyFrames2(n).then(res => {
+        this.viewService.loaderOn();
+        this.videoWorkService.getKeyFrames(n).then(res => {
           this.keyFrames = res;
+          this.viewService.loaderOff();
         });
       }
     });

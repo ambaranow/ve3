@@ -41,56 +41,47 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
   init() {
     this.previewVideoSubs.push(
       this.videoFileService.previewVideoSubj.subscribe(f => {
-        console.log(f)
         this.previewVideo = null;
         this.videoPlayerService.setPlayer(undefined);
         this.player = undefined;
-        // console.log(this.previewVideo)
-        setTimeout(() => {
-          this.previewVideo = f;
-          if (f && f.src) {
-            setTimeout(() => {
-              this.player = window['videojs'](
-                    'previewVideoPlayer',
-                    {
-                      controls: true,
-                      autoplay: false,
-                      preload: 'true',
-                      sources: [
-                        {
-                          src: this.sanitizer.sanitize(4, f.src),
-                          type: f.type
-                        }
-                      ]
-                    },
-                    () => {
-                      setTimeout(() => {
-                      //   <script>
-                      //   // Show loading animation.
-                      //   var playPromise = video.play();
-                      
-                      //   if (playPromise !== undefined) {
-                      //     playPromise.then(_ => {
-                      //       // Automatic playback started!
-                      //       // Show playing UI.
-                      //     })
-                      //     .catch(error => {
-                      //       // Auto-play was prevented
-                      //       // Show paused UI.
-                      //     });
-                      //   }
-                      // </script>
-
-                        this.player.play().then(() => {
+        this.previewVideo = f;
+        if (f && f.src) {
+          setTimeout(() => {
+            this.player = window['videojs'](
+                  'previewVideoPlayer',
+                  {
+                    controls: true,
+                    autoplay: false,
+                    preload: 'true',
+                    sources: [
+                      {
+                        src: this.sanitizer.sanitize(4, f.src),
+                        type: f.type
+                      }
+                    ]
+                  },
+                  () => {
+                    this.player.on('loadedmetadata', () => {
+                      const playPromise = this.player.play();
+                      if (playPromise !== undefined) {
+                        playPromise.then(() => {
                           this.player.pause();
                           this.player.currentTime(0);
+                          setTimeout(() => {
+                            this.videoPlayerService.setPlayer(this.player);
+                          });
+                          // Automatic playback started!
+                          // Show playing UI.
+                        })
+                        .catch(error => {
+                          // Auto-play was prevented
+                          // Show paused UI.
                         });
-                        this.videoPlayerService.setPlayer(this.player);
-                      }, 1);
+                      }
                     });
-            }, 1);
-          }
-        }, 1);
+                  });
+          }, 1);
+        }
       })
     );
     this.previewVideoSubs.push(
