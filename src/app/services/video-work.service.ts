@@ -169,7 +169,7 @@ export class VideoWorkService {
     // await this.worker.run(command.replace(/\s+/g, ' '));
     // https://stackoverflow.com/questions/55866736/ffmpeg-ss-option-is-not-accurate
     // 3*AV_TIME_BASE / 23
-
+    // https://superuser.com/questions/459313/how-to-cut-at-exact-frames-using-ffmpeg
     // fast
     let command = '';
     if (!params.accurate) {
@@ -197,7 +197,7 @@ export class VideoWorkService {
       `;
       console.log(command.replace(/\s+/g, ' '))
       await this.worker.run(command.replace(/\s+/g, ' '));
-  }
+    }
 
 
     // -avoid_negative_ts 1 или -copyts
