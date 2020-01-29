@@ -8,6 +8,7 @@ export class VideoPlayerService {
 
   player = undefined;
   playerSubj: BehaviorSubject<any> = new BehaviorSubject<any>(undefined);
+  currentTimeSubj: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   attempts = 0;
   constructor() { }
 
@@ -15,9 +16,9 @@ export class VideoPlayerService {
     return this.player;
   }
 
-
   setPlayer(el) {
     this.player = el; // DIV, video element wrapper
     this.playerSubj.next(this.player);
   }
+
 }

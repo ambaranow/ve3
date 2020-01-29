@@ -40,6 +40,11 @@ export class HelpersService {
     return pad(hrs) + ':' + pad(mins) + ':' + pad(secs) + '.' + pad(ms, 3);
   }
 
+  ms2TimeStringNoMs = (s: number) => {
+    const msRegExp = /\.([0-9a-z]{1,5})$/i;
+    let res = this.ms2TimeString(s);
+    return res.replace(msRegExp, '');
+  }
    /**
     * Convert string pairs to object
     * @param mess a=b c=d ... y=z
@@ -64,7 +69,7 @@ export class HelpersService {
 
   getExtension(n: string) {
     const extensionRegExp = /\.([0-9a-z]{1,5})$/i;
-    console.log(n.match(extensionRegExp))
+    // console.log(n.match(extensionRegExp))
     return (n.match(extensionRegExp)[1]).toLowerCase();
   }
 
@@ -80,13 +85,14 @@ export class HelpersService {
     return 'preview.mp4';
   }
 
-  getFps(fileinfo: { time: any; }, frames: number) {
+  getFps(fileinfo: { time: number, frames: number; }) {
     let res = 1;
-    const durSeconds = Math.floor(this.timeString2ms(fileinfo.time) / 1000);
+    const durSeconds = fileinfo.time / 1000;
     if (!isNaN(durSeconds)) {
-      res = 1 / (durSeconds / frames);
+      res = 1 / (durSeconds / fileinfo.frames);
       res = Math.floor(res * 100000) / 100000;
     }
+    console.log('fps = ' + res)
     return res;
   }
 }

@@ -19,7 +19,8 @@
           height: auto;
           transform: rotate(-90deg);
           padding: 0 2px;
-          top: 30px;
+          top: 18px;
+          background-color: #ffd740;
         }
 
         .mat-slider-thumb-label-text {
@@ -47,12 +48,13 @@
       }
       .mat-slider-thumb {
         border-radius: 2px;
-        width: 16px;
+        width: 14px;
         height: 50px;
         transform: none;
         bottom: auto;
         top: 0;
-        right: -8px;
+        right: -15px;
+        background-color: #ffd740;
       }
     }
   }
@@ -61,8 +63,13 @@
       &.ng-touched,
       &.cdk-focused {
         .mat-slider-thumb-label {
-          right: -29px;
+          right: -18px;
         }
+      }
+    }
+    &.mat-slider-horizontal {
+      .mat-slider-thumb {
+        right: 1px;
       }
     }
   }
@@ -71,7 +78,7 @@
       &.ng-touched,
       &.cdk-focused {
         .mat-slider-thumb-label {
-          right: -46px;
+          right: -33px;
         }
       }
     }

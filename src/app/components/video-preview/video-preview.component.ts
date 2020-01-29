@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, ViewChild, ElementRef, ChangeDetectorRef 
 import { VideoFileService } from '@services/video-file.service';
 import { VideoObj } from '@models/video-obj';
 import { Subscription } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import { VideoWorkService } from '@services/video-work.service';
 import { VideoPlayerService } from '@services/video-player.service';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -50,7 +51,7 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
             this.player = window['videojs'](
                   'previewVideoPlayer',
                   {
-                    controls: true,
+                    controls: false,
                     autoplay: false,
                     preload: 'true',
                     sources: [
@@ -79,6 +80,11 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
                         });
                       }
                     });
+                    this.videoPlayerService.currentTimeSubj
+                      .pipe(debounceTime(10))
+                      .subscribe(t => {
+                        this.player.currentTime(t);
+                      });
                   });
           }, 1);
         }

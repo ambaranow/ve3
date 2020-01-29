@@ -81,10 +81,13 @@ export class VideoFileService {
   }
 
   setFileInfo(info: any) {
-    if (!info.fps || parseInt(info.fps, 10) === 0) {
-      // try to set fps
-      if (!isNaN(info.frame) && info.time) {
-        info.fps = Math.round(info.frame / (this.helpersService.timeString2ms(info.time) / 1000));
+    if (info.time) {
+      info.durationMs = this.helpersService.timeString2ms(info.time);
+      if (!isNaN(info.frame)) {
+        info.fps = this.helpersService.getFps({
+          time: this.helpersService.timeString2ms(info.time),
+          frames: info.frame
+        });
       }
     }
     this.sourceFileInfo = info;

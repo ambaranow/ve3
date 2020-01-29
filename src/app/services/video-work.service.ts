@@ -5,6 +5,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { HelpersService } from './helpers.service';
 import { VideoObj } from '@models/video-obj';
 import { VideoPlayerService } from './video-player.service';
+import { ViewService } from './view.service';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,7 @@ export class VideoWorkService {
     private sanitizer: DomSanitizer,
     private videoFileService: VideoFileService,
     private videoPlayerService: VideoPlayerService,
+    private viewService: ViewService,
     private helpersService: HelpersService,
   ) { }
 
@@ -66,9 +68,6 @@ export class VideoWorkService {
         const resObj = this.helpersService.parseMessageToJson(res.message);
         // console.log(res)
         result = {...result, ...resObj};
-        if (result.time) {
-          result.durationMs = this.helpersService.timeString2ms(result.time);
-        }
       }
     });
     const isCopy = this.helpersService.getExtension(f.file.name) === 'mp4' ?
@@ -119,11 +118,15 @@ export class VideoWorkService {
         runner(runnerIndex);
       } else {
         videoEl.removeEventListener('timeupdate', setKeyFrame);
-        video.currentTime(0);
+        setTimeout(() => {
+          this.videoPlayerService.currentTimeSubj.next(0);
+          this.viewService.loaderOff();
+        });
       }
     };
     videoEl.addEventListener('timeupdate', setKeyFrame);
     const runner = (i: number) => {
+      this.viewService.loaderOn();
       video.currentTime(n[i]);
     };
     runner(runnerIndex);
