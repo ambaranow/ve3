@@ -76,6 +76,7 @@ export class VideoTrimmerComponent implements OnInit {
         }
         this.shadowTrim.max = 100 - (this.trim.max * 100 / this.fileInfo.durationMs) + '%';
         this.videoPlayerService.currentTimeSubjs.source.next(this.trim.max / 1000);
+        this.setPlayProgress(this.trim.max);
         break;
       case 'min':
         this.trim.min = $event.value;
