@@ -1,4 +1,5 @@
-<div class="preview-video" [ngClass]="{'preview-video__empty': !previewVideo?.src}">
+<div class="preview-video preview-video__{{id}}"
+  [ngClass]="{'preview-video__empty': !previewVideo?.src}">
   <div class="video-preview">
     <div class="video-wrapper">
       <mat-progress-bar
@@ -17,17 +18,13 @@
         <video
           *ngIf="previewVideo && previewVideo.src"
           class="video-element video-js"
-          id="previewVideoPlayer"
-          controls
-          preload="auto"
+          id="{{id + 'PreviewVideoPlayer'}}"
           width="640"
           height="264"
-          poster=""
-          data-setup="{}"
         >
           <!-- <source
-            [src]="previewVideo.src"
-            type="{{previewVideo.type}}" /> -->
+            [src]="sourcePreviewVideo.src"
+            type="{{sourcePreviewVideo.type}}" /> -->
         </video>
       </div>
     </div>

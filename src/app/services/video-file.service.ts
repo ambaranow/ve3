@@ -12,10 +12,12 @@ export class VideoFileService {
 
   sourceVideo: VideoObj;
   sourceVideoSubj: BehaviorSubject<VideoObj> = new BehaviorSubject<VideoObj>(null);
+  sourcePreviewVideo: VideoObj;
+  sourcePreviewVideoSubj: BehaviorSubject<VideoObj> = new BehaviorSubject<VideoObj>(null);
   targetVideo: VideoObj;
   targetVideoSubj: BehaviorSubject<VideoObj> = new BehaviorSubject<VideoObj>(null);
-  previewVideo: VideoObj;
-  previewVideoSubj: BehaviorSubject<VideoObj> = new BehaviorSubject<VideoObj>(null);
+  targetPreviewVideo: VideoObj;
+  targetPreviewVideoSubj: BehaviorSubject<VideoObj> = new BehaviorSubject<VideoObj>(null);
 
   sourceFileInfo;
   sourceFileInfoSubj: BehaviorSubject<any> = new BehaviorSubject<any>(null);
@@ -29,12 +31,16 @@ export class VideoFileService {
     return this.sourceVideo;
   }
 
+  getSourcePreview() {
+    return this.sourcePreviewVideo;
+  }
+
   getTarget() {
     return this.targetVideo;
   }
 
-  getView() {
-    return this.previewVideo;
+  getTargetPreview() {
+    return this.sourcePreviewVideo;
   }
 
   setSource(sourceVideo: ReadFile) {
@@ -50,6 +56,19 @@ export class VideoFileService {
     this.sourceVideoSubj.next(this.sourceVideo);
   }
 
+  setSourcePreview(sourcePreviewVideo: { data: any; type: string; name?: string; }) {
+    this.sourcePreviewVideo = {
+      src: this.sanitizer.bypassSecurityTrustUrl(
+        URL.createObjectURL(
+          new Blob([sourcePreviewVideo.data], { type: sourcePreviewVideo.type })
+        )
+      ),
+      file: new File([sourcePreviewVideo.data], this.helpersService.getSourcePreviewFileName(), { type: sourcePreviewVideo.type }),
+      type: sourcePreviewVideo.type
+    };
+    this.sourcePreviewVideoSubj.next(this.sourcePreviewVideo);
+  }
+
   setTarget(targetVideo: { data: any; type: string; name?: string; }) {
     this.targetVideo = {
       src: this.sanitizer.bypassSecurityTrustUrl(
@@ -63,17 +82,17 @@ export class VideoFileService {
     this.targetVideoSubj.next(this.targetVideo);
   }
 
-  setPreview(previewVideo: { data: any; type: string; name?: string; }) {
-    this.previewVideo = {
+  setTargetPreview(targetPreviewVideo: { data: any; type: string; name?: string; }) {
+    this.targetPreviewVideo = {
       src: this.sanitizer.bypassSecurityTrustUrl(
         URL.createObjectURL(
-          new Blob([previewVideo.data], { type: previewVideo.type })
+          new Blob([targetPreviewVideo.data], { type: targetPreviewVideo.type })
         )
       ),
-      file: new File([previewVideo.data], this.helpersService.getPreviewFileName(), { type: previewVideo.type }),
-      type: previewVideo.type
+      file: new File([targetPreviewVideo.data], this.helpersService.getTargetPreviewFileName(), { type: targetPreviewVideo.type }),
+      type: targetPreviewVideo.type
     };
-    this.previewVideoSubj.next(this.previewVideo);
+    this.targetPreviewVideoSubj.next(this.targetPreviewVideo);
   }
 
   getFileInfo() {

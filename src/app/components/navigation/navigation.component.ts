@@ -35,7 +35,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
   }
 
   init() {
-    this.videoPlayerService.playerSubj.subscribe(player => {
+    this.videoPlayerService.playerSubjs.source.subscribe(player => {
       this.isPreviewReady = player ? true : false;
     });
   }

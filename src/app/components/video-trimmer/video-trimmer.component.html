@@ -5,6 +5,7 @@
       mat-stroked-button
       (click)="trimmedRangePlayPause()"
       >
+      {{isPaused}}
       <i class="material-icons" *ngIf="!isPaused">pause</i>
       <i class="material-icons" *ngIf="isPaused">play_arrow</i>
     </button>

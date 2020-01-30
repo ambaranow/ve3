@@ -56,7 +56,7 @@ export class VideoWorkService {
   async getFileInfo(f: VideoObj) {
     // console.log('getFileInfo')
     const start = (new Date()).getTime();
-    const previewFileName = this.helpersService.getPreviewFileName();
+    const previewFileName = this.helpersService.getSourcePreviewFileName();
     if (!this.isInited) {
       await this.init();
       // write source
@@ -87,7 +87,7 @@ export class VideoWorkService {
       type: 'video/mp4',
       name: previewFileName
     };
-    this.videoFileService.setPreview(previewFile);
+    this.videoFileService.setSourcePreview(previewFile);
     this.videoFileService.setFileInfo(result);
 
     messSubscriber.unsubscribe();
@@ -100,7 +100,7 @@ export class VideoWorkService {
   async getKeyFrames(n: number[]) {
     const start = (new Date()).getTime();
     const keyFrames = [];
-    const video = this.videoPlayerService.getPlayer();
+    const video = this.videoPlayerService.getPlayer('source');
     const canvas = document.createElement('canvas');
     const videoEl = video.children_[0];
     canvas.width = video.width_;
@@ -119,7 +119,7 @@ export class VideoWorkService {
       } else {
         videoEl.removeEventListener('timeupdate', setKeyFrame);
         setTimeout(() => {
-          this.videoPlayerService.currentTimeSubj.next(0);
+          this.videoPlayerService.currentTimeSubjs.source.next(0);
           this.viewService.loaderOff();
         });
       }
@@ -144,7 +144,7 @@ export class VideoWorkService {
     const n = this.videoFileService.sourceVideo.file.name;
     const inputFileName = this.helpersService.getSourceFileName(n);
     const outputFileName = this.helpersService.getTargetFileName(n);
-    const previewFileName = this.helpersService.getPreviewFileName();
+    const targetPreviewFileName = this.helpersService.getTargetPreviewFileName();
     const outputFileType = this.videoFileService.sourceVideo.file.type;
 
     // let command = `
@@ -201,8 +201,6 @@ export class VideoWorkService {
       console.log(command.replace(/\s+/g, ' '))
       await this.worker.run(command.replace(/\s+/g, ' '));
     }
-
-
     // -avoid_negative_ts 1 или -copyts
     await setTimeout (async () => {
       const tFile = await this.worker.read('tmp_' + outputFileName);
@@ -218,19 +216,19 @@ export class VideoWorkService {
         -i tmp_${outputFileName} \
         -loglevel debug \
         ${isCopy} \
-        -y ${previewFileName}
+        -y ${targetPreviewFileName}
       `);
-      const pFile = await this.worker.read(previewFileName);
+      const pFile = await this.worker.read(targetPreviewFileName);
       const previewFile = {
         data: pFile.data,
         type: 'video/mp4',
-        name: previewFileName
+        name: targetPreviewFileName
       };
-      this.videoFileService.setPreview(previewFile);
+      this.videoFileService.setTargetPreview(previewFile);
 
       const end = (new Date()).getTime();
       console.log('Duration trim() = ' + this.helpersService.ms2TimeString(end - start));
       this.progress.next(100);
-    }, 1000)
+    }, 1000);
   }
 }

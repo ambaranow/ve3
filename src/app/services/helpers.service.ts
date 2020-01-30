@@ -81,8 +81,12 @@ export class HelpersService {
     return 'target.' + this.getExtension(n);
   }
 
-  getPreviewFileName() {
-    return 'preview.mp4';
+  getSourcePreviewFileName() {
+    return 'sourcePreview.mp4';
+  }
+
+  getTargetPreviewFileName() {
+    return 'targetPreview.mp4';
   }
 
   getFps(fileinfo: { time: number, frames: number; }) {

@@ -16,8 +16,9 @@
 
     <mat-sidenav-content>
       <div class="ve-content-wrapper">
-        <ve-video-preview></ve-video-preview>
+        <ve-video-preview id="source"></ve-video-preview>
         <ve-video-trimmer *ngIf="isPreviewReady"></ve-video-trimmer>
+        <ve-video-preview id="target"></ve-video-preview>
         <!-- <router-outlet></router-outlet> -->
       </div>
 
