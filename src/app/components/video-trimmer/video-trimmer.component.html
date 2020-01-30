@@ -1,4 +1,36 @@
+<div class="trim-actions" *ngIf="fileInfo.durationMs && keyFrames.length">
+  <div class="trim-actions__left"></div>
+  <div class="trim-actions__main">
+    <button
+      mat-stroked-button
+      (click)="trimmedRangePlayPause()"
+      >
+      <i class="material-icons" *ngIf="!isPaused">pause</i>
+      <i class="material-icons" *ngIf="isPaused">play_arrow</i>
+    </button>
+    <span>
+      {{trim.duration}}
+    </span>
+    <button
+      mat-stroked-button
+      (click)="actionTrim($event)"
+      *ngIf="trim.max < fileInfo.durationMs || trim.min > 0"
+      ><i
+        class="material-icons">last_page</i>Trim<i
+        class="material-icons">first_page</i></button>
+  </div>
+  <div class="trim-actions__right"></div>
+</div>
+
+
 <div class="trim">
+  <mat-progress-bar
+    [ngStyle]="{left: playProgress.left, width: playProgress.width}"
+    class="trim-play-progress"
+    mode="determinate"
+    color="accent"
+    [value]="playProgress.time"
+    ></mat-progress-bar>
   <app-keyframes-line
     *ngIf="keyFrames.length"
     [keyFrames]="keyFrames"></app-keyframes-line>
@@ -32,11 +64,4 @@
     [displayWith]="helpersService.ms2TimeStringNoMs"
     [value]="fileInfo.durationMs"
     ></mat-slider>
-</div>
-<div class="trim-actions" *ngIf="fileInfo.durationMs && keyFrames.length">
-  <div class="trim-actions__left"></div>
-  <div class="trim-actions__main">
-    <button mat-flat-button color="accent" (click)="actionTrim($event)" *ngIf="trim.max < fileInfo.durationMs || trim.min > 0">Trim</button>
-  </div>
-  <div class="trim-actions__right"></div>
 </div>

@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { VideoTrimmerComponent } from './video-trimmer.component';
 import { KeyframesLineModule } from '../keyframes-line/keyframes-line.module';
-import { MatSliderModule, MatButtonModule } from '@angular/material';
+import { MatSliderModule, MatButtonModule, MatProgressBarModule } from '@angular/material';
 import { FormsModule } from '@angular/forms';
 
 
@@ -16,6 +16,7 @@ import { FormsModule } from '@angular/forms';
     KeyframesLineModule,
     MatSliderModule,
     MatButtonModule,
+    MatProgressBarModule,
   ],
   exports: [
     VideoTrimmerComponent,

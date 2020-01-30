@@ -16,7 +16,8 @@ export class VideoTrimmerComponent implements OnInit {
 
   trim = {
     min: 0,
-    max: 0
+    max: 0,
+    duration: ''
   };
   shadowTrim = {
     min: '0',
@@ -28,6 +29,13 @@ export class VideoTrimmerComponent implements OnInit {
   keyFrames = [];
   processKeyFrames = false;
   player = undefined;
+  isPaused = true;
+  playProgress = {
+    left: '0',
+    width: '100%',
+    time: 0
+  };
+  trimmedPlayBinded;
 
   constructor(
     private viewService: ViewService,
@@ -35,7 +43,9 @@ export class VideoTrimmerComponent implements OnInit {
     private videoFileService: VideoFileService,
     private videoPlayerService: VideoPlayerService,
     private helpersService: HelpersService,
-  ) { }
+  ) {
+    this.trimmedPlayBinded = this.trimmedPlay.bind(this);
+  }
 
 
   ngOnInit() {
@@ -71,8 +81,12 @@ export class VideoTrimmerComponent implements OnInit {
         }
         this.shadowTrim.min = (this.trim.min * 100 / this.fileInfo.durationMs) + '%';
         this.videoPlayerService.currentTimeSubj.next(this.trim.min / 1000);
+        this.setPlayProgress(this.trim.min)
         break;
     }
+    this.trim.duration = this.helpersService.ms2TimeString(this.trim.max - this.trim.min);
+    // this.playProgress.left = (this.trim.min * 100 / this.fileInfo.durationMs) + '%';
+    // this.playProgress.width = ((this.trim.max - this.trim.min) * 100 / this.fileInfo.durationMs) + '%';
   }
 
   shadowSize(key: string) {
@@ -99,10 +113,38 @@ export class VideoTrimmerComponent implements OnInit {
     this.viewService.loaderOff();
   }
 
+  trimmedPlay() {
+    const t = this.player.currentTime();
+    this.setPlayProgress(t * 1000);
+    if (t >= this.trim.max / 1000) {
+      this.trimmedRangePlayPause();
+      this.player.off('timeupdate', this.trimmedPlayBinded);
+      this.videoPlayerService.currentTimeSubj.next(this.trim.max / 1000);
+      this.setPlayProgress(this.trim.max);
+    }
+  }
+  trimmedPause() {
+  }
+
+  trimmedRangePlayPause() {
+    this.isPaused = !this.isPaused;
+    if (!this.isPaused) {
+      const t = this.player.currentTime();
+      if (t < this.trim.min / 1000 || t >= this.trim.max / 1000) {
+        this.videoPlayerService.currentTimeSubj.next(this.trim.min / 1000);
+      }
+      this.player.on('timeupdate', this.trimmedPlayBinded);
+      this.videoPlayerService.play();
+    } else {
+      this.videoPlayerService.pause();
+    }
+  }
+
+  setPlayProgress(t) {
+    this.playProgress.time = (t * 100) / this.fileInfo.durationMs;
+  }
 
   async init() {
-    console.log(this.fileInfo)
-    console.log(this.trim)
     if (this.processKeyFrames || !this.fileInfo.durationMs) {
       return;
     }
@@ -117,9 +159,10 @@ export class VideoTrimmerComponent implements OnInit {
     this.videoPlayerService.playerSubj.subscribe(player => {
       if (player) {
         this.player = player;
+        this.setRange({value: this.fileInfo.durationMs}, 'max', 'init');
+
         this.videoWorkService.getKeyFrames(n).then(res => {
           this.keyFrames = res;
-        }).finally(() => {
         });
       }
     });

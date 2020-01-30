@@ -19,6 +19,19 @@ export class VideoPlayerService {
   setPlayer(el) {
     this.player = el; // DIV, video element wrapper
     this.playerSubj.next(this.player);
+    console.log(this.player)
+  }
+
+  play() {
+    if (this.player) {
+      this.player.play();
+    }
+  }
+
+  pause() {
+    if (this.player) {
+      this.player.pause();
+    }
   }
 
 }
