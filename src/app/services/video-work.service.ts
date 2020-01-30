@@ -31,7 +31,7 @@ export class VideoWorkService {
     const start = (new Date()).getTime();
     const { createWorker } = window['FFmpeg'];
     this.worker = createWorker({
-      corePath: '/assets/ffmpeg-core.js',
+      corePath: '/assets/ffmpeg/ffmpeg-core.js',
       logger: (res) => {
         // console.log(res);
         // if (res.message && !res.type || res.type !== 'stderr') {
@@ -71,13 +71,13 @@ export class VideoWorkService {
       }
     });
     const isCopy = this.helpersService.getExtension(f.file.name) === 'mp4' ?
-                  '-c copy' : '';
+                  '-c copy -async 1' : '';
     // console.log('isCopy = ' + isCopy)
     // console.log('outputFileName = ' + outputFileName)
     await this.worker.run(`
       -i ${f.file.name} \
       -hide_banner \
-      -loglevel debug \
+      -loglevel info \
       ${isCopy} \
       -y ${previewFileName}
       `);
@@ -181,7 +181,7 @@ export class VideoWorkService {
       -ss ${params.ss} \
       -i ${inputFileName} \
       -to ${params.to} \
-      -loglevel debug \
+      -loglevel info \
       -c copy -async 1 \
       -avoid_negative_ts 1 \
       tmp_${outputFileName}
@@ -195,7 +195,7 @@ export class VideoWorkService {
       -ss ${params.ss} \
       -i ${inputFileName} \
       -to ${params.to} \
-      -loglevel debug \
+      -loglevel info \
       tmp_${outputFileName}
       `;
       console.log(command.replace(/\s+/g, ' '))
