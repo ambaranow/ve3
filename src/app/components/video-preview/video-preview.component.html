@@ -14,7 +14,7 @@
         Please wait, still reading the file...
       </p>
 
-      <div>
+      <div #videoEl>
         <video
           *ngIf="previewVideo && previewVideo.src"
           class="video-element video-js"
@@ -22,9 +22,9 @@
           width="640"
           height="264"
         >
-          <!-- <source
-            [src]="sourcePreviewVideo.src"
-            type="{{sourcePreviewVideo.type}}" /> -->
+          <source
+            [src]="previewVideo.src"
+            type="{{previewVideo.type}}" />
         </video>
       </div>
     </div>

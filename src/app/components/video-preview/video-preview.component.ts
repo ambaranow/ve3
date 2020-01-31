@@ -28,6 +28,9 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
     private videoPlayerService: VideoPlayerService,
   ) { }
 
+  @ViewChild('videoEl', {static: false})
+  private videoParent: ElementRef;
+
   ngOnInit() {
     this.init();
   }
@@ -44,64 +47,79 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
   init() {
     this.previewVideoSubs.push(
       this.videoFileService[this.id + 'PreviewVideoSubj'].subscribe(f => {
-        console.log(this.id + 'PreviewVideoSubj')
-        console.log(f)
+        // console.log(this.id + 'PreviewVideoSubj')
+        // console.log(f)
         if (this.player) {
           // reset player
-          this.player.reset();
-          this.player.dispose();
+          // this.player.reset();
+          // this.player.dispose();
           this.player = undefined;
           this.previewVideo = null;
           this.videoPlayerService.setPlayer(undefined, this.id);
         }
         this.previewVideo = f;
-        // setTimeout(() => {
-          if (f && f.src) {
-            if (!this.player) {
-              setTimeout(() => {
-                this.player = window['videojs'](
-                      this.id + 'PreviewVideoPlayer',
-                      {
-                        controls: this.id === 'target',
-                        autoplay: false,
-                        preload: 'true',
-                        sources: [
-                          {
-                            src: this.sanitizer.sanitize(4, f.src),
-                            type: f.type
-                          }
-                        ]
-                      },
-                      () => {
-                        this.player.on('loadedmetadata', () => {
-                          const playPromise = this.player.play();
-                          if (playPromise !== undefined) {
-                            playPromise.then(() => {
-                              this.player.pause();
-                              this.player.currentTime(0);
-                              setTimeout(() => {
-                                this.videoPlayerService.setPlayer(this.player, this.id);
-                              });
-                              // Automatic playback started!
-                              // Show playing UI.
-                            })
-                            .catch(error => {
-                              // Auto-play was prevented
-                              // Show paused UI.
+        if (f && f.src) {
+          setTimeout(() => {
+            console.log(this.videoParent.nativeElement)
+            console.log(this.videoParent.nativeElement.querySelector('video'))
+            console.log(window)
+            this.player = this.videoParent.nativeElement.querySelector('video');
+            this.videoPlayerService.setPlayer(this.player, this.id);
+            this.videoPlayerService.currentTimeSubjs[this.id]
+              .pipe(debounceTime(20))
+              .subscribe(t => {
+                this.player.currentTime = t;
+              });
+
+          }, 1);
+        }
+        /*
+        if (f && f.src) {
+          if (!this.player) {
+            setTimeout(() => {
+              this.player = window['videojs'](
+                    this.id + 'PreviewVideoPlayer',
+                    {
+                      controls: this.id === 'target',
+                      autoplay: false,
+                      preload: 'true',
+                      sources: [
+                        {
+                          src: this.sanitizer.sanitize(4, f.src),
+                          type: f.type
+                        }
+                      ]
+                    },
+                    () => {
+                      this.player.on('loadedmetadata', () => {
+                        const playPromise = this.player.play();
+                        if (playPromise !== undefined) {
+                          playPromise.then(() => {
+                            this.player.pause();
+                            this.player.currentTime(0);
+                            setTimeout(() => {
+                              this.videoPlayerService.setPlayer(this.player, this.id);
                             });
-                          }
-                        });
-                        this.videoPlayerService.currentTimeSubjs[this.id]
-                          .pipe(debounceTime(20))
-                          .subscribe(t => {
-                            this.player.currentTime(t);
+                            // Automatic playback started!
+                            // Show playing UI.
+                          })
+                          .catch(error => {
+                            // Auto-play was prevented
+                            // Show paused UI.
                           });
+                        }
                       });
-                console.log(this.player)
-                }, 1);
-              }
-          }
-        // }, 100);
+                      this.videoPlayerService.currentTimeSubjs[this.id]
+                        .pipe(debounceTime(20))
+                        .subscribe(t => {
+                          this.player.currentTime(t);
+                        });
+                    });
+              console.log(this.player)
+              }, 1);
+            }
+        }
+        */
       })
     );
     this.previewVideoSubs.push(

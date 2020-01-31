@@ -100,15 +100,17 @@ export class VideoWorkService {
   async getKeyFrames(n: number[]) {
     const start = (new Date()).getTime();
     const keyFrames = [];
-    const video = this.videoPlayerService.getPlayer('source');
+    const videoEl = this.videoPlayerService.getPlayer('source');
     const canvas = document.createElement('canvas');
-    const videoEl = video.children_[0];
-    canvas.width = video.width_;
-    canvas.height = video.height_;
+    // const videoEl = video.children_[0];
+    const vW = videoEl.videoWidth;
+    const vH = videoEl.videoHeight;
+    canvas.width = vW;
+    canvas.height = vH;
     const ctx = canvas.getContext('2d');
     let runnerIndex = 0;
     const setKeyFrame = () => {
-      ctx.drawImage(videoEl, 0, 0, video.width_, video.height_);
+      ctx.drawImage(videoEl, 0, 0, vW, vH);
       const src = canvas.toDataURL();
       if (src) {
         keyFrames.push(src);
@@ -127,7 +129,7 @@ export class VideoWorkService {
     videoEl.addEventListener('timeupdate', setKeyFrame);
     const runner = (i: number) => {
       this.viewService.loaderOn();
-      video.currentTime(n[i]);
+      videoEl.currentTime = n[i];
     };
     runner(runnerIndex);
     const end = (new Date()).getTime();
