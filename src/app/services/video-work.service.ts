@@ -105,6 +105,7 @@ export class VideoWorkService {
     // const videoEl = video.children_[0];
     const vW = videoEl.videoWidth;
     const vH = videoEl.videoHeight;
+    console.log(vW + ' | ' + vH)
     canvas.width = vW;
     canvas.height = vH;
     const ctx = canvas.getContext('2d');
@@ -113,7 +114,7 @@ export class VideoWorkService {
       ctx.drawImage(videoEl, 0, 0, vW, vH);
       const src = canvas.toDataURL();
       if (src) {
-        keyFrames.push(src);
+        keyFrames.push(this.sanitizer.bypassSecurityTrustUrl(src));
       }
       runnerIndex++;
       if (runnerIndex < n.length) {
@@ -121,7 +122,6 @@ export class VideoWorkService {
       } else {
         videoEl.removeEventListener('timeupdate', setKeyFrame);
         setTimeout(() => {
-          this.videoPlayerService.currentTimeSubjs.source.next(0);
           this.viewService.loaderOff();
         });
       }

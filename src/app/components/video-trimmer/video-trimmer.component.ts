@@ -172,6 +172,10 @@ export class VideoTrimmerComponent implements OnInit {
 
         this.videoWorkService.getKeyFrames(n).then(res => {
           this.keyFrames = res;
+          setTimeout(() => {
+            this.videoPlayerService.currentTimeSubjs.source.next(0);
+            this.setPlayProgress(0);
+          });
         });
       }
     });

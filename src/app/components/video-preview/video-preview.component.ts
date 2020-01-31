@@ -40,7 +40,8 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
       subs.unsubscribe();
     }
     if (this.player) {
-      this.player.dispose();
+      // this.player.dispose();
+      this.player.removeEventListener('loadeddata');
     }
   }
 
@@ -51,28 +52,28 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
         // console.log(f)
         if (this.player) {
           // reset player
-          // this.player.reset();
-          // this.player.dispose();
           this.player = undefined;
           this.previewVideo = null;
           this.videoPlayerService.setPlayer(undefined, this.id);
         }
-        this.previewVideo = f;
-        if (f && f.src) {
-          setTimeout(() => {
-            console.log(this.videoParent.nativeElement)
-            console.log(this.videoParent.nativeElement.querySelector('video'))
-            console.log(window)
-            this.player = this.videoParent.nativeElement.querySelector('video');
-            this.videoPlayerService.setPlayer(this.player, this.id);
-            this.videoPlayerService.currentTimeSubjs[this.id]
-              .pipe(debounceTime(20))
-              .subscribe(t => {
-                this.player.currentTime = t;
-              });
-
-          }, 1);
-        }
+        setTimeout(() => {
+          this.previewVideo = f;
+          if (f && f.src) {
+            setTimeout(() => {
+              this.player = this.videoParent.nativeElement.querySelector('video');
+              if (this.player) {
+                this.player.addEventListener('loadeddata', () => {
+                  this.videoPlayerService.setPlayer(this.player, this.id);
+                  this.videoPlayerService.currentTimeSubjs[this.id]
+                    .pipe(debounceTime(20))
+                    .subscribe(t => {
+                      this.player.currentTime = t;
+                    });
+                });
+              }
+            }, 1);
+          }
+        }, 1);
         /*
         if (f && f.src) {
           if (!this.player) {
