@@ -60,3 +60,5 @@
     [value]="fileInfo.durationMs"
     ></mat-slider>
 </div>
+  <mat-progress-bar style="width:100%" class="trim-work-progress" *ngIf="trimProgress"
+    mode="determinate" color="primary" [value]="trimProgress"></mat-progress-bar>

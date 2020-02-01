@@ -5,6 +5,7 @@ import { ViewService } from '@services/view.service';
 import { Subscription } from 'rxjs';
 import { VideoFileService } from '@services/video-file.service';
 import { VideoPlayerService } from '@services/video-player.service';
+import { SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 've-video-trimmer',
@@ -26,7 +27,7 @@ export class VideoTrimmerComponent implements OnInit, OnDestroy {
 
   fileInfo: any = {};
   fileInfoSubs: Subscription;
-  keyFrames = [];
+  keyFrames: SafeUrl[] = [];
   processKeyFrames = false;
   player = undefined;
   isPaused = true;
@@ -37,6 +38,8 @@ export class VideoTrimmerComponent implements OnInit, OnDestroy {
   };
   trimmedPlayBinded: any;
   progressBinded: any;
+
+  trimProgress: number;
 
   constructor(
     private viewService: ViewService,
@@ -119,7 +122,16 @@ export class VideoTrimmerComponent implements OnInit, OnDestroy {
       // true - with decoding, very slowly,
       // but precisely within the selected range
     };
+    this.trimProgress = 0;
+    this.videoFileService.setTargetPreview(undefined);
+    const tps = this.videoWorkService.progress.subscribe(v => {
+      this.trimProgress = v;
+    });
     await this.videoWorkService.trim(params);
+    tps.unsubscribe();
+    setTimeout(() => {
+      this.trimProgress = 0;
+    }, 2000);
     this.viewService.loaderOff();
   }
 
@@ -183,7 +195,12 @@ export class VideoTrimmerComponent implements OnInit, OnDestroy {
         this.player.addEventListener('timeupdate', this.progressBinded);
         this.setRange({value: this.fileInfo.durationMs}, 'max', 'init');
 
-        this.videoWorkService.getKeyFrames(n).then((res: string[]) => {
+        this.videoWorkService.keyFramesSubj.subscribe(f => {
+          if (f) {
+            this.keyFrames.push(f);
+          }
+        })
+        this.videoWorkService.getKeyFrames(n).then((res: SafeUrl[]) => {
           this.keyFrames = res;
           setTimeout(() => {
             console.log(this.keyFrames)

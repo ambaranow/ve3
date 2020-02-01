@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { VideoFileService } from './video-file.service';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { HelpersService } from './helpers.service';
 import { VideoObj } from '@models/video-obj';
 import { VideoPlayerService } from './video-player.service';
@@ -16,6 +16,7 @@ export class VideoWorkService {
   isInited = false;
   progress: BehaviorSubject<number> = new BehaviorSubject<number>(-1);
   message: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+  keyFramesSubj: BehaviorSubject<SafeUrl> = new BehaviorSubject<SafeUrl>(null);
   id = String((new Date()).getTime());
 
   constructor(
@@ -41,7 +42,8 @@ export class VideoWorkService {
         // }
       },
       progress: p => {
-        const prgrs = (!p || p.ratio < 0 || p.ratio > 1) ? 0 : p.ratio;
+        let prgrs = (!p || p.ratio < 0) ? 0 : p.ratio;
+        prgrs = (prgrs > 1) ? (prgrs - parseInt(prgrs, 10)) : prgrs;
         this.progress.next(Math.round(prgrs * 10000) / 100);
         console.log(p)
         // console.log(prgrs)
@@ -100,7 +102,7 @@ export class VideoWorkService {
   async getKeyFrames(n: number[]) {
     const start = (new Date()).getTime();
     const kfPromise = new Promise((resolve, reject) => {
-      const keyFrames = [];
+      const keyFrames: SafeUrl[] = [];
       const videoEl = this.videoPlayerService.getPlayer('source');
       const canvas = document.createElement('canvas');
       const vW = videoEl.videoWidth;
@@ -114,7 +116,9 @@ export class VideoWorkService {
         ctx.drawImage(videoEl, 0, 0, vW, vH);
         const src = canvas.toDataURL();
         if (src) {
-          keyFrames.push(this.sanitizer.bypassSecurityTrustUrl(src));
+          const sanSrc = this.sanitizer.bypassSecurityTrustUrl(src);
+          keyFrames.push(sanSrc);
+          this.keyFramesSubj.next(sanSrc);
         }
         runnerIndex++;
         if (runnerIndex < n.length) {

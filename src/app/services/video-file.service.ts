@@ -70,7 +70,7 @@ export class VideoFileService {
   }
 
   setTarget(targetVideo: { data: any; type: string; name?: string; }) {
-    this.targetVideo = {
+    this.targetVideo = targetVideo ? {
       src: this.sanitizer.bypassSecurityTrustUrl(
         URL.createObjectURL(
           new Blob([targetVideo.data], { type: targetVideo.type })
@@ -78,12 +78,12 @@ export class VideoFileService {
       ),
       file: new File([targetVideo.data], this.helpersService.getTargetFileName(targetVideo.name), { type: targetVideo.type }),
       type: targetVideo.type
-    };
+    } : undefined;
     this.targetVideoSubj.next(this.targetVideo);
   }
 
   setTargetPreview(targetPreviewVideo: { data: any; type: string; name?: string; }) {
-    this.targetPreviewVideo = {
+    this.targetPreviewVideo = targetPreviewVideo ? {
       src: this.sanitizer.bypassSecurityTrustUrl(
         URL.createObjectURL(
           new Blob([targetPreviewVideo.data], { type: targetPreviewVideo.type })
@@ -91,7 +91,7 @@ export class VideoFileService {
       ),
       file: new File([targetPreviewVideo.data], this.helpersService.getTargetPreviewFileName(), { type: targetPreviewVideo.type }),
       type: targetPreviewVideo.type
-    };
+    } : undefined;
     this.targetPreviewVideoSubj.next(this.targetPreviewVideo);
   }
 
