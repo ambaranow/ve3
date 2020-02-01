@@ -18,6 +18,10 @@ export class VideoPlayerService {
     source: new BehaviorSubject<number>(0),
     target: new BehaviorSubject<number>(0)
   };
+  stateSubjs = {
+    source: new BehaviorSubject<string>('paused'),
+    target: new BehaviorSubject<string>('paused')
+  };
 
   constructor() { }
 
@@ -33,13 +37,22 @@ export class VideoPlayerService {
 
   play(id) {
     if (this.players[id]) {
-      this.players[id].play();
+      // this.players[id].play();
+      const playPromise = this.players[id].play();
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          this.stateSubjs[id].next('played');
+        })
+        .catch(error => {
+        });
+      }
     }
   }
 
   pause(id) {
     if (this.players[id]) {
       this.players[id].pause();
+      this.stateSubjs[id].next('paused');
     }
   }
 

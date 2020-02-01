@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewEncapsulation, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewEncapsulation, ElementRef, OnDestroy } from '@angular/core';
 import { VideoWorkService } from '@services/video-work.service';
 import { HelpersService } from '@services/helpers.service';
 import { ViewService } from '@services/view.service';
@@ -12,7 +12,7 @@ import { VideoPlayerService } from '@services/video-player.service';
   styleUrls: ['./video-trimmer.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class VideoTrimmerComponent implements OnInit {
+export class VideoTrimmerComponent implements OnInit, OnDestroy {
 
   trim = {
     min: 0,
@@ -36,6 +36,7 @@ export class VideoTrimmerComponent implements OnInit {
     time: 0
   };
   trimmedPlayBinded: any;
+  progressBinded: any;
 
   constructor(
     private viewService: ViewService,
@@ -45,6 +46,7 @@ export class VideoTrimmerComponent implements OnInit {
     private helpersService: HelpersService,
   ) {
     this.trimmedPlayBinded = this.trimmedPlay.bind(this);
+    this.progressBinded = this.setPlayProgress.bind(this);
   }
 
 
@@ -59,6 +61,10 @@ export class VideoTrimmerComponent implements OnInit {
         this.init();
       }
     });
+  }
+
+  ngOnDestroy() {
+    this.player.removeEventListener('timeupdate', this.progressBinded);
   }
 
   setRange($event: any, type: string, from: string) {
@@ -76,7 +82,7 @@ export class VideoTrimmerComponent implements OnInit {
         }
         this.shadowTrim.max = 100 - (this.trim.max * 100 / this.fileInfo.durationMs) + '%';
         this.videoPlayerService.currentTimeSubjs.source.next(this.trim.max / 1000);
-        this.setPlayProgress(this.trim.max);
+        // this.setPlayProgress(this.trim.max);
         break;
       case 'min':
         this.trim.min = $event.value;
@@ -85,7 +91,7 @@ export class VideoTrimmerComponent implements OnInit {
         }
         this.shadowTrim.min = (this.trim.min * 100 / this.fileInfo.durationMs) + '%';
         this.videoPlayerService.currentTimeSubjs.source.next(this.trim.min / 1000);
-        this.setPlayProgress(this.trim.min);
+        // this.setPlayProgress(this.trim.min);
         break;
     }
     this.trim.duration = this.helpersService.ms2TimeString(this.trim.max - this.trim.min);
@@ -97,7 +103,7 @@ export class VideoTrimmerComponent implements OnInit {
     return this.shadowTrim[key];
   }
 
-  async actionTrim() {
+  async actionTrim(accurate: boolean) {
     this.viewService.loaderOn();
     const params = {
       // ss: this.helpersService.ms2TimeString(this.trim.min),
@@ -107,7 +113,7 @@ export class VideoTrimmerComponent implements OnInit {
       t: '' + (this.trim.max - this.trim.min) / 1000, // duration
       frame_from: this.trim.min * Math.round(this.fileInfo.fps) / 1000,
       frame_to: this.trim.max * Math.round(this.fileInfo.fps) / 1000,
-      accurate: false // https://trac.ffmpeg.org/wiki/Seeking#Notes
+      accurate // https://trac.ffmpeg.org/wiki/Seeking#Notes
       // false - fast but not accurate
       // between keyframes, larger than selected
       // true - with decoding, very slowly,
@@ -117,40 +123,46 @@ export class VideoTrimmerComponent implements OnInit {
     this.viewService.loaderOff();
   }
 
-  trimmedPlay() {
-    this.isPaused = this.player.paused();
-    const t = this.player.currentTime();
-    this.setPlayProgress(t * 1000);
+  setPlayerState(state) {
+    this.isPaused = state === 'paused' ? true : false;
+  }
+
+  trimmedPlay(e) {
+    // console.log(e)
+    // this.isPaused = this.player.paused();
+    const t = e.target.currentTime;
+    // this.setPlayProgress(t * 1000);
     if (t >= this.trim.max / 1000) {
       if (!this.isPaused) {
         this.trimmedRangePlayPause();
       }
-      this.player.off('timeupdate', this.trimmedPlayBinded);
+      this.player.removeEventListener('timeupdate', this.trimmedPlayBinded);
       this.videoPlayerService.currentTimeSubjs.source.next(this.trim.max / 1000);
-      this.setPlayProgress(this.trim.max);
+      // this.setPlayProgress(this.trim.max);
     }
   }
   trimmedPause() {
   }
 
   trimmedRangePlayPause() {
-    console.log('this.isPaused = ' + this.isPaused)
-    this.isPaused = this.player.paused();
+    // console.log('this.isPaused = ' + this.isPaused)
     if (this.isPaused) {
-      const t = this.player.currentTime();
+      const t = this.player.currentTime;
       if (t < this.trim.min / 1000 || t >= this.trim.max / 1000) {
         this.videoPlayerService.currentTimeSubjs.source.next(this.trim.min / 1000);
       }
-      this.player.on('timeupdate', this.trimmedPlayBinded);
-      this.player.play();
+      this.player.addEventListener('timeupdate', this.trimmedPlayBinded);
+      this.videoPlayerService.play('source');
     } else {
-      this.isPaused = this.player.paused();
-      this.player.pause('source');
+      // this.isPaused = this.player.paused();
+      this.videoPlayerService.pause('source');
     }
   }
 
-  setPlayProgress(t) {
-    this.playProgress.time = (t * 100) / this.fileInfo.durationMs;
+  setPlayProgress(e) {
+    console.log('setPlayProgress')
+    console.log(e)
+    this.playProgress.time = (e.target.currentTime * 100) / e.target.duration;
   }
 
   async init() {
@@ -168,13 +180,17 @@ export class VideoTrimmerComponent implements OnInit {
     this.videoPlayerService.playerSubjs.source.subscribe(player => {
       if (player) {
         this.player = player;
+        this.player.addEventListener('timeupdate', this.progressBinded);
         this.setRange({value: this.fileInfo.durationMs}, 'max', 'init');
 
-        this.videoWorkService.getKeyFrames(n).then(res => {
+        this.videoWorkService.getKeyFrames(n).then((res: string[]) => {
           this.keyFrames = res;
           setTimeout(() => {
+            console.log(this.keyFrames)
             this.videoPlayerService.currentTimeSubjs.source.next(0);
-            this.setPlayProgress(0);
+            this.videoPlayerService.stateSubjs.source.subscribe(state => {
+              this.setPlayerState(state);
+            });
           });
         });
       }

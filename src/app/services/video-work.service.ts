@@ -35,7 +35,7 @@ export class VideoWorkService {
       logger: (res) => {
         // console.log(res);
         // if (res.message && !res.type || res.type !== 'stderr') {
-        //   // console.log(res.message);
+        console.log(res.message);
         //   // this.mess += res.message + '\n';
         this.message.next(res);
         // }
@@ -43,7 +43,7 @@ export class VideoWorkService {
       progress: p => {
         const prgrs = (!p || p.ratio < 0 || p.ratio > 1) ? 0 : p.ratio;
         this.progress.next(Math.round(prgrs * 10000) / 100);
-        // console.log(p)
+        console.log(p)
         // console.log(prgrs)
       },
     });
@@ -99,42 +99,45 @@ export class VideoWorkService {
 
   async getKeyFrames(n: number[]) {
     const start = (new Date()).getTime();
-    const keyFrames = [];
-    const videoEl = this.videoPlayerService.getPlayer('source');
-    const canvas = document.createElement('canvas');
-    // const videoEl = video.children_[0];
-    const vW = videoEl.videoWidth;
-    const vH = videoEl.videoHeight;
-    console.log(vW + ' | ' + vH)
-    canvas.width = vW;
-    canvas.height = vH;
-    const ctx = canvas.getContext('2d');
-    let runnerIndex = 0;
-    const setKeyFrame = () => {
-      ctx.drawImage(videoEl, 0, 0, vW, vH);
-      const src = canvas.toDataURL();
-      if (src) {
-        keyFrames.push(this.sanitizer.bypassSecurityTrustUrl(src));
-      }
-      runnerIndex++;
-      if (runnerIndex < n.length) {
-        runner(runnerIndex);
-      } else {
-        videoEl.removeEventListener('timeupdate', setKeyFrame);
-        setTimeout(() => {
+    const kfPromise = new Promise((resolve, reject) => {
+      const keyFrames = [];
+      const videoEl = this.videoPlayerService.getPlayer('source');
+      const canvas = document.createElement('canvas');
+      const vW = videoEl.videoWidth;
+      const vH = videoEl.videoHeight;
+      console.log(vW + ' | ' + vH)
+      canvas.width = vW;
+      canvas.height = vH;
+      const ctx = canvas.getContext('2d');
+      let runnerIndex = 0;
+      const setKeyFrame = () => {
+        ctx.drawImage(videoEl, 0, 0, vW, vH);
+        const src = canvas.toDataURL();
+        if (src) {
+          keyFrames.push(this.sanitizer.bypassSecurityTrustUrl(src));
+        }
+        runnerIndex++;
+        if (runnerIndex < n.length) {
+          setTimeout(() => {
+            runner(runnerIndex);
+          });
+        } else {
+          videoEl.removeEventListener('timeupdate', setKeyFrame);
+
           this.viewService.loaderOff();
-        });
-      }
-    };
-    videoEl.addEventListener('timeupdate', setKeyFrame);
-    const runner = (i: number) => {
-      this.viewService.loaderOn();
-      videoEl.currentTime = n[i];
-    };
-    runner(runnerIndex);
-    const end = (new Date()).getTime();
-    console.log('Duration getKeyFrames() = ' + this.helpersService.ms2TimeString(end - start));
-    return keyFrames;
+          const end = (new Date()).getTime();
+          console.log('Duration getKeyFrames() = ' + this.helpersService.ms2TimeString(end - start));
+          resolve(keyFrames);
+        }
+      };
+      videoEl.addEventListener('timeupdate', setKeyFrame);
+      const runner = async (i: number) => {
+        this.viewService.loaderOn();
+        videoEl.currentTime = n[i];
+      };
+      runner(runnerIndex);
+    });
+    return kfPromise;
   }
 
   async trim(params: {ss: string|number, to: string|number, t: string|number, accurate: boolean}) {

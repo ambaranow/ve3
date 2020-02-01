@@ -65,7 +65,7 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
                 this.player.addEventListener('loadeddata', () => {
                   this.videoPlayerService.setPlayer(this.player, this.id);
                   this.videoPlayerService.currentTimeSubjs[this.id]
-                    .pipe(debounceTime(20))
+                    .pipe(debounceTime(10))
                     .subscribe(t => {
                       this.player.currentTime = t;
                     });
