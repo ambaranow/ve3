@@ -1,4 +1,3 @@
-<!-- <ve-navigation *ngIf="fileUploaded"></ve-navigation> -->
 
 <form [formGroup]="form" class="upload-form">
   <!-- Загрузка файла -->
@@ -10,3 +9,7 @@
     [title]="'Drag video file, or click here'">
   </app-file-upload>
 </form>
+
+<ve-video-preview id="source"></ve-video-preview>
+<ve-video-trimmer *ngIf="isPreviewReady"></ve-video-trimmer>
+<ve-video-preview id="target"></ve-video-preview>

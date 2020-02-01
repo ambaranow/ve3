@@ -10,14 +10,12 @@ import { VideoPlayerService } from '@services/video-player.service';
 export class NavigationComponent implements OnInit, OnDestroy {
 
   mobileQuery: MediaQueryList;
-  isPreviewReady = false;
 
 
   private _mobileQueryListener: () => void;
 
 
   constructor(
-    private videoPlayerService: VideoPlayerService,
     changeDetectorRef: ChangeDetectorRef,
     media: MediaMatcher
     ) {
@@ -35,8 +33,5 @@ export class NavigationComponent implements OnInit, OnDestroy {
   }
 
   init() {
-    this.videoPlayerService.playerSubjs.source.subscribe(player => {
-      this.isPreviewReady = player ? true : false;
-    });
   }
 }

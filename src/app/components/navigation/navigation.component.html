@@ -10,17 +10,14 @@
                  [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
       <mat-nav-list>
         <!-- <a mat-list-item [routerLink]="[{outlets: {actions: 'video'}}]">Video</a> -->
-        <!-- <a mat-list-item routerLink="trim">Trim</a> -->
+        <a mat-list-item routerLink="/video">Video</a>
       </mat-nav-list>
     </mat-sidenav>
 
     <mat-sidenav-content>
-      <div class="ve-content-wrapper">
-        <ve-video-preview id="source"></ve-video-preview>
-        <ve-video-trimmer *ngIf="isPreviewReady"></ve-video-trimmer>
-        <ve-video-preview id="target"></ve-video-preview>
-        <!-- <router-outlet></router-outlet> -->
-      </div>
+      <router-outlet></router-outlet>
+      <!-- <div class="ve-content-wrapper">
+      </div> -->
 
     </mat-sidenav-content>
   </mat-sidenav-container>

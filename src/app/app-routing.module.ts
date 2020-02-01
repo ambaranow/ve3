@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { EditorComponent } from '@components/editor/editor.component';
-import { EditorRoutingModule } from '@components/editor/editor-routing.module';
 import { UrlTree, DefaultUrlSerializer, UrlSerializer } from '@angular/router';
 import { EmptyComponent } from '@components/empty/empty.component';
+import { VideoComponent } from '@components/video/video.component';
 
 export class CleanUrlSerializer extends DefaultUrlSerializer {
   public parse(url: string): UrlTree {
@@ -22,6 +21,7 @@ const routes: Routes = [
   { path: '', component: EmptyComponent,
     children: [
   ]},
+  { path: 'video', component: VideoComponent },
   { path: '**', redirectTo: '/' }
 ];
 
@@ -30,7 +30,6 @@ const routes: Routes = [
     RouterModule.forRoot(routes,
       // { enableTracing: true }
       ),
-    EditorRoutingModule,
   ],
   providers: [
     // {
