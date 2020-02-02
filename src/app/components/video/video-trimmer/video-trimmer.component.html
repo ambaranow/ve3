@@ -11,8 +11,12 @@
     </span>
     <button mat-stroked-button (click)="actionTrim($event, false)" *ngIf="trim.max < fileInfo.durationMs || trim.min > 0"><i
         class="material-icons">last_page</i>Fast trim<i class="material-icons">first_page</i></button>
-    <button mat-stroked-button (click)="actionTrim($event, true)" *ngIf="trim.max < fileInfo.durationMs || trim.min > 0"><i
-        class="material-icons">last_page</i>Accurate<i class="material-icons">first_page</i></button>
+    <button mat-stroked-button (click)="actionTrim($event, true)"
+      *ngIf="trim.max < fileInfo.durationMs || trim.min > 0"><i class="material-icons">last_page</i>Accurate<i
+        class="material-icons">first_page</i></button>
+    <button mat-stroked-button (click)="actionReverse($event)"
+      ><i class="material-icons">swap_horiz</i>Reverse</button>
+    <!-- <mat-checkbox [(ngModel)]="!isRemoveAudio">Audio</mat-checkbox> -->
   </div>
   <div class="trim-actions__right"></div>
 </div>

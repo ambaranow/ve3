@@ -6,7 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { VideoPreviewComponent } from './video-preview/video-preview.component';
 import { VideoTrimmerComponent } from './video-trimmer/video-trimmer.component';
 import { KeyframesLineComponent } from './keyframes-line/keyframes-line.component';
-import { MatProgressBarModule, MatSliderModule } from '@angular/material';
+import { MatProgressBarModule, MatSliderModule, MatCheckboxModule } from '@angular/material';
 
 
 
@@ -23,7 +23,7 @@ import { MatProgressBarModule, MatSliderModule } from '@angular/material';
     FormsModule,
     MatProgressBarModule,
     MatSliderModule,
-
+    MatCheckboxModule,
     ReactiveFormsModule,
 
   ],

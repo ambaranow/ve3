@@ -134,17 +134,70 @@ export class VideoWorkService {
           resolve(keyFrames);
         }
       };
-      videoEl.addEventListener('timeupdate', setKeyFrame);
       const runner = async (i: number) => {
         this.viewService.loaderOn();
         videoEl.currentTime = n[i];
       };
+      videoEl.addEventListener('timeupdate', setKeyFrame);
+      videoEl.currentTime = n[runnerIndex];
       runner(runnerIndex);
     });
     return kfPromise;
   }
 
-  async trim(params: {ss: string|number, to: string|number, t: string|number, accurate: boolean}) {
+  async reverse(params) {
+    const start = (new Date()).getTime();
+    if (!this.isInited) {
+      await this.init();
+    }
+    const n = this.videoFileService.sourceVideo.file.name;
+    const inputFileName = this.helpersService.getSourceFileName(n);
+    const outputFileName = this.helpersService.getTargetFileName(n);
+    const targetPreviewFileName = this.helpersService.getTargetPreviewFileName();
+    const outputFileType = this.videoFileService.sourceVideo.file.type;
+    const noAudio = params.noAudio ? '-an' : '';
+    const command = `
+      -y \
+      -i ${inputFileName} \
+      -loglevel info \
+      -vf reverse \
+      ${noAudio} \
+      ${outputFileName}
+      `;
+    // console.log(command.replace(/\s+/g, ' '))
+    await this.worker.run(command.replace(/\s+/g, ' '));
+    setTimeout(async () => {
+      const tFile = await this.worker.read(outputFileName);
+      const targetFile = {
+        data: tFile.data,
+        type: outputFileType,
+        name: outputFileName
+      };
+      this.videoFileService.setTarget(targetFile);
+      const isCopy = this.helpersService.getExtension(outputFileName) === 'mp4' ?
+        '-c copy' : '';
+      await this.worker.run(`
+        -i ${outputFileName} \
+        -loglevel debug \
+        ${isCopy} \
+        -y ${targetPreviewFileName}
+      `);
+      const pFile = await this.worker.read(targetPreviewFileName);
+      const previewFile = {
+        data: pFile.data,
+        type: 'video/mp4',
+        name: targetPreviewFileName
+      };
+      this.videoFileService.setTargetPreview(previewFile);
+
+      const end = (new Date()).getTime();
+      console.log('Duration trim() = ' + this.helpersService.ms2TimeString(end - start));
+      this.progress.next(100);
+    }, 1000);
+
+  }
+
+  async trim(params: { ss: string | number, to: string | number, t: string | number, accurate: boolean, noAudio: boolean}) {
     const start = (new Date()).getTime();
     console.log(params)
     if (!this.isInited) {
@@ -155,6 +208,7 @@ export class VideoWorkService {
     const outputFileName = this.helpersService.getTargetFileName(n);
     const targetPreviewFileName = this.helpersService.getTargetPreviewFileName();
     const outputFileType = this.videoFileService.sourceVideo.file.type;
+    const noAudio = params.noAudio ? '-an' : '';
 
     // let command = `
     // -y \
@@ -193,7 +247,8 @@ export class VideoWorkService {
       -loglevel info \
       -c copy -async 1 \
       -avoid_negative_ts 1 \
-      tmp_${outputFileName}
+      ${noAudio} \
+      ${outputFileName}
       `;
       console.log(command.replace(/\s+/g, ' '))
       await this.worker.run(command.replace(/\s+/g, ' '));
@@ -205,14 +260,15 @@ export class VideoWorkService {
       -i ${inputFileName} \
       -to ${params.to} \
       -loglevel info \
-      tmp_${outputFileName}
+      ${noAudio} \
+      ${outputFileName}
       `;
       console.log(command.replace(/\s+/g, ' '))
       await this.worker.run(command.replace(/\s+/g, ' '));
     }
     // -avoid_negative_ts 1 или -copyts
-    await setTimeout (async () => {
-      const tFile = await this.worker.read('tmp_' + outputFileName);
+    setTimeout (async () => {
+      const tFile = await this.worker.read(outputFileName);
       const targetFile = {
         data: tFile.data,
         type: outputFileType,
@@ -222,7 +278,7 @@ export class VideoWorkService {
       const isCopy = this.helpersService.getExtension(outputFileName) === 'mp4' ?
                     '-c copy' : '';
       await this.worker.run(`
-        -i tmp_${outputFileName} \
+        -i ${outputFileName} \
         -loglevel debug \
         ${isCopy} \
         -y ${targetPreviewFileName}

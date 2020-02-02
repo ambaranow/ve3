@@ -10,6 +10,6 @@
   </app-file-upload>
 </form>
 
-<ve-video-preview id="source"></ve-video-preview>
-<ve-video-trimmer *ngIf="isPreviewReady"></ve-video-trimmer>
-<ve-video-preview id="target"></ve-video-preview>
+<ve-video-preview id="source" *ngIf="fileUploaded"></ve-video-preview>
+<ve-video-trimmer *ngIf="fileUploaded && isPreviewReady"></ve-video-trimmer>
+<ve-video-preview id="target" [downloadLink]="true"></ve-video-preview>

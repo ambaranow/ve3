@@ -41,6 +41,8 @@ export class VideoTrimmerComponent implements OnInit, OnDestroy {
 
   trimProgress: number;
 
+  isRemoveAudio = false;
+
   constructor(
     private viewService: ViewService,
     private videoWorkService: VideoWorkService,
@@ -106,11 +108,12 @@ export class VideoTrimmerComponent implements OnInit, OnDestroy {
     return this.shadowTrim[key];
   }
 
-  async actionTrim(accurate: boolean) {
+  async actionTrim($event, accurate = false) {
     this.viewService.loaderOn();
     const params = {
       // ss: this.helpersService.ms2TimeString(this.trim.min),
       // to: this.helpersService.ms2TimeString(this.trim.max),
+      noAudio: this.isRemoveAudio,
       ss: '' + this.trim.min / 1000, // start point
       to: '' + this.trim.max / 1000, // end point
       t: '' + (this.trim.max - this.trim.min) / 1000, // duration
@@ -134,6 +137,25 @@ export class VideoTrimmerComponent implements OnInit, OnDestroy {
     }, 2000);
     this.viewService.loaderOff();
   }
+
+  async actionReverse($event) {
+    this.viewService.loaderOn();
+    this.trimProgress = 0;
+    this.videoFileService.setTargetPreview(undefined);
+    const tps = this.videoWorkService.progress.subscribe(v => {
+      this.trimProgress = v;
+    });
+    const params = {
+      noAudio: this.isRemoveAudio
+    };
+    await this.videoWorkService.reverse(params);
+    tps.unsubscribe();
+    setTimeout(() => {
+      this.trimProgress = 0;
+    }, 2000);
+    this.viewService.loaderOff();
+  }
+
 
   setPlayerState(state) {
     this.isPaused = state === 'paused' ? true : false;
@@ -172,8 +194,8 @@ export class VideoTrimmerComponent implements OnInit, OnDestroy {
   }
 
   setPlayProgress(e) {
-    console.log('setPlayProgress')
-    console.log(e)
+    // console.log('setPlayProgress')
+    // console.log(e)
     this.playProgress.time = (e.target.currentTime * 100) / e.target.duration;
   }
 
@@ -203,7 +225,7 @@ export class VideoTrimmerComponent implements OnInit, OnDestroy {
         this.videoWorkService.getKeyFrames(n).then((res: SafeUrl[]) => {
           this.keyFrames = res;
           setTimeout(() => {
-            console.log(this.keyFrames)
+            // console.log(this.keyFrames)
             this.videoPlayerService.currentTimeSubjs.source.next(0);
             this.videoPlayerService.stateSubjs.source.subscribe(state => {
               this.setPlayerState(state);

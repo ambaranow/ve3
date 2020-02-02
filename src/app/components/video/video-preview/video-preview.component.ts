@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { VideoWorkService } from '@services/video-work.service';
 import { VideoPlayerService } from '@services/video-player.service';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 've-video-preview',
@@ -19,7 +19,10 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
   previewVideoSubs: Subscription[] = [];
   progress: number = undefined;
 
-  @Input() id: 'source'|'target';
+  downloadHref: SafeUrl = undefined;
+
+  @Input() id: 'source' | 'target';
+  @Input() downloadLink: boolean;
 
   constructor(
     private sanitizer: DomSanitizer,
@@ -40,16 +43,24 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
       subs.unsubscribe();
     }
     if (this.player) {
-      // this.player.dispose();
       this.player.removeEventListener('loadeddata');
     }
   }
 
   init() {
+    if (this.downloadLink) {
+      this.previewVideoSubs.push(
+        this.videoFileService[this.id + 'VideoSubj'].subscribe(f => {
+          if (f && f.src) {
+            this.downloadHref = f.src;
+          } else {
+            this.downloadHref = undefined;
+          }
+        })
+      );
+    }
     this.previewVideoSubs.push(
       this.videoFileService[this.id + 'PreviewVideoSubj'].subscribe(f => {
-        // console.log(this.id + 'PreviewVideoSubj')
-        // console.log(f)
         if (this.player) {
           // reset player
           this.player = undefined;
@@ -74,53 +85,6 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
             }, 1);
           }
         }, 1);
-        /*
-        if (f && f.src) {
-          if (!this.player) {
-            setTimeout(() => {
-              this.player = window['videojs'](
-                    this.id + 'PreviewVideoPlayer',
-                    {
-                      controls: this.id === 'target',
-                      autoplay: false,
-                      preload: 'true',
-                      sources: [
-                        {
-                          src: this.sanitizer.sanitize(4, f.src),
-                          type: f.type
-                        }
-                      ]
-                    },
-                    () => {
-                      this.player.on('loadedmetadata', () => {
-                        const playPromise = this.player.play();
-                        if (playPromise !== undefined) {
-                          playPromise.then(() => {
-                            this.player.pause();
-                            this.player.currentTime(0);
-                            setTimeout(() => {
-                              this.videoPlayerService.setPlayer(this.player, this.id);
-                            });
-                            // Automatic playback started!
-                            // Show playing UI.
-                          })
-                          .catch(error => {
-                            // Auto-play was prevented
-                            // Show paused UI.
-                          });
-                        }
-                      });
-                      this.videoPlayerService.currentTimeSubjs[this.id]
-                        .pipe(debounceTime(20))
-                        .subscribe(t => {
-                          this.player.currentTime(t);
-                        });
-                    });
-              console.log(this.player)
-              }, 1);
-            }
-        }
-        */
       })
     );
     this.previewVideoSubs.push(
