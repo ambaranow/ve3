@@ -38,6 +38,7 @@ export class VideoTrimmerComponent implements OnInit, OnDestroy {
   };
   trimmedPlayBinded: any;
   progressBinded: any;
+  downloadHref: SafeUrl = undefined;
 
   trimProgress: number;
 
@@ -138,25 +139,6 @@ export class VideoTrimmerComponent implements OnInit, OnDestroy {
     this.viewService.loaderOff();
   }
 
-  async actionReverse($event) {
-    this.viewService.loaderOn();
-    this.trimProgress = 0;
-    this.videoFileService.setTargetPreview(undefined);
-    const tps = this.videoWorkService.progress.subscribe(v => {
-      this.trimProgress = v;
-    });
-    const params = {
-      noAudio: this.isRemoveAudio
-    };
-    await this.videoWorkService.reverse(params);
-    tps.unsubscribe();
-    setTimeout(() => {
-      this.trimProgress = 0;
-    }, 2000);
-    this.viewService.loaderOff();
-  }
-
-
   setPlayerState(state) {
     this.isPaused = state === 'paused' ? true : false;
   }
@@ -203,29 +185,37 @@ export class VideoTrimmerComponent implements OnInit, OnDestroy {
     if (this.processKeyFrames || !this.fileInfo.durationMs) {
       return;
     }
-    const n = [];
-    const ind = Math.round(this.fileInfo.durationMs / 10);
-    for (let i = 0; i < this.fileInfo.durationMs; i++) {
-      if (i % ind === 0) {
-        n.push(Math.round(i / 1000));
+    this.videoFileService.targetVideoSubj.subscribe(f => {
+      if (f && f.src) {
+        this.downloadHref = f.src;
+      } else {
+        this.downloadHref = undefined;
       }
-    }
+    });
+
     this.viewService.loaderOn();
     this.videoPlayerService.playerSubjs.source.subscribe(player => {
       if (player) {
         this.player = player;
         this.player.addEventListener('timeupdate', this.progressBinded);
         this.setRange({value: this.fileInfo.durationMs}, 'max', 'init');
+        this.videoPlayerService.currentTimeSubjs.source.next(0);
 
         this.videoWorkService.keyFramesSubj.subscribe(f => {
           if (f) {
             this.keyFrames.push(f);
           }
-        })
+        });
+        const n = [];
+        const ind = Math.round(this.fileInfo.durationMs / 10);
+        for (let i = 0; i < this.fileInfo.durationMs; i++) {
+          if (i % ind === 0) {
+            n.push(Math.round(i / 1000));
+          }
+        }
         this.videoWorkService.getKeyFrames(n).then((res: SafeUrl[]) => {
           this.keyFrames = res;
           setTimeout(() => {
-            // console.log(this.keyFrames)
             this.videoPlayerService.currentTimeSubjs.source.next(0);
             this.videoPlayerService.stateSubjs.source.subscribe(state => {
               this.setPlayerState(state);
@@ -234,12 +224,5 @@ export class VideoTrimmerComponent implements OnInit, OnDestroy {
         });
       }
     });
-    // this.videoWorkService.getKeyFrames(n).then(res => {
-    //   this.keyFrames = res;
-    //   kfSubs.unsubscribe();
-    //   this.fileInfo = this.videoFileService.getFileInfo();
-    //   this.viewService.loaderOff();
-    //   this.processKeyFrames = false;
-    // });
   }
 }

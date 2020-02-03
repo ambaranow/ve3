@@ -19,10 +19,7 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
   previewVideoSubs: Subscription[] = [];
   progress: number = undefined;
 
-  downloadHref: SafeUrl = undefined;
-
   @Input() id: 'source' | 'target';
-  @Input() downloadLink: boolean;
 
   constructor(
     private sanitizer: DomSanitizer,
@@ -48,17 +45,6 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
   }
 
   init() {
-    if (this.downloadLink) {
-      this.previewVideoSubs.push(
-        this.videoFileService[this.id + 'VideoSubj'].subscribe(f => {
-          if (f && f.src) {
-            this.downloadHref = f.src;
-          } else {
-            this.downloadHref = undefined;
-          }
-        })
-      );
-    }
     this.previewVideoSubs.push(
       this.videoFileService[this.id + 'PreviewVideoSubj'].subscribe(f => {
         if (this.player) {

@@ -10,6 +10,28 @@
   </app-file-upload>
 </form>
 
-<ve-video-preview id="source" *ngIf="fileUploaded"></ve-video-preview>
-<ve-video-trimmer *ngIf="fileUploaded && isPreviewReady"></ve-video-trimmer>
-<ve-video-preview id="target" [downloadLink]="true"></ve-video-preview>
+<mat-grid-list cols="2" rowHeight="320">
+  <mat-grid-tile>
+    <ve-video-preview
+      id="source"
+      *ngIf="fileUploaded"></ve-video-preview>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <ve-video-preview
+      id="target"
+      ></ve-video-preview>
+  </mat-grid-tile>
+</mat-grid-list>
+
+
+
+<mat-tab-group *ngIf="fileUploaded">
+  <mat-tab label="Trim">
+    <ve-video-trimmer *ngIf="fileUploaded && isPreviewReady"></ve-video-trimmer>
+  </mat-tab>
+  <mat-tab label="Reverse">
+    <ve-video-reverse *ngIf="fileUploaded && isPreviewReady"></ve-video-reverse>
+  </mat-tab>
+</mat-tab-group>
+
+

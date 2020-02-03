@@ -14,9 +14,8 @@
     <button mat-stroked-button (click)="actionTrim($event, true)"
       *ngIf="trim.max < fileInfo.durationMs || trim.min > 0"><i class="material-icons">last_page</i>Accurate<i
         class="material-icons">first_page</i></button>
-    <button mat-stroked-button (click)="actionReverse($event)"
-      ><i class="material-icons">swap_horiz</i>Reverse</button>
     <!-- <mat-checkbox [(ngModel)]="!isRemoveAudio">Audio</mat-checkbox> -->
+    <app-download-link *ngIf="downloadHref" [link]="downloadHref"></app-download-link>
   </div>
   <div class="trim-actions__right"></div>
 </div>
@@ -30,9 +29,9 @@
     color="accent"
     [value]="playProgress.time"
     ></mat-progress-bar>
-  <app-keyframes-line
+  <ve-keyframes-line
     *ngIf="keyFrames.length"
-    [keyFrames]="keyFrames"></app-keyframes-line>
+    [keyFrames]="keyFrames"></ve-keyframes-line>
 
   <div class="trim-shadow trim-shadow__min" [ngStyle]="{width: shadowSize('min')}"></div>
   <div class="trim-shadow trim-shadow__max" [ngStyle]="{width: shadowSize('max')}"></div>
@@ -64,5 +63,6 @@
     [value]="fileInfo.durationMs"
     ></mat-slider>
 </div>
-  <mat-progress-bar style="width:100%" class="trim-work-progress" *ngIf="trimProgress"
-    mode="determinate" color="primary" [value]="trimProgress"></mat-progress-bar>
+
+<mat-progress-bar style="width:100%" class="trim-work-progress" *ngIf="trimProgress"
+  mode="determinate" color="primary" [value]="trimProgress"></mat-progress-bar>

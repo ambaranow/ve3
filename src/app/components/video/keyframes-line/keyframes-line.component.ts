@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-keyframes-line',
+  selector: 've-keyframes-line',
   templateUrl: './keyframes-line.component.html',
   styleUrls: ['./keyframes-line.component.scss']
 })
