@@ -20,6 +20,7 @@ export class VideoComponent implements OnInit {
   keyFrames = [];
   progress: number = undefined;
   isPreviewReady = false;
+  isTargetReady = false;
 
   constructor(
     private viewService: ViewService,
@@ -40,6 +41,9 @@ export class VideoComponent implements OnInit {
     this.videoPlayerService.player.source.playerSubj.subscribe(player => {
       this.isPreviewReady = player ? true : false;
     });
+    this.videoFileService.targetPreviewVideoSubj.subscribe(f => {
+      this.isTargetReady = f && f.src ? true : false;
+    });
 
   }
 
@@ -54,10 +58,12 @@ export class VideoComponent implements OnInit {
     this.fileUploaded = true;
     this.videoFileService.setSource($event);
     this.videoWorkService.getFileInfo(this.videoFileService.getSource()).then(r => {
-      // console.log(r)
       this.viewService.loaderOff();
     }).finally(() => {
     });
+  }
 
+  volumeChange($event) {
+    this.videoPlayerService.setVolume($event.value);
   }
 }

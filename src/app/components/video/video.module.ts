@@ -6,7 +6,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { VideoPreviewComponent } from './video-preview/video-preview.component';
 import { VideoTrimmerComponent } from './video-trimmer/video-trimmer.component';
 import { KeyframesLineComponent } from './keyframes-line/keyframes-line.component';
-import { MatProgressBarModule, MatSliderModule, MatCheckboxModule, MatTabsModule, MatGridListModule } from '@angular/material';
+import { MatProgressBarModule,
+  MatSliderModule,
+  MatCheckboxModule,
+  MatTabsModule,
+  MatGridListModule,
+  MatButtonModule } from '@angular/material';
 import { VideoReverseComponent } from './video-reverse/video-reverse.component';
 import { DownloadLinkComponent } from '@components/download-link/download-link.component';
 
@@ -30,6 +35,7 @@ import { DownloadLinkComponent } from '@components/download-link/download-link.c
     MatTabsModule,
     MatCheckboxModule,
     MatGridListModule,
+    MatButtonModule,
     ReactiveFormsModule,
 
   ],

@@ -55,11 +55,8 @@ export class VideoPlayerService {
     }
   }
 
-  volume(id, val) {
-    if (this.player[id].el) {
-      this.player[id].el.volume = val;
-      this.volumeSubj.next(val);
-    }
+  setVolume(val) {
+    this.volumeSubj.next(val);
   }
 
 }

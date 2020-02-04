@@ -68,6 +68,11 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
                       this.player.currentTime = t;
                     });
                 });
+                this.previewVideoSubs.push(
+                  this.videoPlayerService.volumeSubj.subscribe(vol => {
+                    this.player.volume = vol;
+                  })
+                );
               }
             }, 1);
           }

@@ -14,13 +14,13 @@
   cols="13"
   rowHeight="320" 
   *ngIf="fileUploaded">
-  <mat-grid-tile colspan="6">
+  <mat-grid-tile [colspan]="isTargetReady ? 6 : 12">
     <ve-video-preview
       class="ve-video-preview"
       [controls]="false"
       id="source"></ve-video-preview>
   </mat-grid-tile>
-  <mat-grid-tile colspan="6">
+  <mat-grid-tile colspan="6" *ngIf="isTargetReady">
     <ve-video-preview
       class="ve-video-preview"
       id="target"
@@ -31,13 +31,15 @@
       volume_up
       </i><br />
     <mat-slider
+      color="primary"
       min="0"
       max="1"
-      step="0.1"
+      step="0.05"
       value="0.25"
+      (change)="volumeChange($event)"
       vertical></mat-slider><br />
     <i class="material-icons">
-      volume_down
+      volume_off
     </i>
   </mat-grid-tile>
 </mat-grid-list>

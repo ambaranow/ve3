@@ -1,6 +1,7 @@
 .trim {
-  margin: 20px;
+  margin: 20px 30px;
   position: relative;
+  min-height: 67px;
   .mat-slider {
     width: 100%;
     height: 0;
@@ -20,12 +21,15 @@
           height: auto;
           transform: rotate(-90deg);
           padding: 0 2px;
-          top: 18px;
-          background-color: #ffd740;
+          top: 24px;
+          box-shadow: 0px 0px 1px rgba(0,0,0,.7);
+          background-color: #ffcc0b;
         }
 
         .mat-slider-thumb-label-text {
           transform: none;
+          transition: none;
+          font-size: 16px;
           opacity: 1;
         }
         .mat-slider-thumb {
@@ -49,13 +53,13 @@
       }
       .mat-slider-thumb {
         border-radius: 2px;
-        width: 14px;
-        height: 50px;
+        width: 19px;
+        height: 68px;
         transform: none;
         bottom: auto;
         top: 0;
-        right: -15px;
-        background-color: #ffd740;
+        right: -20px;
+        background-color: #ffcc0b;
       }
     }
   }
@@ -64,7 +68,7 @@
       &.ng-touched,
       &.cdk-focused {
         .mat-slider-thumb-label {
-          right: -18px;
+          right: -23px;
         }
       }
     }
@@ -79,7 +83,7 @@
       &.ng-touched,
       &.cdk-focused {
         .mat-slider-thumb-label {
-          right: -33px;
+          right: -43px;
         }
       }
     }
