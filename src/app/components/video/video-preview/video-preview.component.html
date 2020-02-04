@@ -19,9 +19,9 @@
           *ngIf="previewVideo && previewVideo.src"
           class="video-element video-js"
           id="{{id + 'PreviewVideoPlayer'}}"
-          controls
-          width="640"
-          height="264"
+          [controls]="controls"
+          width="560"
+          height="315"
         >
           <source
             [src]="previewVideo.src"

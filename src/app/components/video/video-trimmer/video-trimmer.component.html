@@ -1,24 +1,36 @@
-<div class="trim-actions" *ngIf="fileInfo.durationMs && keyFrames.length">
-  <div class="trim-actions__left"></div>
-  <div class="trim-actions__main">
+<mat-grid-list
+  class="actions"
+  cols="4"
+  rowHeight="75px"
+  *ngIf="fileInfo.durationMs && keyFrames.length">
+  <mat-grid-tile>
+  </mat-grid-tile>
+  <mat-grid-tile>
     <button
       mat-stroked-button
       (click)="trimmedRangePlayPause()"
       ><i class="material-icons" *ngIf="!isPaused">pause</i><i
       class="material-icons" *ngIf="isPaused">play_arrow</i></button>
-    <span>
-      {{trim.duration}}
+      &nbsp;
+      <span>
+      <i
+        class="material-icons">last_page</i>{{trim.duration}}<i
+        class="material-icons">first_page</i>
     </span>
-    <button mat-stroked-button (click)="actionTrim($event, false)" *ngIf="trim.max < fileInfo.durationMs || trim.min > 0"><i
-        class="material-icons">last_page</i>Fast trim<i class="material-icons">first_page</i></button>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <button mat-stroked-button (click)="actionTrim($event, false)"
+      *ngIf="trim.max < fileInfo.durationMs || trim.min > 0">Fast trim
+      <i class="material-icons">fast_forward</i></button>
     <button mat-stroked-button (click)="actionTrim($event, true)"
-      *ngIf="trim.max < fileInfo.durationMs || trim.min > 0"><i class="material-icons">last_page</i>Accurate<i
-        class="material-icons">first_page</i></button>
+      *ngIf="trim.max < fileInfo.durationMs || trim.min > 0">Accurate
+      <i class="material-icons">skip_next</i></button>
     <!-- <mat-checkbox [(ngModel)]="!isRemoveAudio">Audio</mat-checkbox> -->
+  </mat-grid-tile>
+  <mat-grid-tile>
     <app-download-link *ngIf="downloadHref" [link]="downloadHref"></app-download-link>
-  </div>
-  <div class="trim-actions__right"></div>
-</div>
+  </mat-grid-tile>
+</mat-grid-list>
 
 
 <div class="trim">

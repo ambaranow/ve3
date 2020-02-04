@@ -10,27 +10,47 @@
   </app-file-upload>
 </form>
 
-<mat-grid-list cols="2" rowHeight="320">
-  <mat-grid-tile>
+<mat-grid-list
+  cols="13"
+  rowHeight="320" 
+  *ngIf="fileUploaded">
+  <mat-grid-tile colspan="6">
     <ve-video-preview
-      id="source"
-      *ngIf="fileUploaded"></ve-video-preview>
+      class="ve-video-preview"
+      [controls]="false"
+      id="source"></ve-video-preview>
   </mat-grid-tile>
-  <mat-grid-tile>
+  <mat-grid-tile colspan="6">
     <ve-video-preview
+      class="ve-video-preview"
       id="target"
       ></ve-video-preview>
+  </mat-grid-tile>
+  <mat-grid-tile class="ve-video-volume">
+    <i class="material-icons">
+      volume_up
+      </i><br />
+    <mat-slider
+      min="0"
+      max="1"
+      step="0.1"
+      value="0.25"
+      vertical></mat-slider><br />
+    <i class="material-icons">
+      volume_down
+    </i>
   </mat-grid-tile>
 </mat-grid-list>
 
 
 
-<mat-tab-group *ngIf="fileUploaded">
+
+<mat-tab-group *ngIf="fileUploaded" animationDuration="0">
   <mat-tab label="Trim">
-    <ve-video-trimmer *ngIf="fileUploaded && isPreviewReady"></ve-video-trimmer>
+    <ve-video-trimmer *ngIf="isPreviewReady"></ve-video-trimmer>
   </mat-tab>
   <mat-tab label="Reverse">
-    <ve-video-reverse *ngIf="fileUploaded && isPreviewReady"></ve-video-reverse>
+    <ve-video-reverse *ngIf="isPreviewReady"></ve-video-reverse>
   </mat-tab>
 </mat-tab-group>
 

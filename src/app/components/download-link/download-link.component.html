@@ -1,2 +1,4 @@
-<a [href]="link" *ngIf="link" mat-stroked-button download><i
-  class="material-icons">save_alt</i>Download</a>
+<form method="get" [action]="link" *ngIf="link">
+  <button type="submit" mat-stroked-button download><i
+    class="material-icons">save_alt</i>Download!</button>
+</form>

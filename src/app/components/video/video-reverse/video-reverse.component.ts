@@ -48,6 +48,7 @@ export class VideoReverseComponent implements OnInit, OnDestroy {
           this.fileInfoSubs.unsubscribe();
         }
         this.fileInfo = info;
+        this.fileInfo.duration = this.helpersService.ms2TimeString(this.fileInfo.durationMs);
         this.init();
       }
     });
@@ -82,7 +83,15 @@ export class VideoReverseComponent implements OnInit, OnDestroy {
   }
 
   setPlayerState(state) {
-    this.isPaused = state === 'paused' ? true : false;
+    this.isPaused = !state;
+  }
+
+  playerPlayPause() {
+    if (this.isPaused) {
+      this.videoPlayerService.play('source');
+    } else {
+      this.videoPlayerService.pause('source');
+    }
   }
 
   async init() {
@@ -99,7 +108,7 @@ export class VideoReverseComponent implements OnInit, OnDestroy {
 
 
     this.viewService.loaderOn();
-    this.videoPlayerService.playerSubjs.source.subscribe(player => {
+    this.videoPlayerService.player.source.playerSubj.subscribe(player => {
       if (player) {
         this.player = player;
         this.player.addEventListener('timeupdate', this.progressBinded);
@@ -107,6 +116,9 @@ export class VideoReverseComponent implements OnInit, OnDestroy {
           if (f) {
             this.keyFrames.push(f);
           }
+        });
+        this.videoPlayerService.player.source.playedSubj.subscribe(state => {
+          this.setPlayerState(state);
         });
       }
     });

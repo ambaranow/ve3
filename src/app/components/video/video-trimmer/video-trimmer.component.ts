@@ -87,7 +87,7 @@ export class VideoTrimmerComponent implements OnInit, OnDestroy {
           this.trim.max = this.fileInfo.durationMs;
         }
         this.shadowTrim.max = 100 - (this.trim.max * 100 / this.fileInfo.durationMs) + '%';
-        this.videoPlayerService.currentTimeSubjs.source.next(this.trim.max / 1000);
+        this.videoPlayerService.player.source.currentTimeSubj.next(this.trim.max / 1000);
         // this.setPlayProgress(this.trim.max);
         break;
       case 'min':
@@ -96,7 +96,7 @@ export class VideoTrimmerComponent implements OnInit, OnDestroy {
           this.trim.min = this.trim.max;
         }
         this.shadowTrim.min = (this.trim.min * 100 / this.fileInfo.durationMs) + '%';
-        this.videoPlayerService.currentTimeSubjs.source.next(this.trim.min / 1000);
+        this.videoPlayerService.player.source.currentTimeSubj.next(this.trim.min / 1000);
         // this.setPlayProgress(this.trim.min);
         break;
     }
@@ -140,7 +140,7 @@ export class VideoTrimmerComponent implements OnInit, OnDestroy {
   }
 
   setPlayerState(state) {
-    this.isPaused = state === 'paused' ? true : false;
+    this.isPaused = !state;
   }
 
   trimmedPlay(e) {
@@ -153,7 +153,7 @@ export class VideoTrimmerComponent implements OnInit, OnDestroy {
         this.trimmedRangePlayPause();
       }
       this.player.removeEventListener('timeupdate', this.trimmedPlayBinded);
-      this.videoPlayerService.currentTimeSubjs.source.next(this.trim.max / 1000);
+      this.videoPlayerService.player.source.currentTimeSubj.next(this.trim.max / 1000);
       // this.setPlayProgress(this.trim.max);
     }
   }
@@ -165,7 +165,7 @@ export class VideoTrimmerComponent implements OnInit, OnDestroy {
     if (this.isPaused) {
       const t = this.player.currentTime;
       if (t < this.trim.min / 1000 || t >= this.trim.max / 1000) {
-        this.videoPlayerService.currentTimeSubjs.source.next(this.trim.min / 1000);
+        this.videoPlayerService.player.source.currentTimeSubj.next(this.trim.min / 1000);
       }
       this.player.addEventListener('timeupdate', this.trimmedPlayBinded);
       this.videoPlayerService.play('source');
@@ -194,12 +194,12 @@ export class VideoTrimmerComponent implements OnInit, OnDestroy {
     });
 
     this.viewService.loaderOn();
-    this.videoPlayerService.playerSubjs.source.subscribe(player => {
+    this.videoPlayerService.player.source.playerSubj.subscribe(player => {
       if (player) {
         this.player = player;
         this.player.addEventListener('timeupdate', this.progressBinded);
         this.setRange({value: this.fileInfo.durationMs}, 'max', 'init');
-        this.videoPlayerService.currentTimeSubjs.source.next(0);
+        this.videoPlayerService.player.source.currentTimeSubj.next(0);
 
         this.videoWorkService.keyFramesSubj.subscribe(f => {
           if (f) {
@@ -216,8 +216,8 @@ export class VideoTrimmerComponent implements OnInit, OnDestroy {
         this.videoWorkService.getKeyFrames(n).then((res: SafeUrl[]) => {
           this.keyFrames = res;
           setTimeout(() => {
-            this.videoPlayerService.currentTimeSubjs.source.next(0);
-            this.videoPlayerService.stateSubjs.source.subscribe(state => {
+            this.videoPlayerService.player.source.currentTimeSubj.next(0);
+            this.videoPlayerService.player.source.playedSubj.subscribe(state => {
               this.setPlayerState(state);
             });
           });

@@ -20,6 +20,7 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
   progress: number = undefined;
 
   @Input() id: 'source' | 'target';
+  @Input() controls = true;
 
   constructor(
     private sanitizer: DomSanitizer,
@@ -61,7 +62,7 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
               if (this.player) {
                 this.player.addEventListener('loadeddata', () => {
                   this.videoPlayerService.setPlayer(this.player, this.id);
-                  this.videoPlayerService.currentTimeSubjs[this.id]
+                  this.videoPlayerService.player[this.id].currentTimeSubj
                     .pipe(debounceTime(10))
                     .subscribe(t => {
                       this.player.currentTime = t;

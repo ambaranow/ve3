@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { VideoObj } from '@models/video-obj';
 import { ViewService } from '@services/view.service';
@@ -9,7 +9,8 @@ import { VideoPlayerService } from '@services/video-player.service';
 @Component({
   selector: 'app-video',
   templateUrl: './video.component.html',
-  styleUrls: ['./video.component.scss']
+  styleUrls: ['./video.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class VideoComponent implements OnInit {
   form: FormGroup;
@@ -36,7 +37,7 @@ export class VideoComponent implements OnInit {
         this.progress = 0;
       }
     });
-    this.videoPlayerService.playerSubjs.source.subscribe(player => {
+    this.videoPlayerService.player.source.playerSubj.subscribe(player => {
       this.isPreviewReady = player ? true : false;
     });
 

@@ -36,7 +36,7 @@ export class VideoWorkService {
       logger: (res) => {
         // console.log(res);
         // if (res.message && !res.type || res.type !== 'stderr') {
-        console.log(res.message);
+        // console.log(res.message);
         //   // this.mess += res.message + '\n';
         this.message.next(res);
         // }
@@ -256,8 +256,8 @@ export class VideoWorkService {
       // accurate
       command = `
       -y \
-      -ss ${params.ss} \
       -i ${inputFileName} \
+      -ss ${params.ss} \
       -to ${params.to} \
       -loglevel info \
       ${noAudio} \

@@ -1,10 +1,36 @@
 <div *ngIf="fileInfo.durationMs">
-  <button mat-stroked-button (click)="actionReverse($event)"
-    ><i class="material-icons">swap_horiz</i>Reverse</button>
 
-  <app-download-link *ngIf="downloadHref" [link]="downloadHref"></app-download-link>
-  <ve-keyframes-line
-    *ngIf="keyFrames.length"
-    [keyFrames]="keyFrames"></ve-keyframes-line>
+  <mat-grid-list
+    class="actions"
+    cols="4"
+    rowHeight="75px">
+    <mat-grid-tile>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <button
+        mat-stroked-button
+        (click)="playerPlayPause()"
+        ><i class="material-icons" *ngIf="!isPaused">pause</i><i
+        class="material-icons" *ngIf="isPaused">play_arrow</i></button>
+      &nbsp;
+      <span>
+        <i
+          class="material-icons">last_page</i>{{fileInfo.duration}}<i
+          class="material-icons">first_page</i>
+      </span>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <button mat-stroked-button (click)="actionReverse($event)"
+        ><i class="material-icons">swap_horiz</i>Reverse</button>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <app-download-link *ngIf="downloadHref" [link]="downloadHref"></app-download-link>
+    </mat-grid-tile>
+  </mat-grid-list>
 
+  <div class="reverse">
+    <ve-keyframes-line
+      *ngIf="keyFrames.length"
+      [keyFrames]="keyFrames"></ve-keyframes-line>
+  </div>
 </div>
