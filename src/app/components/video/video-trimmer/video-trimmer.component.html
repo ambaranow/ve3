@@ -73,8 +73,9 @@
   rowHeight="70px"
   *ngIf="fileInfo.durationMs && keyFrames.length">
 
-  <mat-grid-tile class="actions-trim" *ngIf="trim.max < fileInfo.durationMs || trim.min > 0">
+  <mat-grid-tile class="actions-trim">
     <div
+      *ngIf="trim.max < fileInfo.durationMs || trim.min > 0"
       class="actions-trim__block">
       <span
         class="actions-trim__title"
@@ -99,8 +100,8 @@
       </div>
     </div>
   </mat-grid-tile>
-  <mat-grid-tile *ngIf="downloadHref">
-    <app-download-link [link]="downloadHref"></app-download-link>
+  <mat-grid-tile>
+    <app-download-link></app-download-link>
   </mat-grid-tile>
 </mat-grid-list>
 

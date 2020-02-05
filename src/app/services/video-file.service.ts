@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { VideoObj } from '@models/video-obj';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { ReadFile } from 'ngx-file-helpers';
 import { HelpersService } from './helpers.service';
 
@@ -10,6 +10,11 @@ import { HelpersService } from './helpers.service';
 })
 export class VideoFileService {
 
+  originalFile: {
+    name: string,
+    ext: string,
+    type: string
+  }
   sourceVideo: VideoObj;
   sourceVideoSubj: BehaviorSubject<VideoObj> = new BehaviorSubject<VideoObj>(null);
   sourcePreviewVideo: VideoObj;
@@ -18,6 +23,7 @@ export class VideoFileService {
   targetVideoSubj: BehaviorSubject<VideoObj> = new BehaviorSubject<VideoObj>(null);
   targetPreviewVideo: VideoObj;
   targetPreviewVideoSubj: BehaviorSubject<VideoObj> = new BehaviorSubject<VideoObj>(null);
+  downloadLinkSubj: BehaviorSubject<{src:SafeUrl,fileName:string}> = new BehaviorSubject<{src:SafeUrl,fileName:string}>(undefined);
 
   sourceFileInfo;
   sourceFileInfoSubj: BehaviorSubject<any> = new BehaviorSubject<any>(null);
@@ -44,17 +50,26 @@ export class VideoFileService {
   }
 
   setSource(sourceVideo: ReadFile) {
-    this.sourceVideo = {
-      src: this.sanitizer.bypassSecurityTrustUrl(sourceVideo.content),
-      src_: sourceVideo.content,
-      file: new File(
-        [this.dataURLtoU8arr(sourceVideo.content)],
-        this.helpersService.getSourceFileName(sourceVideo.name),
-        { type: sourceVideo.type }
-        ),
-      type: sourceVideo.type
-    };
-    this.sourceVideoSubj.next(this.sourceVideo);
+    console.log(sourceVideo.name)
+    if (sourceVideo) {
+      const parsedOriginalFileName = this.helpersService.parseFileName(sourceVideo.name);
+      this.originalFile = {
+        name: parsedOriginalFileName.name,
+        ext: parsedOriginalFileName.ext,
+        type: sourceVideo.type
+      }
+      this.sourceVideo = {
+        src: this.sanitizer.bypassSecurityTrustUrl(sourceVideo.content),
+        src_: sourceVideo.content,
+        file: new File(
+          [this.dataURLtoU8arr(sourceVideo.content)],
+          this.helpersService.getSourceFileName(sourceVideo.name),
+          { type: sourceVideo.type }
+          ),
+        type: sourceVideo.type
+      };
+      this.sourceVideoSubj.next(this.sourceVideo);
+    }
   }
 
   setSourcePreview(sourcePreviewVideo: { data: any; type: string; name?: string; }) {
@@ -89,6 +104,17 @@ export class VideoFileService {
       };
     }
     this.targetVideoSubj.next(this.targetVideo);
+    this.setDownloadLink(targetVideo);
+  }
+
+  setDownloadLink(targetVideo) {
+    if (targetVideo) {
+      const fileName = this.originalFile.name + '.' + this.helpersService.getExtension(targetVideo.name);
+      const dwnld = {src: this.targetVideo.src, fileName};
+      this.downloadLinkSubj.next(dwnld);
+    } else {
+      this.downloadLinkSubj.next(undefined);
+    }
   }
 
   setTargetPreview(targetPreviewVideo: { data: any; type: string; name?: string; }) {

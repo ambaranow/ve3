@@ -64,6 +64,7 @@ export class VideoWorkService {
       // write source
       await this.worker.write(f.file.name, f.file);
     }
+    this.videoFileService.setDownloadLink(undefined); // reset donwload link
     let result: any = {};
     const messSubscriber = this.message.subscribe(res => {
       if (res) {
@@ -150,6 +151,7 @@ export class VideoWorkService {
     if (!this.isInited) {
       await this.init();
     }
+    this.videoFileService.setDownloadLink(undefined); // reset donwload link
     const n = this.videoFileService.sourceVideo.file.name;
     const inputFileName = this.helpersService.getSourceFileName(n);
     const outputFileName = this.helpersService.getTargetFileName(n);
@@ -199,10 +201,10 @@ export class VideoWorkService {
 
   async trim(params: { ss: string | number, to: string | number, t: string | number, accurate: boolean, noAudio: boolean}) {
     const start = (new Date()).getTime();
-    console.log(params)
     if (!this.isInited) {
       await this.init();
     }
+    this.videoFileService.setDownloadLink(undefined); // reset donwload link
     const n = this.videoFileService.sourceVideo.file.name;
     const inputFileName = this.helpersService.getSourceFileName(n);
     const outputFileName = this.helpersService.getTargetFileName(n);

@@ -38,7 +38,7 @@ export class VideoTrimmerComponent implements OnInit, OnDestroy {
   };
   trimmedPlayBinded: any;
   progressBinded: any;
-  downloadHref: SafeUrl = undefined;
+
 
   trimProgress: number;
 
@@ -176,8 +176,6 @@ export class VideoTrimmerComponent implements OnInit, OnDestroy {
   }
 
   setPlayProgress(e) {
-    // console.log('setPlayProgress')
-    // console.log(e)
     this.playProgress.time = (e.target.currentTime * 100) / e.target.duration;
   }
 
@@ -185,13 +183,6 @@ export class VideoTrimmerComponent implements OnInit, OnDestroy {
     if (this.processKeyFrames || !this.fileInfo.durationMs) {
       return;
     }
-    this.videoFileService.targetVideoSubj.subscribe(f => {
-      if (f && f.src) {
-        this.downloadHref = f.src;
-      } else {
-        this.downloadHref = undefined;
-      }
-    });
 
     this.viewService.loaderOn();
     this.videoPlayerService.player.source.playerSubj.subscribe(player => {

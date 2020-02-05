@@ -26,7 +26,6 @@ export class VideoReverseComponent implements OnInit, OnDestroy {
   };
   reverseProgress = 0;
   progressBinded: any;
-  downloadHref: SafeUrl = undefined;
 
   isRemoveAudio = false;
 
@@ -98,13 +97,6 @@ export class VideoReverseComponent implements OnInit, OnDestroy {
     if (!this.fileInfo.durationMs) {
       return;
     }
-    this.videoFileService.targetVideoSubj.subscribe(f => {
-      if (f && f.src) {
-        this.downloadHref = f.src;
-      } else {
-        this.downloadHref = undefined;
-      }
-    });
 
 
     this.viewService.loaderOn();

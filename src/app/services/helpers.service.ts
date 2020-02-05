@@ -42,7 +42,7 @@ export class HelpersService {
 
   ms2TimeStringNoMs = (s: number) => {
     const msRegExp = /\.([0-9a-z]{1,5})$/i;
-    let res = this.ms2TimeString(s);
+    const res = this.ms2TimeString(s);
     return res.replace(msRegExp, '');
   }
    /**
@@ -73,6 +73,12 @@ export class HelpersService {
     return (n.match(extensionRegExp)[1]).toLowerCase();
   }
 
+  parseFileName(n: string) {
+    console.log('parseFileName ' + n)
+    const re = /(.+)\.([0-9a-z]{1,5})$/i;
+    return {name: (n.match(re)[1]), ext: (n.match(re)[2])};
+  }
+
   getSourceFileName(n: string) {
     return 'source.' + this.getExtension(n);
   }
@@ -96,7 +102,7 @@ export class HelpersService {
       res = 1 / (durSeconds / fileinfo.frames);
       res = Math.floor(res * 100000) / 100000;
     }
-    console.log('fps = ' + res)
+    // console.log('fps = ' + res)
     return res;
   }
 }

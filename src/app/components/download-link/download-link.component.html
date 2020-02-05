@@ -1,8 +1,7 @@
-<form method="get" [action]="link" *ngIf="link">
-  <button
-    type="submit"
-    mat-raised-button
-    class="download-button"
-    download>{{ 'BUTTONS.DOWNLOAD' | translate }}!
-    <i class="material-icons">save_alt</i></button>
-</form>
+<a
+  [href]="downloadHref"
+  download="{{downloadName}}"
+  class="mat-raised-button mat-button-base download-button"
+  *ngIf="downloadHref && downloadName"><span 
+    class="mat-button-wrapper">{{ 'BUTTONS.DOWNLOAD' | translate }}!
+  <i class="material-icons">save_alt</i></span></a>
