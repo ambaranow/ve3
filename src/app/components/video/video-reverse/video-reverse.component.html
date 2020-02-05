@@ -17,8 +17,12 @@
         class="material-icons" *ngIf="isPaused">play_arrow</i></button>
     </mat-grid-tile>
     <mat-grid-tile colspan="2">
-      <button mat-raised-button (click)="actionReverse($event)"
-        ><i class="material-icons">swap_horiz</i>Reverse</button>
+      <button
+        mat-raised-button
+        (click)="actionReverse($event)"
+        color="accent"
+        >Reverse
+        <i class="material-icons">swap_horiz</i></button>
       <app-download-link *ngIf="downloadHref" [link]="downloadHref"></app-download-link>
     </mat-grid-tile>
   </mat-grid-list>
