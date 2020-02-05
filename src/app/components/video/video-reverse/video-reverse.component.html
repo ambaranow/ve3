@@ -2,28 +2,22 @@
 
   <mat-grid-list
     class="actions"
-    cols="4"
-    rowHeight="75px">
+    cols="2"
+    rowHeight="70px">
     <mat-grid-tile>
-      <span>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="playerPlayPause()"
+        class="actions-source__play"
+        ><i class="material-icons" *ngIf="!isPaused">pause</i><i
+        class="material-icons" *ngIf="isPaused">play_arrow</i></button>
+
+        <span class="actions-source__time">
         {{fileInfo.duration}}
       </span>
     </mat-grid-tile>
     <mat-grid-tile>
-      <button
-        mat-raised-button
-        (click)="playerPlayPause()"
-        ><i class="material-icons" *ngIf="!isPaused">pause</i><i
-        class="material-icons" *ngIf="isPaused">play_arrow</i></button>
-    </mat-grid-tile>
-    <mat-grid-tile colspan="2">
-      <button
-        mat-raised-button
-        (click)="actionReverse($event)"
-        color="accent"
-        >Reverse
-        <i class="material-icons">swap_horiz</i></button>
-      <app-download-link *ngIf="downloadHref" [link]="downloadHref"></app-download-link>
     </mat-grid-tile>
   </mat-grid-list>
 
@@ -32,4 +26,22 @@
       *ngIf="keyFrames.length"
       [keyFrames]="keyFrames"></ve-keyframes-line>
   </div>
+
+  <mat-grid-list 
+    class="actions"
+    cols="2"
+    rowHeight="70px"
+    *ngIf="fileInfo.durationMs && keyFrames.length">
+    <mat-grid-tile>
+      <button
+        mat-raised-button
+        (click)="actionReverse($event)"
+        color="accent"
+        >Reverse
+        <i class="material-icons">swap_horiz</i></button>
+    </mat-grid-tile>
+    <mat-grid-tile *ngIf="downloadHref">
+      <app-download-link [link]="downloadHref"></app-download-link>
+    </mat-grid-tile>
+  </mat-grid-list>
 </div>

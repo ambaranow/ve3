@@ -12,6 +12,17 @@
   line-height: 1;
   vertical-align: middle;
   margin: 20px 0;
+  & &-source {
+    &__play {
+      margin: 0 5px;
+    }
+    &__time {
+      line-height: 1em;
+      display: inline-flex;
+      margin: 0 5px;
+    }
+  }
+
   .material-icons, button {
     font-size: 100%;
     line-height: 1;

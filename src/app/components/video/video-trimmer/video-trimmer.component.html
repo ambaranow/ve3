@@ -1,55 +1,27 @@
 <mat-grid-list
   class="actions"
-  cols="4"
-  rowHeight="100px"
+  cols="2"
+  rowHeight="70px"
   *ngIf="fileInfo.durationMs && keyFrames.length">
   <mat-grid-tile class="actions-source">
     <button
       mat-raised-button
+      color="primary"
       (click)="trimmedRangePlayPause()"
+      class="actions-source__play"
       ><i class="material-icons" *ngIf="!isPaused">pause</i><i
       class="material-icons" *ngIf="isPaused">play_arrow</i></button>
     <!-- <mat-checkbox [(ngModel)]="!isRemoveAudio">Audio</mat-checkbox> -->
+
     <span class="actions-source__time">
       <i
-        class="material-icons">last_page</i>{{trim.duration}}<i
-        class="material-icons">first_page</i>
+        class="material-icons">skip_next</i>{{trim.duration}}<i
+        class="material-icons">skip_previous</i>
     </span>
   </mat-grid-tile>
-  <mat-grid-tile class="actions-trim">
-    <div
-      class="actions-trim__block"
-      *ngIf="trim.max < fileInfo.durationMs || trim.min > 0">
-      <span
-        class="actions-trim__title"
-        >
-        {{ 'BUTTONS.TRIM' | translate }}:
-      </span>
-      <div class="actions-trim__buttons">
-        <button
-          mat-raised-button
-          (click)="actionTrim($event, false)"
-          color="accent"
-          ><span class="hide-mobile">{{ 'BUTTONS.FASTTRIM' | translate }}</span>
-          <i class="material-icons">fast_forward</i><span class="hide-desktop">_</span>
-          <i class="material-icons hide-desktop">fast_rewind</i></button>
-        <button
-          mat-raised-button
-          (click)="actionTrim($event, true)"
-          color="accent"
-          ><span class="hide-mobile">{{ 'BUTTONS.ACCURATETRIM' | translate }}</span>
-          <i class="material-icons">skip_next</i><span class="hide-desktop">&#8230;</span>
-          <i class="material-icons hide-desktop">skip_previous</i></button>
-      </div>
-    </div>
-  </mat-grid-tile>
   <mat-grid-tile>
-  </mat-grid-tile>
-  <mat-grid-tile>
-    <app-download-link *ngIf="downloadHref" [link]="downloadHref"></app-download-link>
   </mat-grid-tile>
 </mat-grid-list>
-
 
 <div class="trim">
   <mat-progress-bar
@@ -93,6 +65,44 @@
     [value]="fileInfo.durationMs"
     ></mat-slider>
 </div>
+
+
+<mat-grid-list 
+  class="actions"
+  cols="2"
+  rowHeight="70px"
+  *ngIf="fileInfo.durationMs && keyFrames.length">
+
+  <mat-grid-tile class="actions-trim" *ngIf="trim.max < fileInfo.durationMs || trim.min > 0">
+    <div
+      class="actions-trim__block">
+      <span
+        class="actions-trim__title"
+        >
+        {{ 'BUTTONS.TRIM' | translate }}:
+      </span>
+      <div class="actions-trim__buttons">
+        <button
+          mat-raised-button
+          (click)="actionTrim($event, false)"
+          color="accent"
+          ><span class="hide-mobile">{{ 'BUTTONS.FASTTRIM' | translate }}</span>
+          <i class="material-icons">fast_forward</i><span class="hide-desktop">_</span>
+          <i class="material-icons hide-desktop">fast_rewind</i></button>
+        <button
+          mat-raised-button
+          (click)="actionTrim($event, true)"
+          color="accent"
+          ><span class="hide-mobile">{{ 'BUTTONS.ACCURATETRIM' | translate }}</span>
+          <i class="material-icons">skip_next</i><span class="hide-desktop">&#8230;</span>
+          <i class="material-icons hide-desktop">skip_previous</i></button>
+      </div>
+    </div>
+  </mat-grid-tile>
+  <mat-grid-tile *ngIf="downloadHref">
+    <app-download-link [link]="downloadHref"></app-download-link>
+  </mat-grid-tile>
+</mat-grid-list>
 
 <mat-progress-bar style="width:100%" class="trim-work-progress" *ngIf="trimProgress"
   mode="determinate" color="primary" [value]="trimProgress"></mat-progress-bar>
