@@ -8,6 +8,15 @@
     width: 560px;
     max-width: 100%;
     margin: 20px auto;
+    &__read {
+      text-align: center;
+      position: absolute;
+      width: 100%;
+      margin: -0.5em 0 0 0;
+      line-height: 1em;
+      left: 0;
+      top: 50%;
+    }
   }
   &-wrapper {
     padding-bottom: 56.25%;

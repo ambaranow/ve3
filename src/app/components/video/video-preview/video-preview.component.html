@@ -10,8 +10,9 @@
         [value]="progress"
         ></mat-progress-bar>
 
-      <p *ngIf="!previewVideo?.src">
-        Please wait, still reading the file...
+      <p *ngIf="!previewVideo?.src"
+        class="video-preview__read">
+        {{ 'PREVIEW.STILLREAD' | translate }}...
       </p>
 
       <div #videoEl>

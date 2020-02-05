@@ -9,13 +9,17 @@
     "TRIM": "Вырезать",
     "FASTTRIM": "Быстро",
     "ACCURATETRIM": "Аккуратно",
-    "DOWNLOAD": "Скачать"
+    "DOWNLOAD": "Скачать",
+    "UPLOADAREA": "Перетащите файл сюда или кликайте"
   },
   "LANGUAGES": {
 		"EN": "En",
 		"RU": "Ру",
 		"TITLE": "Язык"
 	},
+  "PREVIEW": {
+    "STILLREAD": "Подождите, пожалуйста, идёт чтение файла"
+  },
   "GREETENG": {
   }
 

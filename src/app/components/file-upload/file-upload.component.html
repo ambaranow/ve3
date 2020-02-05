@@ -8,9 +8,8 @@
     (readEnd)="onReadEnd($event)"
     (filePick)="onFilePicked($event)"
     (fileDrop)="onFilePicked($event)">
-    <span *ngIf="!fileUploadProgress">
+    <span *ngIf="!fileUploadProgress">{{ title }}
       <i class="material-icons">add_to_queue</i>
-      {{ title }}:
     </span>
     <span *ngIf="fileUploadProgress">
       <i class="material-icons">hourglass_empty</i>

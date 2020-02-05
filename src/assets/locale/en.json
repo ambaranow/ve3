@@ -9,12 +9,16 @@
     "TRIM": "Trim",
     "FASTTRIM": "Fast",
     "ACCURATETRIM": "Accurate",
-    "DOWNLOAD": "Download"
+    "DOWNLOAD": "Download",
+    "UPLOADAREA": "Drag video file, or click here"
   },
   "LANGUAGES": {
 		"EN": "En",
 		"RU": "Ру",
 		"TITLE": "Language"
+  },
+  "PREVIEW": {
+    "STILLREAD": "Please wait, still reading the file"
   },
   "GREETENG": {
   }

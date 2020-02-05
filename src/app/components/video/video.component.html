@@ -6,7 +6,7 @@
     *ngIf="!fileUploaded"
     [acceptType]="'video/*'"
     (fileUploaded)="onFilePicked($event)"
-    [title]="'Drag video file, or click here'">
+    [title]="'BUTTONS.UPLOADAREA' | translate">
   </app-file-upload>
 </form>
 
