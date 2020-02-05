@@ -7,7 +7,8 @@
     "build": "npm i && ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "update-locale": "ngx-translate-extract -i ./src -o src/assets/locale/*.json --sort --format namespaced-json"
   },
   "private": true,
   "dependencies": {

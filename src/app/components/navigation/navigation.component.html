@@ -1,7 +1,17 @@
 <div class="ve-container" [class.ve-is-mobile]="mobileQuery.matches">
   <mat-toolbar color="basic" class="ve-toolbar">
     <button mat-raised-button mat-icon-button (click)="snav.toggle()"><mat-icon>menu</mat-icon></button>
-    <!-- <h1 class="ve-app-name">Responsive App</h1> -->
+    <h1 class="ve-toolbar-title">Responsive App</h1>
+    <span class="ve-toolbar-spacer"></span>
+    <span class="ve-toolbar-langs">
+      {{ 'LANGUAGES.TITLE' | translate }}:
+      <button
+        mat-button
+        (click)="changeLocale(language.id)"
+        *ngFor="let language of languages;">
+        {{ language.title }}
+      </button>
+    </span>
   </mat-toolbar>
 
   <mat-sidenav-container class="ve-sidenav-container"

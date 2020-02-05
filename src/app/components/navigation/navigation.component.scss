@@ -14,8 +14,20 @@
   z-index: 2;
 }
 
-h1.ve-app-name {
-  margin-left: 8px;
+.ve-toolbar {
+  &-title {
+    margin-left: 8px;
+  }
+  &-spacer {
+    flex: 1 1 auto;
+  }
+  &-langs {
+    font-size: small;
+    button {
+      min-width: 30px;
+      padding: 0 10px;
+    }
+  }
 }
 
 .ve-sidenav-container {

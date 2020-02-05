@@ -1,0 +1,16 @@
+{
+  "NAV": {
+    "VIDEO": "Видео"
+  },
+  "VIDEO": {
+
+  },
+  "LANGUAGES": {
+		"EN": "En",
+		"RU": "Ру",
+		"TITLE": "Язык"
+	},
+  "GREETENG": {
+  }
+
+}
