@@ -14,6 +14,10 @@ import { MatProgressBarModule,
   MatButtonModule } from '@angular/material';
 import { VideoReverseComponent } from './video-reverse/video-reverse.component';
 import { DownloadLinkComponent } from '@components/download-link/download-link.component';
+import { TranslateModule, TranslateLoader, MissingTranslationHandler } from '@ngx-translate/core';
+import { HttpLoaderFactory } from '@services/http-loader.factory';
+import { HttpClient } from '@angular/common/http';
+import { MissingTranslationService } from '@services/missing-translation.service';
 
 
 
@@ -37,6 +41,16 @@ import { DownloadLinkComponent } from '@components/download-link/download-link.c
     MatGridListModule,
     MatButtonModule,
     ReactiveFormsModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient],
+      },
+      missingTranslationHandler: { provide: MissingTranslationHandler, useClass: MissingTranslationService },
+      useDefaultLang: false,
+    })
+
 
   ],
   exports: [VideoComponent]

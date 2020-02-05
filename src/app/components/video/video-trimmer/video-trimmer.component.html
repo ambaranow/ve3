@@ -1,38 +1,49 @@
 <mat-grid-list
   class="actions"
   cols="4"
-  rowHeight="75px"
+  rowHeight="100px"
   *ngIf="fileInfo.durationMs && keyFrames.length">
-  <mat-grid-tile>
-    <span>
-      <i
-        class="material-icons">last_page</i>{{trim.duration}}<i
-        class="material-icons">first_page</i>
-    </span>
-  </mat-grid-tile>
-  <mat-grid-tile>
+  <mat-grid-tile class="actions-source">
     <button
       mat-raised-button
       (click)="trimmedRangePlayPause()"
       ><i class="material-icons" *ngIf="!isPaused">pause</i><i
       class="material-icons" *ngIf="isPaused">play_arrow</i></button>
     <!-- <mat-checkbox [(ngModel)]="!isRemoveAudio">Audio</mat-checkbox> -->
+    <span class="actions-source__time">
+      <i
+        class="material-icons">last_page</i>{{trim.duration}}<i
+        class="material-icons">first_page</i>
+    </span>
+  </mat-grid-tile>
+  <mat-grid-tile class="actions-trim">
+    <div
+      class="actions-trim__block"
+      *ngIf="trim.max < fileInfo.durationMs || trim.min > 0">
+      <span
+        class="actions-trim__title"
+        >
+        {{ 'BUTTONS.TRIM' | translate }}:
+      </span>
+      <div class="actions-trim__buttons">
+        <button
+          mat-raised-button
+          (click)="actionTrim($event, false)"
+          color="accent"
+          >{{ 'BUTTONS.FASTTRIM' | translate }}
+          <i class="material-icons">fast_forward</i></button>
+        <button
+          mat-raised-button
+          (click)="actionTrim($event, true)"
+          color="accent"
+          >{{ 'BUTTONS.ACCURATETRIM' | translate }}
+          <i class="material-icons">skip_next</i></button>
+      </div>
+    </div>
   </mat-grid-tile>
   <mat-grid-tile>
-    <button
-      mat-raised-button
-      (click)="actionTrim($event, false)"
-      color="accent"
-      *ngIf="trim.max < fileInfo.durationMs || trim.min > 0"
-      >Fast trim
-      <i class="material-icons">fast_forward</i></button>
-    <button
-      mat-raised-button
-      (click)="actionTrim($event, true)"
-      color="accent"
-      *ngIf="trim.max < fileInfo.durationMs || trim.min > 0"
-      >Accurate
-      <i class="material-icons">skip_next</i></button>
+  </mat-grid-tile>
+  <mat-grid-tile>
     <app-download-link *ngIf="downloadHref" [link]="downloadHref"></app-download-link>
   </mat-grid-tile>
 </mat-grid-list>

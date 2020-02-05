@@ -1,6 +1,7 @@
 .ve-video{
   &-preview {
     max-height: 320px;
+    max-width: 100%;
   }
   &-volume .mat-figure {
     flex-direction: column;
@@ -10,6 +11,7 @@
   font-size: 18px;
   line-height: 1;
   vertical-align: middle;
+  margin: 20px 0;
   .material-icons, button {
     font-size: 100%;
     line-height: 1;

@@ -5,6 +5,12 @@
   "VIDEO": {
 
   },
+  "BUTTONS": {
+    "TRIM": "Вырезать",
+    "FASTTRIM": "Быстро",
+    "ACCURATETRIM": "Аккуратно",
+    "DOWNLOAD": "Скачать"
+  },
   "LANGUAGES": {
 		"EN": "En",
 		"RU": "Ру",

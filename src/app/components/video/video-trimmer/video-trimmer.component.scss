@@ -117,13 +117,34 @@
     }
   }
 }
-.trim-actions {
-  font-size: 20px;
-  line-height: 1;
-  vertical-align: middle;
-  .material-icons, button {
-    font-size: 100%;
-    line-height: 1;
-    vertical-align: middle;
+.actions {
+  &-source {
+    .mat-figure {
+      flex-direction: column;
+    }
+    &__time {
+      line-height: 1em;
+      margin-top: 10px;
+      margin-bottom: calc(-1em - 10px);
+    }
+  }
+  &-trim {
+    &__block {
+      display: flex;
+      flex-direction: column;
+    }
+    &__title {
+      line-height: 1em;
+      margin-left: 5px;
+      margin-bottom: 10px;
+      margin-top: calc(-1em - 10px);
+    }
+    &__buttons {
+      display: flex;
+      flex-direction: row;
+      button {
+        margin: 0 5px;
+      }
+    }
   }
 }
