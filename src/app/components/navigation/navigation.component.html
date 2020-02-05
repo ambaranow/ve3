@@ -1,7 +1,9 @@
 <div class="ve-container" [class.ve-is-mobile]="mobileQuery.matches">
   <mat-toolbar color="basic" class="ve-toolbar">
-    <button mat-raised-button mat-icon-button (click)="snav.toggle()"><mat-icon>menu</mat-icon></button>
-    <h1 class="ve-toolbar-title">Responsive App</h1>
+    <button mat-raised-button mat-icon-button
+      (click)="snav.toggle()"
+      ><mat-icon>menu</mat-icon></button>
+    <h1 class="ve-toolbar-title"></h1>
     <span class="ve-toolbar-spacer"></span>
     <span class="ve-toolbar-langs">
       {{ 'LANGUAGES.TITLE' | translate }}:
