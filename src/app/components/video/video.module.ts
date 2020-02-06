@@ -47,8 +47,8 @@ import { MissingTranslationService } from '@services/missing-translation.service
         useFactory: HttpLoaderFactory,
         deps: [HttpClient],
       },
-      missingTranslationHandler: { provide: MissingTranslationHandler, useClass: MissingTranslationService },
-      useDefaultLang: false,
+      // missingTranslationHandler: { provide: MissingTranslationHandler, useClass: MissingTranslationService },
+      // useDefaultLang: false,
     })
 
 

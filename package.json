@@ -27,8 +27,6 @@
     "@ngx-translate/core": "^11.0.1",
     "@ngx-translate/http-loader": "^4.0.0",
     "hammerjs": "^2.0.8",
-    "localize-router": "^2.0.0-RC.3",
-    "localize-router-http-loader": "^1.0.2",
     "ngx-file-helpers": "^2.0.0",
     "rxjs": "~6.4.0",
     "tslib": "^1.10.0",
