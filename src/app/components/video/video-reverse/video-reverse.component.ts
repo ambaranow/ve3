@@ -25,7 +25,6 @@ export class VideoReverseComponent implements OnInit, OnDestroy {
     time: 0
   };
   reverseProgress = 0;
-  progressBinded: any;
 
   isRemoveAudio = false;
 
@@ -36,7 +35,6 @@ export class VideoReverseComponent implements OnInit, OnDestroy {
     private videoPlayerService: VideoPlayerService,
     private helpersService: HelpersService,
   ) {
-    this.progressBinded = this.setPlayProgress.bind(this);
   }
 
 
@@ -54,7 +52,6 @@ export class VideoReverseComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.player.removeEventListener('timeupdate', this.progressBinded);
   }
 
   async actionReverse($event) {
@@ -71,46 +68,22 @@ export class VideoReverseComponent implements OnInit, OnDestroy {
     tps.unsubscribe();
     setTimeout(() => {
       this.reverseProgress = 0;
-    }, 2000);
+    }, 1);
     this.viewService.loaderOff();
-  }
-
-  setPlayProgress(e) {
-    // console.log('setPlayProgress')
-    // console.log(e)
-    this.playProgress.time = (e.target.currentTime * 100) / e.target.duration;
-  }
-
-  setPlayerState(state) {
-    this.isPaused = !state;
-  }
-
-  playerPlayPause() {
-    if (this.isPaused) {
-      this.videoPlayerService.play('source');
-    } else {
-      this.videoPlayerService.pause('source');
-    }
   }
 
   async init() {
     if (!this.fileInfo.durationMs) {
       return;
     }
-
-
     this.viewService.loaderOn();
     this.videoPlayerService.player.source.playerSubj.subscribe(player => {
       if (player) {
         this.player = player;
-        this.player.addEventListener('timeupdate', this.progressBinded);
         this.videoWorkService.keyFramesSubj.subscribe(f => {
           if (f) {
             this.keyFrames.push(f);
           }
-        });
-        this.videoPlayerService.player.source.playedSubj.subscribe(state => {
-          this.setPlayerState(state);
         });
       }
     });

@@ -1,0 +1,21 @@
+<div class="video-controls" *ngIf="player">
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="controlPlayPause()"
+    class="actions-source__play"><i
+      class="material-icons"
+      *ngIf="!isPaused">pause</i><i
+        class="material-icons"
+        *ngIf="isPaused"
+        >play_arrow</i></button>
+  <span
+    class="actions-source__time"><i
+      class="material-icons"
+      *ngIf="start || end"
+      >skip_next</i>{{duration}}<i
+        class="material-icons"
+        *ngIf="start || end"
+        >skip_previous</i>
+  </span>
+</div>

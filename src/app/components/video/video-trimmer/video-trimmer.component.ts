@@ -51,7 +51,6 @@ export class VideoTrimmerComponent implements OnInit, OnDestroy {
     private videoPlayerService: VideoPlayerService,
     private helpersService: HelpersService,
   ) {
-    this.trimmedPlayBinded = this.trimmedPlay.bind(this);
     this.progressBinded = this.setPlayProgress.bind(this);
   }
 
@@ -88,7 +87,6 @@ export class VideoTrimmerComponent implements OnInit, OnDestroy {
         }
         this.shadowTrim.max = 100 - (this.trim.max * 100 / this.fileInfo.durationMs) + '%';
         this.videoPlayerService.player.source.currentTimeSubj.next(this.trim.max / 1000);
-        // this.setPlayProgress(this.trim.max);
         break;
       case 'min':
         this.trim.min = $event.value;
@@ -97,12 +95,9 @@ export class VideoTrimmerComponent implements OnInit, OnDestroy {
         }
         this.shadowTrim.min = (this.trim.min * 100 / this.fileInfo.durationMs) + '%';
         this.videoPlayerService.player.source.currentTimeSubj.next(this.trim.min / 1000);
-        // this.setPlayProgress(this.trim.min);
         break;
     }
-    this.trim.duration = this.helpersService.ms2TimeString(this.trim.max - this.trim.min);
-    // this.playProgress.left = (this.trim.min * 100 / this.fileInfo.durationMs) + '%';
-    // this.playProgress.width = ((this.trim.max - this.trim.min) * 100 / this.fileInfo.durationMs) + '%';
+    this.trim.duration = this.helpersService.ms2TimeStringNoMs(this.trim.max - this.trim.min);
   }
 
   shadowSize(key: string) {
@@ -139,41 +134,6 @@ export class VideoTrimmerComponent implements OnInit, OnDestroy {
     this.viewService.loaderOff();
   }
 
-  setPlayerState(state) {
-    this.isPaused = !state;
-  }
-
-  trimmedPlay(e) {
-    // console.log(e)
-    // this.isPaused = this.player.paused();
-    const t = e.target.currentTime;
-    // this.setPlayProgress(t * 1000);
-    if (t >= this.trim.max / 1000) {
-      if (!this.isPaused) {
-        this.trimmedRangePlayPause();
-      }
-      this.player.removeEventListener('timeupdate', this.trimmedPlayBinded);
-      this.videoPlayerService.player.source.currentTimeSubj.next(this.trim.max / 1000);
-      // this.setPlayProgress(this.trim.max);
-    }
-  }
-  trimmedPause() {
-  }
-
-  trimmedRangePlayPause() {
-    // console.log('this.isPaused = ' + this.isPaused)
-    if (this.isPaused) {
-      const t = this.player.currentTime;
-      if (t < this.trim.min / 1000 || t >= this.trim.max / 1000) {
-        this.videoPlayerService.player.source.currentTimeSubj.next(this.trim.min / 1000);
-      }
-      this.player.addEventListener('timeupdate', this.trimmedPlayBinded);
-      this.videoPlayerService.play('source');
-    } else {
-      // this.isPaused = this.player.paused();
-      this.videoPlayerService.pause('source');
-    }
-  }
 
   setPlayProgress(e) {
     this.playProgress.time = (e.target.currentTime * 100) / e.target.duration;
@@ -208,9 +168,6 @@ export class VideoTrimmerComponent implements OnInit, OnDestroy {
           this.keyFrames = res;
           setTimeout(() => {
             this.videoPlayerService.player.source.currentTimeSubj.next(0);
-            this.videoPlayerService.player.source.playedSubj.subscribe(state => {
-              this.setPlayerState(state);
-            });
           });
         });
       }

@@ -14,12 +14,14 @@ export class VideoPlayerService {
       playerSubj: new BehaviorSubject<any>(undefined),
       playedSubj: new BehaviorSubject<boolean>(false),
       currentTimeSubj: new BehaviorSubject<number>(0),
+      durationSubj: new BehaviorSubject<number>(0),
     },
     target: {
       el: undefined,
       playerSubj: new BehaviorSubject<any>(undefined),
       playedSubj: new BehaviorSubject<boolean>(false),
       currentTimeSubj: new BehaviorSubject<number>(0),
+      durationSubj: new BehaviorSubject<number>(0),
     }
   };
   constructor() { }
@@ -31,7 +33,6 @@ export class VideoPlayerService {
   setPlayer(el,  id: string) {
     this.player[id].el = el; // DIV, video element wrapper
     this.player[id].playerSubj.next(this.player[id].el);
-    // console.log(this.players[id])
   }
 
   play(id) {

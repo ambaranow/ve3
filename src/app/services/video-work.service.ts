@@ -28,15 +28,18 @@ export class VideoWorkService {
   ) { }
 
 
+  log(mess) {
+    // console.log(mess);
+  }
   async init() {
     const start = (new Date()).getTime();
     const { createWorker } = window['FFmpeg'];
     this.worker = createWorker({
       corePath: '/assets/ffmpeg/ffmpeg-core.js',
       logger: (res) => {
-        // console.log(res);
+        // this.log(res);
         // if (res.message && !res.type || res.type !== 'stderr') {
-        // console.log(res.message);
+        // this.log(res.message);
         //   // this.mess += res.message + '\n';
         this.message.next(res);
         // }
@@ -45,18 +48,18 @@ export class VideoWorkService {
         let prgrs = (!p || p.ratio < 0) ? 0 : p.ratio;
         prgrs = (prgrs > 1) ? (prgrs - parseInt(prgrs, 10)) : prgrs;
         this.progress.next(Math.round(prgrs * 10000) / 100);
-        console.log(p)
-        // console.log(prgrs)
+        this.log(p)
+        // this.log(prgrs)
       },
     });
     this.isInited = true;
     await this.worker.load();
     const end = (new Date()).getTime();
-    console.log('Duration init() = ' + this.helpersService.ms2TimeString(end - start));
+    this.log('Duration init() = ' + this.helpersService.ms2TimeString(end - start));
   }
 
   async getFileInfo(f: VideoObj) {
-    // console.log('getFileInfo')
+    // this.log('getFileInfo')
     const start = (new Date()).getTime();
     const previewFileName = this.helpersService.getSourcePreviewFileName();
     if (!this.isInited) {
@@ -69,14 +72,14 @@ export class VideoWorkService {
     const messSubscriber = this.message.subscribe(res => {
       if (res) {
         const resObj = this.helpersService.parseMessageToJson(res.message);
-        // console.log(res)
+        // this.log(res)
         result = {...result, ...resObj};
       }
     });
     const isCopy = this.helpersService.getExtension(f.file.name) === 'mp4' ?
                   '-c copy -async 1' : '';
-    // console.log('isCopy = ' + isCopy)
-    // console.log('outputFileName = ' + outputFileName)
+    // this.log('isCopy = ' + isCopy)
+    // this.log('outputFileName = ' + outputFileName)
     await this.worker.run(`
       -i ${f.file.name} \
       -hide_banner \
@@ -95,7 +98,7 @@ export class VideoWorkService {
 
     messSubscriber.unsubscribe();
     const end = (new Date()).getTime();
-    console.log('Duration getFileInfo() = ' + this.helpersService.ms2TimeString(end - start));
+    this.log('Duration getFileInfo() = ' + this.helpersService.ms2TimeString(end - start));
     return result;
   }
 
@@ -108,7 +111,7 @@ export class VideoWorkService {
       const canvas = document.createElement('canvas');
       const vW = videoEl.videoWidth;
       const vH = videoEl.videoHeight;
-      console.log(vW + ' | ' + vH)
+      this.log(vW + ' | ' + vH)
       canvas.width = vW;
       canvas.height = vH;
       const ctx = canvas.getContext('2d');
@@ -131,7 +134,7 @@ export class VideoWorkService {
 
           this.viewService.loaderOff();
           const end = (new Date()).getTime();
-          console.log('Duration getKeyFrames() = ' + this.helpersService.ms2TimeString(end - start));
+          this.log('Duration getKeyFrames() = ' + this.helpersService.ms2TimeString(end - start));
           resolve(keyFrames);
         }
       };
@@ -166,7 +169,7 @@ export class VideoWorkService {
       ${noAudio} \
       ${outputFileName}
       `;
-    // console.log(command.replace(/\s+/g, ' '))
+    // this.log(command.replace(/\s+/g, ' '))
     await this.worker.run(command.replace(/\s+/g, ' '));
     setTimeout(async () => {
       const tFile = await this.worker.read(outputFileName);
@@ -193,7 +196,7 @@ export class VideoWorkService {
       this.videoFileService.setTargetPreview(previewFile);
 
       const end = (new Date()).getTime();
-      console.log('Duration trim() = ' + this.helpersService.ms2TimeString(end - start));
+      this.log('Duration trim() = ' + this.helpersService.ms2TimeString(end - start));
       this.progress.next(100);
     }, 1000);
 
@@ -220,7 +223,7 @@ export class VideoWorkService {
     // -async 1 \
     // tmp_${outputFileName}
     // `;
-    // console.log(command.replace(/\s+/g, ' '))
+    // this.log(command.replace(/\s+/g, ' '))
     // await this.worker.run(command.replace(/\s+/g, ' '));
     // command = `
     // -ss ${params.ss} \
@@ -233,7 +236,7 @@ export class VideoWorkService {
     // -y \
     // ${outputFileName}
     // `;
-    // console.log(command.replace(/\s+/g, ' '))
+    // this.log(command.replace(/\s+/g, ' '))
     // await this.worker.run(command.replace(/\s+/g, ' '));
     // https://stackoverflow.com/questions/55866736/ffmpeg-ss-option-is-not-accurate
     // 3*AV_TIME_BASE / 23
@@ -252,7 +255,7 @@ export class VideoWorkService {
       ${noAudio} \
       ${outputFileName}
       `;
-      console.log(command.replace(/\s+/g, ' '))
+      this.log(command.replace(/\s+/g, ' '))
       await this.worker.run(command.replace(/\s+/g, ' '));
     } else {
       // accurate
@@ -265,7 +268,7 @@ export class VideoWorkService {
       ${noAudio} \
       ${outputFileName}
       `;
-      console.log(command.replace(/\s+/g, ' '))
+      this.log(command.replace(/\s+/g, ' '))
       await this.worker.run(command.replace(/\s+/g, ' '));
     }
     // -avoid_negative_ts 1 или -copyts
@@ -294,7 +297,7 @@ export class VideoWorkService {
       this.videoFileService.setTargetPreview(previewFile);
 
       const end = (new Date()).getTime();
-      console.log('Duration trim() = ' + this.helpersService.ms2TimeString(end - start));
+      this.log('Duration trim() = ' + this.helpersService.ms2TimeString(end - start));
       this.progress.next(100);
     }, 1000);
   }

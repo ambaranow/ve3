@@ -18,6 +18,7 @@ import { TranslateModule, TranslateLoader, MissingTranslationHandler } from '@ng
 import { HttpLoaderFactory } from '@services/http-loader.factory';
 import { HttpClient } from '@angular/common/http';
 import { MissingTranslationService } from '@services/missing-translation.service';
+import { VideoControlsComponent } from './video-controls/video-controls.component';
 
 
 
@@ -29,6 +30,7 @@ import { MissingTranslationService } from '@services/missing-translation.service
     KeyframesLineComponent,
     VideoReverseComponent,
     DownloadLinkComponent,
+    VideoControlsComponent,
   ],
   imports: [
     CommonModule,

@@ -27,7 +27,7 @@
       id="target"
       ></ve-video-preview>
   </mat-grid-tile>
-  <mat-grid-tile class="ve-video-volume">
+  <mat-grid-tile class="ve-video-volume" *ngIf="isPreviewReady">
     <i class="material-icons">
       volume_up
       </i><br />
@@ -48,12 +48,12 @@
 
 
 
-<mat-tab-group *ngIf="fileUploaded" animationDuration="0">
+<mat-tab-group *ngIf="isPreviewReady" animationDuration="0">
   <mat-tab label="Trim">
-    <ve-video-trimmer *ngIf="isPreviewReady"></ve-video-trimmer>
+    <ve-video-trimmer></ve-video-trimmer>
   </mat-tab>
   <mat-tab label="Reverse">
-    <ve-video-reverse *ngIf="isPreviewReady"></ve-video-reverse>
+    <ve-video-reverse></ve-video-reverse>
   </mat-tab>
 </mat-tab-group>
 

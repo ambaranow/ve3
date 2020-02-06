@@ -3,10 +3,9 @@
   <div class="video-preview">
     <div class="video-wrapper">
       <mat-progress-bar
-        *ngIf="progress > 0 && progress < 100 && !previewVideo?.src"
+        *ngIf="progress > 0 && progress < 100 && previewVideo?.src"
         class="video-load"
         mode="determinate"
-        color="primary"
         [value]="progress"
         ></mat-progress-bar>
 
@@ -15,7 +14,7 @@
         {{ 'PREVIEW.STILLREAD' | translate }}...
       </p>
 
-      <div #videoEl>
+      <div #videoEl class="video-parent">
         <video
           *ngIf="previewVideo && previewVideo.src"
           class="video-element video-js"

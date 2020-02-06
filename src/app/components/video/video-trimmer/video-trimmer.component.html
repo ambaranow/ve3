@@ -4,22 +4,29 @@
   rowHeight="70px"
   *ngIf="fileInfo.durationMs && keyFrames.length">
   <mat-grid-tile class="actions-source">
-    <button
+    <!-- <button
       mat-raised-button
       color="primary"
       (click)="trimmedRangePlayPause()"
       class="actions-source__play"
       ><i class="material-icons" *ngIf="!isPaused">pause</i><i
       class="material-icons" *ngIf="isPaused">play_arrow</i></button>
-    <!-- <mat-checkbox [(ngModel)]="!isRemoveAudio">Audio</mat-checkbox> -->
-
     <span class="actions-source__time">
       <i
         class="material-icons">skip_next</i>{{trim.duration}}<i
         class="material-icons">skip_previous</i>
-    </span>
+    </span> -->
+    <ve-video-controls
+      preview="source"
+      [duration]="trim.duration"
+      [start]="trim.min"
+      [end]="trim.max"
+      ></ve-video-controls>
   </mat-grid-tile>
   <mat-grid-tile>
+    <ve-video-controls
+      preview="target"
+      ></ve-video-controls>
   </mat-grid-tile>
 </mat-grid-list>
 

@@ -5,7 +5,7 @@
     cols="2"
     rowHeight="70px">
     <mat-grid-tile>
-      <button
+      <!-- <button
         mat-raised-button
         color="primary"
         (click)="playerPlayPause()"
@@ -15,9 +15,11 @@
 
         <span class="actions-source__time">
         {{fileInfo.duration}}
-      </span>
+      </span> -->
+      <ve-video-controls preview="source"></ve-video-controls>
     </mat-grid-tile>
     <mat-grid-tile>
+      <ve-video-controls preview="target"></ve-video-controls>
     </mat-grid-tile>
   </mat-grid-list>
 
