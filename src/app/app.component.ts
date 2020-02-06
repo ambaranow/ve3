@@ -3,6 +3,9 @@ import {MediaMatcher} from '@angular/cdk/layout';
 import { TranslateService } from '@ngx-translate/core';
 import * as locales from './../assets/locales.json';
 import { LocalizeRouterService } from '@components/localize-router/localize-router.service';
+import { Subscription } from 'rxjs';
+import { MetaService } from '@services/meta.service.js';
+import { MetaObj } from '@models/meta-obj.js';
 
 @Component({
   selector: 'app-root',
@@ -12,9 +15,12 @@ import { LocalizeRouterService } from '@components/localize-router/localize-rout
 })
 export class AppComponent implements OnInit, OnDestroy {
 
+  pageTitle: string;
   lang: string;
   languages: {id: string, title: string}[] = [];
   settings = locales['default'];
+
+  subs: Subscription[] = [];
   mobileQuery: MediaQueryList;
   private _mobileQueryListener: () => void;
 
@@ -22,9 +28,10 @@ export class AppComponent implements OnInit, OnDestroy {
     changeDetectorRef: ChangeDetectorRef,
     media: MediaMatcher,
     private translateService: TranslateService,
-    private localize: LocalizeRouterService
+    private localize: LocalizeRouterService,
+    private metaService: MetaService,
     ) {
-    this.mobileQuery = media.matchMedia('(max-width: 600px)');
+    this.mobileQuery = media.matchMedia('(max-width: 1023px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
   }
@@ -34,14 +41,13 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    for (const subs of this.subs) {
+      subs.unsubscribe();
+    }
     this.mobileQuery.removeListener(this._mobileQueryListener);
   }
 
   init() {
-    // initialize translate service
-    // this.translateService.use(Settings.defaultLocale);
-    // this.selectedLanguage = Settings.defaultLocale;
-
     this.lang = this.translateService.currentLang;
 
     this.translateService.get(this.settings.locales.map(x => `LANGUAGES.${x.toUpperCase()}`))
@@ -54,6 +60,18 @@ export class AppComponent implements OnInit, OnDestroy {
           };
         });
       });
+
+    // this.subs.push(
+    //   this.metaService.metaSubj.subscribe((obj: MetaObj) => {
+    //     if (!obj) {
+    //       this.pageTitle = '';
+    //     } else {
+    //       this.pageTitle = obj.pageTitle;
+    //     }
+    //     console.log('metaSubj.subscribe')
+    //     console.log(obj)
+    //   })
+    // );
   }
 
   changeLocale(lang) {

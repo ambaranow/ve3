@@ -49,8 +49,6 @@ import { VideoControlsComponent } from './video-controls/video-controls.componen
         deps: [HttpClient],
       },
     })
-
-
   ],
   exports: [VideoComponent]
 })

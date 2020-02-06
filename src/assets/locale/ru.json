@@ -2,8 +2,8 @@
   "NAV": {
     "VIDEO": "Видео"
   },
-  "VIDEO": {
-
+  "VIDEOPAGE": {
+    "PAGETITLE": "Видео"
   },
   "BUTTONS": {
     "CUT": "Вырезать",

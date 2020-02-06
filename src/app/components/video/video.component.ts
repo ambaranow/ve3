@@ -6,6 +6,8 @@ import { VideoFileService } from '@services/video-file.service';
 import { VideoWorkService } from '@services/video-work.service';
 import { VideoPlayerService } from '@services/video-player.service';
 import { Subscription } from 'rxjs';
+import { MetaService } from '@services/meta.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-video',
@@ -26,10 +28,17 @@ export class VideoComponent implements OnInit, OnDestroy {
     private videoFileService: VideoFileService,
     private videoWorkService: VideoWorkService,
     private videoPlayerService: VideoPlayerService,
+    private metaService: MetaService,
+    private translateService: TranslateService,
   ) { }
 
   ngOnInit() {
-    // console.log('VideoComponent init')
+    // this.subs.push(
+    //   this.translateService.get('VIDEOPAGE.PAGETITLE', { value: 'world' }).subscribe((res: string) => {
+    //     this.metaService.setMeta({ pageTitle: res });
+    //     this.metaService.metaSubj.next({ pageTitle: res });
+    //   })
+    // );
     this.generateForm();
     this.subs.push(
       this.videoWorkService.progress.subscribe(res => {

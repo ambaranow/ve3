@@ -2,15 +2,15 @@
   "NAV": {
     "VIDEO": "Video"
   },
-  "VIDEO": {
-
+  "VIDEOPAGE": {
+    "PAGETITLE": "Video"
   },
   "BUTTONS": {
     "CUT": "Cut",
     "FASTCUT": "Fast",
     "ACCURATECUT": "Accurate",
     "DOWNLOAD": "Download",
-    "UPLOADAREA": "Drag video file, or click here"
+    "UPLOADAREA": "Drop video file, or click here"
   },
   "LANGUAGES": {
 		"EN": "En",

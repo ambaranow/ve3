@@ -12,11 +12,10 @@ import {
   MatListModule,
   MatButtonModule } from '@angular/material';
 import { VideoModule } from '@components/video/video.module';
-import { TranslateModule, TranslateLoader, MissingTranslationHandler } from '@ngx-translate/core';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 
 import { EmptyComponent } from '@components/empty/empty.component';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { MissingTranslationService } from '@services/missing-translation.service';
 import { HttpLoaderFactory } from '@services/http-loader.factory';
 import { AppRoutingModule } from './app-routing.module';
 
@@ -45,8 +44,6 @@ import { AppRoutingModule } from './app-routing.module';
         useFactory: HttpLoaderFactory,
         deps: [HttpClient],
       },
-      // missingTranslationHandler: { provide: MissingTranslationHandler, useClass: MissingTranslationService },
-      useDefaultLang: false,
     }),
   ],
   providers: [],
