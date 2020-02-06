@@ -16,6 +16,7 @@ export class VideoReverseComponent implements OnInit, OnDestroy {
 
   fileInfo: any = {};
   fileInfoSubs: Subscription;
+  subs: Subscription[] = [];
   keyFrames: SafeUrl[] = [];
   player = undefined;
   isPaused = true;
@@ -49,9 +50,13 @@ export class VideoReverseComponent implements OnInit, OnDestroy {
         this.init();
       }
     });
+    this.subs.push(this.fileInfoSubs);
   }
 
   ngOnDestroy() {
+    for (const subs of this.subs) {
+      subs.unsubscribe();
+    }
   }
 
   async actionReverse($event) {
@@ -61,6 +66,7 @@ export class VideoReverseComponent implements OnInit, OnDestroy {
     const tps = this.videoWorkService.progress.subscribe(v => {
       this.reverseProgress = v;
     });
+    this.subs.push(tps);
     const params = {
       noAudio: this.isRemoveAudio
     };
@@ -77,16 +83,18 @@ export class VideoReverseComponent implements OnInit, OnDestroy {
       return;
     }
     this.viewService.loaderOn();
-    this.videoPlayerService.player.source.playerSubj.subscribe(player => {
-      if (player) {
-        this.player = player;
-        this.videoWorkService.keyFramesSubj.subscribe(f => {
-          if (f) {
-            this.keyFrames.push(f);
-          }
-        });
-      }
-    });
+    this.subs.push(
+      this.videoPlayerService.player.source.playerSubj.subscribe(player => {
+        if (player) {
+          this.player = player;
+          this.videoWorkService.keyFramesSubj.subscribe(f => {
+            if (f) {
+              this.keyFrames.push(f);
+            }
+          });
+        }
+      })
+    );
   }
 
 }

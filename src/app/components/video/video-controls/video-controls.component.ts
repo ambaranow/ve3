@@ -14,6 +14,7 @@ export class VideoControlsComponent implements OnInit, OnDestroy {
   isPaused = true;
   playedSubj: Subscription;
   timeUpdateBinded;
+  subs: Subscription[] = [];
 
   constructor(
     private videoPlayerService: VideoPlayerService,
@@ -69,22 +70,27 @@ export class VideoControlsComponent implements OnInit, OnDestroy {
 
   init() {
     if (this.preview) {
-      this.videoPlayerService.player[this.preview].playerSubj.subscribe(player => {
-        this.player = player;
-        if (this.playedSubj) {
-          this.playedSubj.unsubscribe();
-        }
-        if (this.player) {
-          if (!this.duration) {
-            this.videoPlayerService.player[this.preview].durationSubj.subscribe(duration => {
-              this.duration = this.helpersService.ms2TimeStringNoMs(duration * 1000);
-            });
+      this.subs.push(
+        this.videoPlayerService.player[this.preview].playerSubj.subscribe(player => {
+          this.player = player;
+          if (this.playedSubj) {
+            this.playedSubj.unsubscribe();
           }
-          this.playedSubj = this.videoPlayerService.player[this.preview].playedSubj.subscribe(state => {
-            this.setPlayerState(state);
-          });
-        }
-      });
+          if (this.player) {
+            if (!this.duration) {
+              this.subs.push(
+                this.videoPlayerService.player[this.preview].durationSubj.subscribe(duration => {
+                  this.duration = this.helpersService.ms2TimeStringNoMs(duration * 1000);
+                })
+              );
+            }
+            this.playedSubj = this.videoPlayerService.player[this.preview].playedSubj.subscribe(state => {
+              this.setPlayerState(state);
+            });
+            this.subs.push(this.playedSubj);
+          }
+        })
+      );
     }
   }
 
@@ -93,6 +99,11 @@ export class VideoControlsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-
+    for (const subs of this.subs) {
+      subs.unsubscribe();
+    }
+    if (this.player) {
+      this.player.removeEventListener('timeupdate', this.timeUpdateBinded);
+    }
   }
 }

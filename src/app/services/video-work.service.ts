@@ -58,16 +58,26 @@ export class VideoWorkService {
     this.log('Duration init() = ' + this.helpersService.ms2TimeString(end - start));
   }
 
+  reset() {
+    this.videoFileService.setDownloadLink(undefined); // reset donwload link
+    this.videoFileService.setSourcePreview(undefined);
+    this.videoFileService.setTarget(undefined);
+    this.videoFileService.setTargetPreview(undefined);
+    this.keyFramesSubj.next([]);
+    this.videoFileService.setFileInfo({});
+  }
+
   async getFileInfo(f: VideoObj) {
     // this.log('getFileInfo')
     const start = (new Date()).getTime();
+    this.reset();
     const previewFileName = this.helpersService.getSourcePreviewFileName();
     if (!this.isInited) {
       await this.init();
       // write source
-      await this.worker.write(f.file.name, f.file);
     }
-    this.videoFileService.setDownloadLink(undefined); // reset donwload link
+    await this.worker.write(f.file.name, f.file);
+
     let result: any = {};
     const messSubscriber = this.message.subscribe(res => {
       if (res) {

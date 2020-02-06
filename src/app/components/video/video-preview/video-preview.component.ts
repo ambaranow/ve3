@@ -3,7 +3,6 @@ import { VideoFileService } from '@services/video-file.service';
 import { VideoObj } from '@models/video-obj';
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { VideoWorkService } from '@services/video-work.service';
 import { VideoPlayerService } from '@services/video-player.service';
 
 @Component({
@@ -16,7 +15,7 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
 
   previewVideo: VideoObj;
   player;
-  previewVideoSubs: Subscription[] = [];
+  subs: Subscription[] = [];
   duration: number = undefined;
   progress: number = undefined;
 
@@ -30,7 +29,6 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
 
   constructor(
     private videoFileService: VideoFileService,
-    private videoWorkService: VideoWorkService,
     private videoPlayerService: VideoPlayerService,
   ) {
     this.setPlayerBinded = this.setPlayer.bind(this);
@@ -46,7 +44,7 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    for (const subs of this.previewVideoSubs) {
+    for (const subs of this.subs) {
       subs.unsubscribe();
     }
     if (this.player) {
@@ -60,7 +58,7 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
   timeUpdate(e) {
     const t = e.target.currentTime;
     this.progress = t * 100 / this.duration;
-    console.log('timeUpdate ' + t + ' | duration' + this.duration + ' | progress ' + this.progress)
+    // console.log('timeUpdate ' + t + ' | duration' + this.duration + ' | progress ' + this.progress)
   }
 
 
@@ -69,11 +67,13 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
       return;
     }
     this.videoPlayerService.setPlayer(this.player, this.id);
-    this.videoPlayerService.player[this.id].currentTimeSubj
-      .pipe(debounceTime(1))
-      .subscribe(t => {
-        this.player.currentTime = t;
-      });
+    this.subs.push(
+      this.videoPlayerService.player[this.id].currentTimeSubj
+        .pipe(debounceTime(1))
+        .subscribe(t => {
+          this.player.currentTime = t;
+        })
+    );
   }
 
   setDuration(e) {
@@ -96,7 +96,7 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
   }
 
   init() {
-    this.previewVideoSubs.push(
+    this.subs.push(
       this.videoFileService[this.id + 'PreviewVideoSubj'].subscribe(f => {
         if (this.player) {
           this.reset();
@@ -110,7 +110,7 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
                 this.player.addEventListener('durationchange', this.setDurationBinded);
                 this.player.addEventListener('loadeddata', this.setPlayerBinded);
                 this.player.addEventListener('timeupdate', this.timeUpdateBinded);
-                this.previewVideoSubs.push(
+                this.subs.push(
                   this.videoPlayerService.volumeSubj.subscribe(vol => {
                     this.player.volume = vol;
                   })
@@ -121,7 +121,7 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
         }, 1);
       })
     );
-    // this.previewVideoSubs.push(
+    // this.subs.push(
     //   this.videoWorkService.progress.subscribe(res => {
     //     if (typeof res === 'number' && (res > 0 || res < 100)) {
     //       this.progress = res;

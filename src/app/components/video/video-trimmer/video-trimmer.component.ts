@@ -38,7 +38,7 @@ export class VideoTrimmerComponent implements OnInit, OnDestroy {
   };
   trimmedPlayBinded: any;
   progressBinded: any;
-
+  subs: Subscription[] = [];
 
   trimProgress: number;
 
@@ -66,10 +66,16 @@ export class VideoTrimmerComponent implements OnInit, OnDestroy {
         this.init();
       }
     });
+    this.subs.push(this.fileInfoSubs);
   }
 
   ngOnDestroy() {
-    this.player.removeEventListener('timeupdate', this.progressBinded);
+    if (this.player) {
+      this.player.removeEventListener('timeupdate', this.progressBinded);
+    }
+    for (const subs of this.subs) {
+      subs.unsubscribe();
+    }
   }
 
   setRange($event: any, type: string, from: string) {
@@ -126,6 +132,7 @@ export class VideoTrimmerComponent implements OnInit, OnDestroy {
     const tps = this.videoWorkService.progress.subscribe(v => {
       this.trimProgress = v;
     });
+    this.subs.push(tps);
     await this.videoWorkService.trim(params);
     tps.unsubscribe();
     setTimeout(() => {
@@ -145,32 +152,36 @@ export class VideoTrimmerComponent implements OnInit, OnDestroy {
     }
 
     this.viewService.loaderOn();
-    this.videoPlayerService.player.source.playerSubj.subscribe(player => {
-      if (player) {
-        this.player = player;
-        this.player.addEventListener('timeupdate', this.progressBinded);
-        this.setRange({value: this.fileInfo.durationMs}, 'max', 'init');
-        this.videoPlayerService.player.source.currentTimeSubj.next(0);
+    this.subs.push(
+      this.videoPlayerService.player.source.playerSubj.subscribe(player => {
+        if (player) {
+          this.player = player;
+          this.player.addEventListener('timeupdate', this.progressBinded);
+          this.setRange({value: this.fileInfo.durationMs}, 'max', 'init');
+          this.videoPlayerService.player.source.currentTimeSubj.next(0);
 
-        this.videoWorkService.keyFramesSubj.subscribe(f => {
-          if (f) {
-            this.keyFrames.push(f);
+          this.subs.push(
+            this.videoWorkService.keyFramesSubj.subscribe(f => {
+              if (f) {
+                this.keyFrames.push(f);
+              }
+            })
+          );
+          const n = [];
+          const ind = Math.round(this.fileInfo.durationMs / 10);
+          for (let i = 0; i < this.fileInfo.durationMs; i++) {
+            if (i % ind === 0) {
+              n.push(Math.round(i / 1000));
+            }
           }
-        });
-        const n = [];
-        const ind = Math.round(this.fileInfo.durationMs / 10);
-        for (let i = 0; i < this.fileInfo.durationMs; i++) {
-          if (i % ind === 0) {
-            n.push(Math.round(i / 1000));
-          }
-        }
-        this.videoWorkService.getKeyFrames(n).then((res: SafeUrl[]) => {
-          this.keyFrames = res;
-          setTimeout(() => {
-            this.videoPlayerService.player.source.currentTimeSubj.next(0);
+          this.videoWorkService.getKeyFrames(n).then((res: SafeUrl[]) => {
+            this.keyFrames = res;
+            setTimeout(() => {
+              this.videoPlayerService.player.source.currentTimeSubj.next(0);
+            });
           });
-        });
-      }
-    });
+        }
+      })
+    );
   }
 }
