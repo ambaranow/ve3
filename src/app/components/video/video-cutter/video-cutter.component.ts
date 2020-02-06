@@ -8,19 +8,19 @@ import { VideoPlayerService } from '@services/video-player.service';
 import { SafeUrl } from '@angular/platform-browser';
 
 @Component({
-  selector: 've-video-trimmer',
-  templateUrl: './video-trimmer.component.html',
-  styleUrls: ['./video-trimmer.component.scss'],
+  selector: 've-video-cutter',
+  templateUrl: './video-cutter.component.html',
+  styleUrls: ['./video-cutter.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class VideoTrimmerComponent implements OnInit, OnDestroy {
+export class VideoCutterComponent implements OnInit, OnDestroy {
 
-  trim = {
+  cut = {
     min: 0,
     max: 0,
     duration: ''
   };
-  shadowTrim = {
+  shadowCut = {
     min: '0',
     max: '0'
   };
@@ -36,11 +36,10 @@ export class VideoTrimmerComponent implements OnInit, OnDestroy {
     width: '100%',
     time: 0
   };
-  trimmedPlayBinded: any;
   progressBinded: any;
   subs: Subscription[] = [];
 
-  trimProgress: number;
+  cutProgress: number;
 
   isRemoveAudio = false;
 
@@ -62,7 +61,7 @@ export class VideoTrimmerComponent implements OnInit, OnDestroy {
           this.fileInfoSubs.unsubscribe();
         }
         this.fileInfo = info;
-        this.trim.max = this.fileInfo.durationMs || 0;
+        this.cut.max = this.fileInfo.durationMs || 0;
         this.init();
       }
     });
@@ -84,59 +83,59 @@ export class VideoTrimmerComponent implements OnInit, OnDestroy {
     }
     switch (type) {
       case 'max':
-        this.trim.max = $event.value;
-        if (this.trim.min > this.trim.max) {
-          this.trim.max = this.trim.min;
+        this.cut.max = $event.value;
+        if (this.cut.min > this.cut.max) {
+          this.cut.max = this.cut.min;
         }
-        if (this.trim.max > this.fileInfo.durationMs) {
-          this.trim.max = this.fileInfo.durationMs;
+        if (this.cut.max > this.fileInfo.durationMs) {
+          this.cut.max = this.fileInfo.durationMs;
         }
-        this.shadowTrim.max = 100 - (this.trim.max * 100 / this.fileInfo.durationMs) + '%';
-        this.videoPlayerService.player.source.currentTimeSubj.next(this.trim.max / 1000);
+        this.shadowCut.max = 100 - (this.cut.max * 100 / this.fileInfo.durationMs) + '%';
+        this.videoPlayerService.player.source.currentTimeSubj.next(this.cut.max / 1000);
         break;
       case 'min':
-        this.trim.min = $event.value;
-        if (this.trim.min > this.trim.max) {
-          this.trim.min = this.trim.max;
+        this.cut.min = $event.value;
+        if (this.cut.min > this.cut.max) {
+          this.cut.min = this.cut.max;
         }
-        this.shadowTrim.min = (this.trim.min * 100 / this.fileInfo.durationMs) + '%';
-        this.videoPlayerService.player.source.currentTimeSubj.next(this.trim.min / 1000);
+        this.shadowCut.min = (this.cut.min * 100 / this.fileInfo.durationMs) + '%';
+        this.videoPlayerService.player.source.currentTimeSubj.next(this.cut.min / 1000);
         break;
     }
-    this.trim.duration = this.helpersService.ms2TimeStringNoMs(this.trim.max - this.trim.min);
+    this.cut.duration = this.helpersService.ms2TimeStringNoMs(this.cut.max - this.cut.min);
   }
 
   shadowSize(key: string) {
-    return this.shadowTrim[key];
+    return this.shadowCut[key];
   }
 
-  async actionTrim($event, accurate = false) {
+  async actionCut($event, accurate = false) {
     this.viewService.loaderOn();
     const params = {
-      // ss: this.helpersService.ms2TimeString(this.trim.min),
-      // to: this.helpersService.ms2TimeString(this.trim.max),
+      // ss: this.helpersService.ms2TimeString(this.cut.min),
+      // to: this.helpersService.ms2TimeString(this.cut.max),
       noAudio: this.isRemoveAudio,
-      ss: '' + this.trim.min / 1000, // start point
-      to: '' + this.trim.max / 1000, // end point
-      t: '' + (this.trim.max - this.trim.min) / 1000, // duration
-      frame_from: this.trim.min * Math.round(this.fileInfo.fps) / 1000,
-      frame_to: this.trim.max * Math.round(this.fileInfo.fps) / 1000,
+      ss: '' + this.cut.min / 1000, // start point
+      to: '' + this.cut.max / 1000, // end point
+      t: '' + (this.cut.max - this.cut.min) / 1000, // duration
+      frame_from: this.cut.min * Math.round(this.fileInfo.fps) / 1000,
+      frame_to: this.cut.max * Math.round(this.fileInfo.fps) / 1000,
       accurate // https://trac.ffmpeg.org/wiki/Seeking#Notes
       // false - fast but not accurate
       // between keyframes, larger than selected
       // true - with decoding, very slowly,
       // but precisely within the selected range
     };
-    this.trimProgress = 0;
+    this.cutProgress = 0;
     this.videoFileService.setTargetPreview(undefined);
     const tps = this.videoWorkService.progress.subscribe(v => {
-      this.trimProgress = v;
+      this.cutProgress = v;
     });
     this.subs.push(tps);
-    await this.videoWorkService.trim(params);
+    await this.videoWorkService.cut(params);
     tps.unsubscribe();
     setTimeout(() => {
-      this.trimProgress = 0;
+      this.cutProgress = 0;
     }, 2000);
     this.viewService.loaderOff();
   }

@@ -6,9 +6,9 @@
 
   },
   "BUTTONS": {
-    "TRIM": "Trim",
-    "FASTTRIM": "Fast",
-    "ACCURATETRIM": "Accurate",
+    "CUT": "Cut",
+    "FASTCUT": "Fast",
+    "ACCURATECUT": "Accurate",
     "DOWNLOAD": "Download",
     "UPLOADAREA": "Drag video file, or click here"
   },

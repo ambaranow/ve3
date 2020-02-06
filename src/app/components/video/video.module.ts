@@ -4,7 +4,7 @@ import { VideoComponent } from './video.component';
 import { FileUploadModule } from '@components/file-upload/file-upload.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { VideoPreviewComponent } from './video-preview/video-preview.component';
-import { VideoTrimmerComponent } from './video-trimmer/video-trimmer.component';
+import { VideoCutterComponent } from './video-cutter/video-cutter.component';
 import { KeyframesLineComponent } from './keyframes-line/keyframes-line.component';
 import { MatProgressBarModule,
   MatSliderModule,
@@ -14,10 +14,9 @@ import { MatProgressBarModule,
   MatButtonModule } from '@angular/material';
 import { VideoReverseComponent } from './video-reverse/video-reverse.component';
 import { DownloadLinkComponent } from '@components/download-link/download-link.component';
-import { TranslateModule, TranslateLoader, MissingTranslationHandler } from '@ngx-translate/core';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { HttpLoaderFactory } from '@services/http-loader.factory';
 import { HttpClient } from '@angular/common/http';
-import { MissingTranslationService } from '@services/missing-translation.service';
 import { VideoControlsComponent } from './video-controls/video-controls.component';
 
 
@@ -26,7 +25,7 @@ import { VideoControlsComponent } from './video-controls/video-controls.componen
   declarations: [
     VideoComponent,
     VideoPreviewComponent,
-    VideoTrimmerComponent,
+    VideoCutterComponent,
     KeyframesLineComponent,
     VideoReverseComponent,
     DownloadLinkComponent,
@@ -49,8 +48,6 @@ import { VideoControlsComponent } from './video-controls/video-controls.componen
         useFactory: HttpLoaderFactory,
         deps: [HttpClient],
       },
-      // missingTranslationHandler: { provide: MissingTranslationHandler, useClass: MissingTranslationService },
-      // useDefaultLang: false,
     })
 
 

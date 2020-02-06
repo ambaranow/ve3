@@ -206,13 +206,13 @@ export class VideoWorkService {
       this.videoFileService.setTargetPreview(previewFile);
 
       const end = (new Date()).getTime();
-      this.log('Duration trim() = ' + this.helpersService.ms2TimeString(end - start));
+      this.log('Duration cut() = ' + this.helpersService.ms2TimeString(end - start));
       this.progress.next(100);
     }, 1000);
 
   }
 
-  async trim(params: { ss: string | number, to: string | number, t: string | number, accurate: boolean, noAudio: boolean}) {
+  async cut(params: { ss: string | number, to: string | number, t: string | number, accurate: boolean, noAudio: boolean}) {
     const start = (new Date()).getTime();
     if (!this.isInited) {
       await this.init();
@@ -307,7 +307,7 @@ export class VideoWorkService {
       this.videoFileService.setTargetPreview(previewFile);
 
       const end = (new Date()).getTime();
-      this.log('Duration trim() = ' + this.helpersService.ms2TimeString(end - start));
+      this.log('Duration cut() = ' + this.helpersService.ms2TimeString(end - start));
       this.progress.next(100);
     }, 1000);
   }

@@ -6,9 +6,9 @@
 
   },
   "BUTTONS": {
-    "TRIM": "Вырезать",
-    "FASTTRIM": "Быстро",
-    "ACCURATETRIM": "Аккуратно",
+    "CUT": "Вырезать",
+    "FASTCUT": "Быстро",
+    "ACCURATECUT": "Аккуратно",
     "DOWNLOAD": "Скачать",
     "UPLOADAREA": "Перетащите файл сюда или кликайте"
   },

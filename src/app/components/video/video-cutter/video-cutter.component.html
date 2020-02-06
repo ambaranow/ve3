@@ -4,23 +4,11 @@
   rowHeight="70px"
   *ngIf="fileInfo.durationMs && keyFrames.length">
   <mat-grid-tile class="actions-source">
-    <!-- <button
-      mat-raised-button
-      color="primary"
-      (click)="trimmedRangePlayPause()"
-      class="actions-source__play"
-      ><i class="material-icons" *ngIf="!isPaused">pause</i><i
-      class="material-icons" *ngIf="isPaused">play_arrow</i></button>
-    <span class="actions-source__time">
-      <i
-        class="material-icons">skip_next</i>{{trim.duration}}<i
-        class="material-icons">skip_previous</i>
-    </span> -->
     <ve-video-controls
       preview="source"
-      [duration]="trim.duration"
-      [start]="trim.min"
-      [end]="trim.max"
+      [duration]="cut.duration"
+      [start]="cut.min"
+      [end]="cut.max"
       ></ve-video-controls>
   </mat-grid-tile>
   <mat-grid-tile>
@@ -30,10 +18,10 @@
   </mat-grid-tile>
 </mat-grid-list>
 
-<div class="trim">
+<div class="cut">
   <mat-progress-bar
     [ngStyle]="{left: playProgress.left, width: playProgress.width}"
-    class="trim-play-progress"
+    class="cut-play-progress"
     mode="determinate"
     color="accent"
     [value]="playProgress.time"
@@ -42,30 +30,30 @@
     *ngIf="keyFrames.length"
     [keyFrames]="keyFrames"></ve-keyframes-line>
 
-  <div class="trim-shadow trim-shadow__min" [ngStyle]="{width: shadowSize('min')}"></div>
-  <div class="trim-shadow trim-shadow__max" [ngStyle]="{width: shadowSize('max')}"></div>
+  <div class="cut-shadow cut-shadow__min" [ngStyle]="{width: shadowSize('min')}"></div>
+  <div class="cut-shadow cut-shadow__max" [ngStyle]="{width: shadowSize('max')}"></div>
 
   <mat-slider
-    class="trim-min"
+    class="cut-min"
     *ngIf="fileInfo.durationMs && keyFrames.length"
     thumbLabel="true"
     min="0"
     [max]="fileInfo.durationMs"
     [step]="1"
-    [(ngModel)]="trim.min"
+    [(ngModel)]="cut.min"
     (input)="setRange($event, 'min', 'input')"
     (change)="setRange($event, 'min', 'change')"
     [displayWith]="helpersService.ms2TimeStringNoMs"
-    [value]="trim.min"
+    [value]="cut.min"
     ></mat-slider>
   <mat-slider
-    class="trim-max"
+    class="cut-max"
     *ngIf="fileInfo.durationMs && keyFrames.length"
     thumbLabel="true"
     min="0"
     [max]="fileInfo.durationMs"
     [step]="1"
-    [(ngModel)]="trim.max"
+    [(ngModel)]="cut.max"
     (input)="setRange($event, 'max', 'input')"
     (change)="setRange($event, 'max', 'change')"
     [displayWith]="helpersService.ms2TimeStringNoMs"
@@ -80,28 +68,28 @@
   rowHeight="70px"
   *ngIf="fileInfo.durationMs && keyFrames.length">
 
-  <mat-grid-tile class="actions-trim">
+  <mat-grid-tile class="actions-cut">
     <div
-      *ngIf="trim.max < fileInfo.durationMs || trim.min > 0"
-      class="actions-trim__block">
+      *ngIf="cut.max < fileInfo.durationMs || cut.min > 0"
+      class="actions-cut__block">
       <span
-        class="actions-trim__title"
+        class="actions-cut__title"
         >
-        {{ 'BUTTONS.TRIM' | translate }}:
+        {{ 'BUTTONS.CUT' | translate }}:
       </span>
-      <div class="actions-trim__buttons">
+      <div class="actions-cut__buttons">
         <button
           mat-raised-button
-          (click)="actionTrim($event, false)"
+          (click)="actionCut($event, false)"
           color="accent"
-          ><span class="hide-mobile">{{ 'BUTTONS.FASTTRIM' | translate }}</span>
+          ><span class="hide-mobile">{{ 'BUTTONS.FASTCUT' | translate }}</span>
           <i class="material-icons">fast_forward</i><span class="hide-desktop">_</span>
           <i class="material-icons hide-desktop">fast_rewind</i></button>
         <button
           mat-raised-button
-          (click)="actionTrim($event, true)"
+          (click)="actionCut($event, true)"
           color="accent"
-          ><span class="hide-mobile">{{ 'BUTTONS.ACCURATETRIM' | translate }}</span>
+          ><span class="hide-mobile">{{ 'BUTTONS.ACCURATECUT' | translate }}</span>
           <i class="material-icons">skip_next</i><span class="hide-desktop">&#8230;</span>
           <i class="material-icons hide-desktop">skip_previous</i></button>
       </div>
@@ -112,5 +100,5 @@
   </mat-grid-tile>
 </mat-grid-list>
 
-<mat-progress-bar style="width:100%" class="trim-work-progress" *ngIf="trimProgress"
-  mode="determinate" color="primary" [value]="trimProgress"></mat-progress-bar>
+<mat-progress-bar style="width:100%" class="cut-work-progress" *ngIf="cutProgress"
+  mode="determinate" color="primary" [value]="cutProgress"></mat-progress-bar>

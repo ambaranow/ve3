@@ -9,6 +9,7 @@
       {{ 'LANGUAGES.TITLE' | translate }}:
       <button
         mat-button
+        [disabled]="language.id === lang"
         (click)="changeLocale(language.id)"
         *ngFor="let language of languages;">
         {{ language.title }}
@@ -22,10 +23,11 @@
                  [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
       <mat-nav-list>
         <!-- <a mat-list-item [routerLink]="[{outlets: {actions: 'video'}}]">Video</a> -->
-        <a
-          mat-list-item
-          [routerLinkActive]="['router-link-active']"
-          [routerLink]="'/video' | localize">Video</a>
+        <a mat-list-item [routerLink]="'/' | localize"><i
+            class="material-icons">
+            home
+          </i></a>
+        <a mat-list-item [routerLinkActive]="['router-link-active']" [routerLink]="'/video' | localize">Video</a>
       </mat-nav-list>
     </mat-sidenav>
 

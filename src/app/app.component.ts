@@ -12,7 +12,7 @@ import { LocalizeRouterService } from '@components/localize-router/localize-rout
 })
 export class AppComponent implements OnInit, OnDestroy {
 
-  selectedLanguage: string;
+  lang: string;
   languages: {id: string, title: string}[] = [];
   settings = locales['default'];
   mobileQuery: MediaQueryList;
@@ -42,6 +42,8 @@ export class AppComponent implements OnInit, OnDestroy {
     // this.translateService.use(Settings.defaultLocale);
     // this.selectedLanguage = Settings.defaultLocale;
 
+    this.lang = this.translateService.currentLang;
+
     this.translateService.get(this.settings.locales.map(x => `LANGUAGES.${x.toUpperCase()}`))
       .subscribe(translations => {
         // init dropdown list with TRANSLATED list of languages from config
@@ -55,7 +57,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   changeLocale(lang) {
-    this.selectedLanguage = lang;
+    this.lang = lang;
     this.localize.changeLanguage(lang);
   }
 
