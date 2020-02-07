@@ -2,6 +2,9 @@
   "NAV": {
     "VIDEO": "Video"
   },
+  "MAIN": {
+    "PAGETITLE": "online video master"
+  },
   "VIDEOPAGE": {
     "PAGETITLE": "Video"
   },
