@@ -9,7 +9,8 @@
     "PAGETITLE": "Video"
   },
   "BUTTONS": {
-    "CUT": "Cut",
+    "REVERSE": "Reverse",
+    "CUT": "Cut fragment",
     "FASTCUT": "Fast",
     "ACCURATECUT": "Accurate",
     "DOWNLOAD": "Download",
@@ -23,7 +24,18 @@
   "PREVIEW": {
     "STILLREAD": "Please wait, still reading the file"
   },
-  "GREETENG": {
+  "GREETING": {
+    "TRYNOW": "Try it now!",
+    "0": "This web application will help you cut a fragment from a small video file directly in your browser. It does not require installation.",
+    "READFILE": "Select a file!",
+    "1": "Your files are not sent to the server, processed only by your computer in your browser and are available only to you.",
+    "CHECKOUT": "Check out!",
+    "2": "The application interface is very simple. You can easily master it, read the file from the disk and get a link to the finished video.",
+    "3": "Processing speed depends on the size and resolution of the video, as well as the power of your computer and browser.",
+    "4": "The web application works with a large number of video formats. If the file does not open, it is probably damaged or too large.",
+    "5": "We are constantly improving our application and expanding the set of functions. You do not need to download or update anything.",
+    "6": "How it works? This is a javascript application, it can work directly in the browser. Your files are always safe!",
+    "7": "This is a free web-app. You do not have to pay anything, just upload your files and use."
   }
 
 }

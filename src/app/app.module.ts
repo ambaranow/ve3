@@ -10,7 +10,9 @@ import {
   MatSidenavModule,
   MatToolbarModule,
   MatListModule,
-  MatButtonModule } from '@angular/material';
+  MatButtonModule,
+  MatGridListModule,
+  MatCardModule} from '@angular/material';
 import { VideoModule } from '@components/video/video.module';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 
@@ -36,6 +38,8 @@ import { GreetingComponent } from './components/greeting/greeting.component';
     MatSidenavModule,
     MatToolbarModule,
     MatListModule,
+    MatGridListModule,
+    MatCardModule,
     MatButtonModule,
     AppRoutingModule,
     TranslateModule.forRoot({

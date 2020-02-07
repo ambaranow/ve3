@@ -1,0 +1,60 @@
+.greeting {
+  margin: 30px auto;
+  max-width: 768px;
+  &-list {}
+  &-card {
+    margin: 0 10px;
+    height: 130px;
+    .mat-card-actions {
+      text-align: center;
+    }
+    &__0 {
+      .card-button {
+        background-color: #0c8e59;
+        color: #fff;
+      }
+    }
+    &__1 {
+      .card-button {
+        background-color: #673ab7;
+        color: #fff;
+      }
+    }
+    &__2 {
+      .card-button {
+        background-color: #ffcc2d;
+        color: #333;
+      }
+    }
+    &__3 {
+      .card-button {
+        background-color: #0c8e59;
+        color: #fff;
+      }
+    }
+    &__4 {
+      .card-button {
+        background-color: #673ab7;
+        color: #fff;
+      }
+    }
+    &__5 {
+      .card-button {
+        background-color: #ffcc2d;
+        color: #333;
+      }
+    }
+    &__6 {
+      .card-button {
+        background-color: #0c8e59;
+        color: #fff;
+      }
+    }
+    &__7 {
+      .card-button {
+        background-color: #673ab7;
+        color: #fff;
+      }
+    }
+  }
+}
