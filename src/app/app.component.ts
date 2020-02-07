@@ -1,10 +1,10 @@
-import { Component, OnInit, ViewEncapsulation, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ChangeDetectorRef, OnDestroy, AfterViewInit, OnChanges } from '@angular/core';
 import {MediaMatcher} from '@angular/cdk/layout';
 import { TranslateService } from '@ngx-translate/core';
 import * as locales from './../assets/locales.json';
 import { LocalizeRouterService } from '@components/localize-router/localize-router.service';
 import { Subscription } from 'rxjs';
-import { MetaService } from '@services/meta.service.js';
+import { MetaService } from '@services/meta.service';
 import { MetaObj } from '@models/meta-obj.js';
 
 @Component({
@@ -13,7 +13,7 @@ import { MetaObj } from '@models/meta-obj.js';
   styleUrls: ['./app.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
 
   pageTitle: string;
   lang: string;
@@ -34,6 +34,10 @@ export class AppComponent implements OnInit, OnDestroy {
     this.mobileQuery = media.matchMedia('(max-width: 1023px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
+  }
+
+
+  ngOnChanges() {
   }
 
   ngOnInit() {
@@ -60,18 +64,18 @@ export class AppComponent implements OnInit, OnDestroy {
           };
         });
       });
+    this.subs.push(
+      this.metaService.metaSubj.subscribe((obj: MetaObj) => {
+        if (!obj) {
+          this.pageTitle = '';
+        } else {
+          this.pageTitle = obj.pageTitle;
+        }
+      })
+    );
+  }
 
-    // this.subs.push(
-    //   this.metaService.metaSubj.subscribe((obj: MetaObj) => {
-    //     if (!obj) {
-    //       this.pageTitle = '';
-    //     } else {
-    //       this.pageTitle = obj.pageTitle;
-    //     }
-    //     console.log('metaSubj.subscribe')
-    //     console.log(obj)
-    //   })
-    // );
+  ngAfterViewInit() {
   }
 
   changeLocale(lang) {

@@ -1,6 +1,5 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, OnDestroy, AfterViewInit, OnChanges } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { VideoObj } from '@models/video-obj';
 import { ViewService } from '@services/view.service';
 import { VideoFileService } from '@services/video-file.service';
 import { VideoWorkService } from '@services/video-work.service';
@@ -15,7 +14,7 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./video.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class VideoComponent implements OnInit, OnDestroy {
+export class VideoComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
   form: FormGroup;
   fileUploaded = false;
   progress: number = undefined;
@@ -32,13 +31,10 @@ export class VideoComponent implements OnInit, OnDestroy {
     private translateService: TranslateService,
   ) { }
 
+  ngOnChanges() {
+  }
+
   ngOnInit() {
-    // this.subs.push(
-    //   this.translateService.get('VIDEOPAGE.PAGETITLE', { value: 'world' }).subscribe((res: string) => {
-    //     this.metaService.setMeta({ pageTitle: res });
-    //     this.metaService.metaSubj.next({ pageTitle: res });
-    //   })
-    // );
     this.generateForm();
     this.subs.push(
       this.videoWorkService.progress.subscribe(res => {
@@ -55,13 +51,23 @@ export class VideoComponent implements OnInit, OnDestroy {
       })
     );
     this.subs.push(
-    this.videoFileService.targetPreviewVideoSubj.subscribe(f => {
-      this.isTargetReady = f && f.src ? true : false;
-    })
+      this.videoFileService.targetPreviewVideoSubj.subscribe(f => {
+        this.isTargetReady = f && f.src ? true : false;
+      })
+    );
+    this.subs.push(
+      this.translateService.get('VIDEOPAGE.PAGETITLE', { value: 'world' }).subscribe((res: string) => {
+        this.metaService.setMeta({ pageTitle: res });
+      })
     );
   }
 
+  ngAfterViewInit() {
+  }
+
+
   ngOnDestroy() {
+    this.metaService.setMeta(undefined);
     // console.log('VideoComponent destroy')
     for (const subs of this.subs) {
       subs.unsubscribe();
