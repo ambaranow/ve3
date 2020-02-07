@@ -14,17 +14,17 @@ import {
 import { VideoModule } from '@components/video/video.module';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 
-import { EmptyComponent } from '@components/empty/empty.component';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { HttpLoaderFactory } from '@services/http-loader.factory';
 import { AppRoutingModule } from './app-routing.module';
+import { GreetingComponent } from './components/greeting/greeting.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    EmptyComponent,
     LoaderComponent,
+    GreetingComponent,
   ],
   imports: [
     BrowserModule,
