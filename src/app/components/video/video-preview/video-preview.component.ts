@@ -90,11 +90,11 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
     this.videoPlayerService.pause(this.id);
     this.videoPlayerService.setPlayer(undefined, this.id);
     this.videoPlayerService.player[this.id].durationSubj.next(undefined);
+    this.videoPlayerService.player[this.id].currentTimeSubj.next(0);
     this.player = undefined;
     this.previewVideo = null;
     this.duration = undefined;
     this.progress = undefined;
-    this.videoPlayerService.player[this.id].currentTimeSubj.next(0);
   }
 
   init() {
