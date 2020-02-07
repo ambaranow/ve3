@@ -12,8 +12,6 @@ export class MetaService {
   constructor() { }
 
   setMeta(obj: MetaObj) {
-    console.log('this.setMeta')
-    console.log(obj)
     this.metaSubj.next(obj)
   }
 }

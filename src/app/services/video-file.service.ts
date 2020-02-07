@@ -50,7 +50,7 @@ export class VideoFileService {
   }
 
   setSource(sourceVideo: ReadFile) {
-    console.log(sourceVideo.name)
+    // console.log(sourceVideo.name)
     if (sourceVideo) {
       const parsedOriginalFileName = this.helpersService.parseFileName(sourceVideo.name);
       this.originalFile = {

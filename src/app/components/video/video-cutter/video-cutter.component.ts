@@ -84,24 +84,24 @@ export class VideoCutterComponent implements OnInit, OnDestroy {
     switch (type) {
       case 'max':
         this.cut.max = $event.value;
-        if (this.cut.min > this.cut.max) {
-          this.cut.max = this.cut.min;
-        }
         if (this.cut.max > this.fileInfo.durationMs) {
           this.cut.max = this.fileInfo.durationMs;
         }
-        this.shadowCut.max = 100 - (this.cut.max * 100 / this.fileInfo.durationMs) + '%';
+        if (this.cut.min >= this.cut.max) {
+          this.cut.min = this.cut.max - 1;
+        }
         this.videoPlayerService.player.source.currentTimeSubj.next(this.cut.max / 1000);
         break;
       case 'min':
         this.cut.min = $event.value;
-        if (this.cut.min > this.cut.max) {
-          this.cut.min = this.cut.max;
+        if (this.cut.min >= this.cut.max) {
+          this.cut.max = this.cut.min + 1;
         }
-        this.shadowCut.min = (this.cut.min * 100 / this.fileInfo.durationMs) + '%';
         this.videoPlayerService.player.source.currentTimeSubj.next(this.cut.min / 1000);
         break;
     }
+    this.shadowCut.min = (this.cut.min * 100 / this.fileInfo.durationMs) + '%';
+    this.shadowCut.max = 100 - (this.cut.max * 100 / this.fileInfo.durationMs) + '%';
     this.cut.duration = this.helpersService.ms2TimeStringNoMs(this.cut.max - this.cut.min);
   }
 

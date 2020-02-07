@@ -22,6 +22,7 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
   setPlayerBinded;
   setDurationBinded;
   timeUpdateBinded;
+  pauseEventBinded;
 
 
   @Input() id: 'source' | 'target';
@@ -34,6 +35,7 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
     this.setPlayerBinded = this.setPlayer.bind(this);
     this.setDurationBinded = this.setDuration.bind(this);
     this.timeUpdateBinded = this.timeUpdate.bind(this);
+    this.pauseEventBinded = this.pauseEvent.bind(this);
   }
 
   @ViewChild('videoEl', {static: false})
@@ -48,9 +50,11 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
       subs.unsubscribe();
     }
     if (this.player) {
+      // TODO в reset???
       this.player.removeEventListener('loadeddata', this.setPlayerBinded);
       this.player.removeEventListener('durationchange', this.setDurationBinded);
       this.player.removeEventListener('timeupdate', this.timeUpdateBinded);
+      this.player.removeEventListener('pause', this.pauseEventBinded);
     }
     this.reset();
   }
@@ -61,6 +65,12 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
     // console.log('timeUpdate ' + t + ' | duration' + this.duration + ' | progress ' + this.progress)
   }
 
+  pauseEvent(e) {
+    if (!this.player) {
+      return;
+    }
+    this.videoPlayerService.pause(this.id);
+  }
 
   setPlayer() {
     if (!this.player) {
@@ -112,6 +122,7 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
                 this.player.addEventListener('durationchange', this.setDurationBinded);
                 this.player.addEventListener('loadeddata', this.setPlayerBinded);
                 this.player.addEventListener('timeupdate', this.timeUpdateBinded);
+                this.player.addEventListener('pause', this.pauseEventBinded);
                 this.subs.push(
                   this.videoPlayerService.volumeSubj.subscribe(vol => {
                     this.player.volume = vol;

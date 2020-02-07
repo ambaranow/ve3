@@ -44,7 +44,6 @@
     (input)="setRange($event, 'min', 'input')"
     (change)="setRange($event, 'min', 'change')"
     [displayWith]="helpersService.ms2TimeStringNoMs"
-    [value]="cut.min"
     ></mat-slider>
   <mat-slider
     class="cut-max"
@@ -57,7 +56,6 @@
     (input)="setRange($event, 'max', 'input')"
     (change)="setRange($event, 'max', 'change')"
     [displayWith]="helpersService.ms2TimeStringNoMs"
-    [value]="fileInfo.durationMs"
     ></mat-slider>
 </div>
 

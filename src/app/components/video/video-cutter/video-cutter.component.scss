@@ -1,5 +1,5 @@
 .cut {
-  margin: 20px 30px;
+  margin: 20px 40px;
   position: relative;
   min-height: 67px;
   .mat-slider {
@@ -79,7 +79,7 @@
       &.ng-touched,
       &.cdk-focused {
         .mat-slider-thumb-label {
-          right: -23px;
+          right: -26px;
         }
       }
     }
@@ -97,7 +97,7 @@
       &.ng-touched,
       &.cdk-focused {
         .mat-slider-thumb-label {
-          right: -43px;
+          right: -47px;
         }
       }
     }
@@ -111,11 +111,11 @@
   }
   &-shadow {
     position: absolute;
-    top: 0;
+    top: 4px;
     width: 0;
-    height: 100%;
+    height: calc(100% - 4px);
     z-index: 1;
-    background-color: rgba(0,0,0,.35);
+    background-color: rgba(255,215,45,.4);
     &__min {
       left: 0;
     }

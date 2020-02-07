@@ -74,7 +74,7 @@ export class HelpersService {
   }
 
   parseFileName(n: string) {
-    console.log('parseFileName ' + n)
+    // console.log('parseFileName ' + n)
     const re = /(.+)\.([0-9a-z]{1,5})$/i;
     return {name: (n.match(re)[1]), ext: (n.match(re)[2])};
   }
