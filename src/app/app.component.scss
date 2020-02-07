@@ -35,10 +35,10 @@ button {
       font: 400 18px/24px 'PT Sans', sans-serif;
     }
     &-logo {
-      width: 42px;
-      height: 42px;
+      width: 64px;
+      height: 64px;
       margin: 0 16px;
-      padding: 0 0 0 32px;
+      padding: 0;
       position: relative;
       cursor: pointer;
       &:focus {
