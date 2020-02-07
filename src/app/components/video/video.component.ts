@@ -55,11 +55,11 @@ export class VideoComponent implements OnInit, OnDestroy, OnChanges, AfterViewIn
         this.isTargetReady = f && f.src ? true : false;
       })
     );
-    this.subs.push(
-      this.translateService.get('VIDEOPAGE.PAGETITLE', { value: 'world' }).subscribe((res: string) => {
-        this.metaService.setMeta({ pageTitle: res });
-      })
-    );
+    // this.subs.push(
+    //   this.translateService.get('VIDEOPAGE.PAGETITLE', { value: 'world' }).subscribe((res: string) => {
+    //     this.metaService.setMeta({ pageTitle: res });
+    //   })
+    // );
   }
 
   ngAfterViewInit() {

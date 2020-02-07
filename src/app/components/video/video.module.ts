@@ -6,19 +6,18 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { VideoPreviewComponent } from './video-preview/video-preview.component';
 import { VideoCutterComponent } from './video-cutter/video-cutter.component';
 import { KeyframesLineComponent } from './keyframes-line/keyframes-line.component';
-import { MatProgressBarModule,
-  MatSliderModule,
-  MatCheckboxModule,
-  MatTabsModule,
-  MatGridListModule,
-  MatButtonModule } from '@angular/material';
 import { VideoReverseComponent } from './video-reverse/video-reverse.component';
 import { DownloadLinkComponent } from '@components/download-link/download-link.component';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { HttpLoaderFactory } from '@services/http-loader.factory';
 import { HttpClient } from '@angular/common/http';
 import { VideoControlsComponent } from './video-controls/video-controls.component';
-
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatButtonModule} from '@angular/material/button';
+import {MatGridListModule} from '@angular/material/grid-list';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatSliderModule} from '@angular/material/slider';
 
 
 @NgModule({

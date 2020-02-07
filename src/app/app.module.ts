@@ -4,23 +4,20 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoaderComponent } from './components/loader/loader.component';
-import {
-  MatProgressSpinnerModule,
-  MatIconModule,
-  MatSidenavModule,
-  MatToolbarModule,
-  MatListModule,
-  MatButtonModule,
-  MatGridListModule,
-  MatCardModule} from '@angular/material';
+import { GreetingComponent } from '@components/greeting/greeting.component';
 import { VideoModule } from '@components/video/video.module';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-
-import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { HttpLoaderFactory } from '@services/http-loader.factory';
 import { AppRoutingModule } from './app-routing.module';
-import { GreetingComponent } from './components/greeting/greeting.component';
-
+import {MatCardModule} from '@angular/material/card';
+import {MatButtonModule} from '@angular/material/button';
+import {MatGridListModule} from '@angular/material/grid-list';
+import {MatListModule} from '@angular/material/list';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatIconModule} from '@angular/material/icon';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
