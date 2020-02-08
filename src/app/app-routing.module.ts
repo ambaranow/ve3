@@ -8,15 +8,12 @@ import { LocalizeRouterSettings } from '@components/localize-router/localize-rou
 import { LocalizeRouterModule } from '@components/localize-router/localize-router.module';
 import { LocalizeParser } from '@components/localize-router/localize-router.parser';
 import { LocalizeRouterHttpLoader } from '@components/localize-router/http-loader';
-import { GreetingComponent } from '@components/greeting/greeting.component';
 
 export function HttpLoaderFactory(translate: TranslateService, location: Location, settings: LocalizeRouterSettings, http: HttpClient) {
   return new LocalizeRouterHttpLoader(translate, location, settings, http);
 }
 const routes: Routes = [
-  { path: '', component: GreetingComponent,
-    children: [
-  ]},
+  { path: '', redirectTo: '/video', pathMatch: 'full'},
   { path: 'video', component: VideoComponent },
   { path: '**', redirectTo: '/' }
 ];
