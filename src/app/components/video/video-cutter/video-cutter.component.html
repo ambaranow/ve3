@@ -70,26 +70,14 @@
     <div
       *ngIf="cut.max < fileInfo.durationMs || cut.min > 0"
       class="actions-cut__block">
-      <span
-        class="actions-cut__title"
-        >
-        {{ 'BUTTONS.CUT' | translate }}:
-      </span>
       <div class="actions-cut__buttons">
-        <button
-          mat-raised-button
-          (click)="actionCut($event, false)"
-          color="accent"
-          ><span class="hide-mobile">{{ 'BUTTONS.FASTCUT' | translate }}</span>
-          <i class="material-icons">fast_forward</i><span class="hide-desktop">_</span>
-          <i class="material-icons hide-desktop">fast_rewind</i></button>
         <button
           mat-raised-button
           (click)="actionCut($event, true)"
           color="accent"
-          ><span class="hide-mobile">{{ 'BUTTONS.ACCURATECUT' | translate }}</span>
-          <i class="material-icons">skip_next</i><span class="hide-desktop">&#8230;</span>
-          <i class="material-icons hide-desktop">skip_previous</i></button>
+          ><span>{{ 'BUTTONS.CUT' | translate }}</span>
+          <i class="material-icons">skip_next</i><span>&#8230;</span>
+          <i class="material-icons">skip_previous</i></button>
       </div>
     </div>
   </mat-grid-tile>

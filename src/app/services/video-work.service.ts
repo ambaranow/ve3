@@ -29,7 +29,7 @@ export class VideoWorkService {
 
 
   log(mess) {
-    // console.log(mess);
+    console.log(mess);
   }
   async init() {
     const start = (new Date()).getTime();
@@ -212,7 +212,50 @@ export class VideoWorkService {
 
   }
 
-  async cut(params: { ss: string | number, to: string | number, t: string | number, accurate: boolean, noAudio: boolean}) {
+  async cut(params: { ss: string | number, to: string | number, t: string | number, accurate: boolean, noAudio: boolean }) {
+    const start = (new Date()).getTime();
+    if (!this.isInited) {
+      await this.init();
+    }
+    this.videoFileService.setDownloadLink(undefined); // reset download link
+    const n = this.videoFileService.sourceVideo.file.name;
+    const inputFileName = this.helpersService.getSourceFileName(n);
+    const outputFileName = this.helpersService.getTargetFileName(n);
+    const targetPreviewFileName = this.helpersService.getTargetPreviewFileName();
+    const outputFileType = this.videoFileService.sourceVideo.file.type;
+    const noAudio = params.noAudio ? '-an' : '';
+    await this.worker.trim(inputFileName, outputFileName, params.ss, params.to);
+    setTimeout(async () => {
+      const tFile = await this.worker.read(outputFileName);
+      const targetFile = {
+        data: tFile.data,
+        type: outputFileType,
+        name: outputFileName
+      };
+      this.videoFileService.setTarget(targetFile);
+      const isCopy = this.helpersService.getExtension(outputFileName) === 'mp4' ?
+        '-c copy' : '';
+      await this.worker.run(`
+        -i ${outputFileName} \
+        -loglevel debug \
+        ${isCopy} \
+        -y ${targetPreviewFileName}
+      `);
+      const pFile = await this.worker.read(targetPreviewFileName);
+      const previewFile = {
+        data: pFile.data,
+        type: 'video/mp4',
+        name: targetPreviewFileName
+      };
+      this.videoFileService.setTargetPreview(previewFile);
+      const end = (new Date()).getTime();
+      this.log('Duration cut() = ' + this.helpersService.ms2TimeString(end - start));
+      this.progress.next(100);
+    }, 1000);
+  }
+
+
+  async cut__(params: { ss: string | number, to: string | number, t: string | number, accurate: boolean, noAudio: boolean}) {
     const start = (new Date()).getTime();
     if (!this.isInited) {
       await this.init();
@@ -225,29 +268,6 @@ export class VideoWorkService {
     const outputFileType = this.videoFileService.sourceVideo.file.type;
     const noAudio = params.noAudio ? '-an' : '';
 
-    // let command = `
-    // -y \
-    // -i ${inputFileName} \
-    // -force_key_frames ${params.ss},${params.to} \
-    // -c copy \
-    // -async 1 \
-    // tmp_${outputFileName}
-    // `;
-    // this.log(command.replace(/\s+/g, ' '))
-    // await this.worker.run(command.replace(/\s+/g, ' '));
-    // command = `
-    // -ss ${params.ss} \
-    // -i tmp_${outputFileName} \
-    // -t ${params.t} \
-    // -loglevel debug \
-    // -c copy \
-    // -avoid_negative_ts 1
-    // -async 1 \
-    // -y \
-    // ${outputFileName}
-    // `;
-    // this.log(command.replace(/\s+/g, ' '))
-    // await this.worker.run(command.replace(/\s+/g, ' '));
     // https://stackoverflow.com/questions/55866736/ffmpeg-ss-option-is-not-accurate
     // 3*AV_TIME_BASE / 23
     // https://superuser.com/questions/459313/how-to-cut-at-exact-frames-using-ffmpeg
@@ -281,6 +301,7 @@ export class VideoWorkService {
       this.log(command.replace(/\s+/g, ' '))
       await this.worker.run(command.replace(/\s+/g, ' '));
     }
+
     // -avoid_negative_ts 1 или -copyts
     setTimeout (async () => {
       const tFile = await this.worker.read(outputFileName);

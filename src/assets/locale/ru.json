@@ -11,8 +11,7 @@
   "BUTTONS": {
     "REVERSE": "Наоборот",
     "CUT": "Вырезать",
-    "FASTCUT": "Быстро",
-    "ACCURATECUT": "Аккуратно",
+    "CUTFRAGMENT": "Вырезать",
     "DOWNLOAD": "Скачать",
     "UPLOADAREA": "Перетащите файл сюда или кликайте"
   },

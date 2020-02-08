@@ -10,9 +10,8 @@
   },
   "BUTTONS": {
     "REVERSE": "Reverse",
-    "CUT": "Cut fragment",
-    "FASTCUT": "Fast",
-    "ACCURATECUT": "Accurate",
+    "CUT": "Cut",
+    "CUTFRAGMENT": "Cut fragment",
     "DOWNLOAD": "Download",
     "UPLOADAREA": "Drop video file, or click here"
   },
