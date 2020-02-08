@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 've-extract-mp3',
+  selector: 'ads-extract-mp3',
   templateUrl: './extract-mp3.component.html',
   styleUrls: ['./extract-mp3.component.scss']
 })

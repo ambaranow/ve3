@@ -19,6 +19,8 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatSliderModule} from '@angular/material/slider';
 import { ExtractMp3Component } from './extract-mp3/extract-mp3.component';
+import { GreetingModule } from '@components/greeting/greeting.module';
+import { RemoveAudioComponent } from './remove-audio/remove-audio.component';
 
 
 @NgModule({
@@ -31,6 +33,7 @@ import { ExtractMp3Component } from './extract-mp3/extract-mp3.component';
     DownloadLinkComponent,
     VideoControlsComponent,
     ExtractMp3Component,
+    RemoveAudioComponent,
   ],
   imports: [
     CommonModule,
@@ -43,6 +46,7 @@ import { ExtractMp3Component } from './extract-mp3/extract-mp3.component';
     MatGridListModule,
     MatButtonModule,
     ReactiveFormsModule,
+    GreetingModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

@@ -6,7 +6,7 @@ import { debounceTime } from 'rxjs/operators';
 import { VideoPlayerService } from '@services/video-player.service';
 
 @Component({
-  selector: 've-video-preview',
+  selector: 'ads-video-preview',
   templateUrl: './video-preview.component.html',
   styleUrls: ['./video-preview.component.scss'],
   encapsulation: ViewEncapsulation.None

@@ -4,7 +4,6 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoaderComponent } from './components/loader/loader.component';
-import { GreetingComponent } from '@components/greeting/greeting.component';
 import { VideoModule } from '@components/video/video.module';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
@@ -18,14 +17,15 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatIconModule} from '@angular/material/icon';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { MatBadgeModule } from '@angular/material/badge';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { GreetingModule } from '@components/greeting/greeting.module';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoaderComponent,
-    GreetingComponent,
+    LoaderComponent
   ],
   imports: [
     BrowserModule,
@@ -40,7 +40,9 @@ import { environment } from '../environments/environment';
     MatGridListModule,
     MatCardModule,
     MatButtonModule,
+    MatBadgeModule,
     AppRoutingModule,
+    GreetingModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

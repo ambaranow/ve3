@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ViewService } from '@services/view.service';
 
 @Component({
-  selector: 've-loader',
+  selector: 'ads-loader',
   templateUrl: './loader.component.html',
   styleUrls: ['./loader.component.scss']
 })

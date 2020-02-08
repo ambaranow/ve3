@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { HelpersService } from '@services/helpers.service';
 
 @Component({
-  selector: 've-video-controls',
+  selector: 'ads-video-controls',
   templateUrl: './video-controls.component.html',
   styleUrls: ['./video-controls.component.scss']
 })

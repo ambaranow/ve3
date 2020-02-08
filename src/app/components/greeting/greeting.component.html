@@ -1,4 +1,8 @@
 <div class="greeting">
+  <div class="try-now" *ngIf="!hideButtons">
+    <button mat-raised-button color="warn"
+      [routerLink]="'/video' | localize">{{ 'GREETING.TRYNOW' | translate }}</button>
+  </div>
   <mat-grid-list class="greeting-list" cols="2" rowHeight="175px">
     <mat-grid-tile>
       <mat-card class="greeting-card greeting-card__0">
@@ -9,10 +13,6 @@
           {{ 'GREETING.0' | translate }}
         </mat-card-content>
         <mat-card-actions>
-          <button
-            mat-raised-button
-            class="card-button"
-           [routerLink]="'/video' | localize">{{ 'GREETING.TRYNOW' | translate }}</button>
         </mat-card-actions>
       </mat-card>
     </mat-grid-tile>
@@ -25,10 +25,6 @@
           {{ 'GREETING.1' | translate }}
         </mat-card-content>
         <mat-card-actions>
-          <button
-            mat-raised-button
-            class="card-button"
-           [routerLink]="'/video' | localize">{{ 'GREETING.READFILE' | translate }}</button>
         </mat-card-actions>
       </mat-card>
     </mat-grid-tile>
@@ -41,10 +37,6 @@
           {{ 'GREETING.2' | translate }}
         </mat-card-content>
         <mat-card-actions>
-          <button
-            mat-raised-button
-            class="card-button"
-           [routerLink]="'/video' | localize">{{ 'GREETING.CHECKOUT' | translate }}</button>
         </mat-card-actions>
       </mat-card>
     </mat-grid-tile>
@@ -57,10 +49,6 @@
           {{ 'GREETING.3' | translate }}
         </mat-card-content>
         <mat-card-actions>
-          <button
-            mat-raised-button
-            class="card-button"
-           [routerLink]="'/video' | localize">{{ 'GREETING.TRYNOW' | translate }}</button>
         </mat-card-actions>
       </mat-card>
     </mat-grid-tile>
@@ -73,10 +61,6 @@
           {{ 'GREETING.4' | translate }}
         </mat-card-content>
         <mat-card-actions>
-          <button
-            mat-raised-button
-            class="card-button"
-           [routerLink]="'/video' | localize">{{ 'GREETING.READFILE' | translate }}</button>
         </mat-card-actions>
       </mat-card>
     </mat-grid-tile>
@@ -89,10 +73,6 @@
           {{ 'GREETING.5' | translate }}
         </mat-card-content>
         <mat-card-actions>
-          <button
-            mat-raised-button
-            class="card-button"
-           [routerLink]="'/video' | localize">{{ 'GREETING.CHECKOUT' | translate }}</button>
         </mat-card-actions>
       </mat-card>
     </mat-grid-tile>
@@ -105,10 +85,6 @@
           {{ 'GREETING.6' | translate }}
         </mat-card-content>
         <mat-card-actions>
-          <button
-            mat-raised-button
-            class="card-button"
-           [routerLink]="'/video' | localize">{{ 'GREETING.TRYNOW' | translate }}</button>
         </mat-card-actions>
       </mat-card>
     </mat-grid-tile>
@@ -121,12 +97,13 @@
           {{ 'GREETING.7' | translate }}
         </mat-card-content>
         <mat-card-actions>
-          <button
-            mat-raised-button
-            class="card-button"
-           [routerLink]="'/video' | localize">{{ 'GREETING.READFILE' | translate }}</button>
         </mat-card-actions>
       </mat-card>
     </mat-grid-tile>
   </mat-grid-list>
+
+  <div class="try-now" *ngIf="!hideButtons">
+    <button mat-raised-button color="warn"
+      [routerLink]="'/video' | localize">{{ 'GREETING.TRYNOW' | translate }}</button>
+  </div>
 </div>

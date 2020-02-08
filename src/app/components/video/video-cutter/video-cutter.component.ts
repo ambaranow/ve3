@@ -8,7 +8,7 @@ import { VideoPlayerService } from '@services/video-player.service';
 import { SafeUrl } from '@angular/platform-browser';
 
 @Component({
-  selector: 've-video-cutter',
+  selector: 'ads-video-cutter',
   templateUrl: './video-cutter.component.html',
   styleUrls: ['./video-cutter.component.scss'],
   encapsulation: ViewEncapsulation.None

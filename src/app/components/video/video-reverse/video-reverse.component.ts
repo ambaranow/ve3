@@ -8,7 +8,7 @@ import { VideoPlayerService } from '@services/video-player.service';
 import { HelpersService } from '@services/helpers.service';
 
 @Component({
-  selector: 've-video-reverse',
+  selector: 'ads-video-reverse',
   templateUrl: './video-reverse.component.html',
   styleUrls: ['./video-reverse.component.scss']
 })

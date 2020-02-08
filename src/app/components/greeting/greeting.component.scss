@@ -1,6 +1,10 @@
 .greeting {
   margin: 30px auto;
   max-width: 768px;
+  .try-now {
+    margin: 20px 0;
+    text-align: center;
+  }
   &-list {}
   &-card {
     margin: 0 10px;

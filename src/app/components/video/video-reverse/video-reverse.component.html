@@ -16,17 +16,17 @@
         <span class="actions-source__time">
         {{fileInfo.duration}}
       </span> -->
-      <ve-video-controls preview="source"></ve-video-controls>
+      <ads-video-controls preview="source"></ads-video-controls>
     </mat-grid-tile>
     <mat-grid-tile>
-      <ve-video-controls preview="target"></ve-video-controls>
+      <ads-video-controls preview="target"></ads-video-controls>
     </mat-grid-tile>
   </mat-grid-list>
 
   <div class="reverse">
-    <ve-keyframes-line
+    <ads-keyframes-line
       *ngIf="keyFrames.length"
-      [keyFrames]="keyFrames"></ve-keyframes-line>
+      [keyFrames]="keyFrames"></ads-keyframes-line>
   </div>
 
   <mat-grid-list 

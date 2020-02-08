@@ -4,17 +4,17 @@
   rowHeight="70px"
   *ngIf="fileInfo.durationMs && keyFrames.length">
   <mat-grid-tile class="actions-source">
-    <ve-video-controls
+    <ads-video-controls
       preview="source"
       [duration]="cut.duration"
       [start]="cut.min"
       [end]="cut.max"
-      ></ve-video-controls>
+      ></ads-video-controls>
   </mat-grid-tile>
   <mat-grid-tile>
-    <ve-video-controls
+    <ads-video-controls
       preview="target"
-      ></ve-video-controls>
+      ></ads-video-controls>
   </mat-grid-tile>
 </mat-grid-list>
 
@@ -26,9 +26,9 @@
     color="accent"
     [value]="playProgress.time"
     ></mat-progress-bar>
-  <ve-keyframes-line
+  <ads-keyframes-line
     *ngIf="keyFrames.length"
-    [keyFrames]="keyFrames"></ve-keyframes-line>
+    [keyFrames]="keyFrames"></ads-keyframes-line>
 
   <div class="cut-shadow cut-shadow__min" [ngStyle]="{width: shadowSize('min')}"></div>
   <div class="cut-shadow cut-shadow__max" [ngStyle]="{width: shadowSize('max')}"></div>

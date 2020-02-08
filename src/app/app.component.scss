@@ -10,7 +10,7 @@ button {
 }
 
 
-.ve-container {
+.ads-container {
   display: flex;
   flex-direction: column;
   position: absolute;
@@ -20,7 +20,7 @@ button {
   right: 0;
 }
 
-.ve-is-mobile .ve-toolbar {
+.ads-is-mobile .ads-toolbar {
   position: fixed;
   /* Make sure the toolbar will stay on top of the content as it scrolls past. */
   z-index: 2;
@@ -28,7 +28,7 @@ button {
 .mat-toolbar {
   background-color: #fff;
   border-bottom: 1px solid rgba(0,0,0,0.1);
-  .ve-toolbar {
+  .ads-toolbar {
     &-title {
       margin-left: 8px;
       color: rgba(12, 142, 89, 1);
@@ -75,19 +75,19 @@ button {
   }
 }
 
-.ve-sidenav-container {
+.ads-sidenav-container {
   /* When the sidenav is not fixed, stretch the sidenav container to fill the available space. This
      causes `<mat-sidenav-content>` to act as our scrolling element for desktop layouts. */
   flex: 1;
 }
 
-.ve-is-mobile .ve-sidenav-container {
+.ads-is-mobile .ads-sidenav-container {
   /* When the sidenav is fixed, don't constrain the height of the sidenav container. This allows the
      `<body>` to be our scrolling element for mobile layouts. */
   flex: 1 0 auto;
 }
 
-.ve-content-wrapper {
+.ads-content-wrapper {
   padding: 0 20px;
   max-width: 1400px;
   min-width: 728px;

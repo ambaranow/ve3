@@ -10,24 +10,26 @@
   </app-file-upload>
 </form>
 
+<ads-greeting hideButtons="true" *ngIf="!fileUploaded"></ads-greeting>
+
 <mat-grid-list
   cols="13"
   rowHeight="320" 
   *ngIf="fileUploaded">
   <mat-grid-tile [colspan]="isTargetReady ? 6 : 12">
-    <ve-video-preview
-      class="ve-video-preview"
+    <ads-video-preview
+      class="ads-video-preview"
       [controls]="false"
-      id="source"></ve-video-preview>
+      id="source"></ads-video-preview>
   </mat-grid-tile>
   <mat-grid-tile colspan="6" *ngIf="isTargetReady">
-    <ve-video-preview
-      class="ve-video-preview"
+    <ads-video-preview
+      class="ads-video-preview"
       [controls]="false"
       id="target"
-      ></ve-video-preview>
+      ></ads-video-preview>
   </mat-grid-tile>
-  <mat-grid-tile class="ve-video-volume" *ngIf="isPreviewReady">
+  <mat-grid-tile class="ads-video-volume" *ngIf="isPreviewReady">
     <i class="material-icons">
       volume_up
       </i><br />
@@ -50,13 +52,16 @@
 
 <mat-tab-group *ngIf="isPreviewReady" animationDuration="0">
   <mat-tab label="{{'BUTTONS.CUTFRAGMENT' | translate}}">
-    <ve-video-cutter></ve-video-cutter>
+    <ads-video-cutter></ads-video-cutter>
   </mat-tab>
   <mat-tab label="{{'BUTTONS.EXTRACTMP3' | translate}}">
-    <ve-extract-mp3></ve-extract-mp3>
+    <ads-extract-mp3></ads-extract-mp3>
   </mat-tab>
   <mat-tab label="{{'BUTTONS.REVERSE' | translate}}">
-    <ve-video-reverse></ve-video-reverse>
+    <ads-video-reverse></ads-video-reverse>
+  </mat-tab>
+  <mat-tab label="{{'BUTTONS.REMOVEAUDIO' | translate}}">
+    <banner-remove-audio></banner-remove-audio>
   </mat-tab>
 </mat-tab-group>
 

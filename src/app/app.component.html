@@ -1,19 +1,22 @@
-<div class="ve-container" [class.ve-is-mobile]="mobileQuery.matches">
-  <mat-toolbar color="basic" class="ve-toolbar">
+<div class="ads-container" [class.ads-is-mobile]="mobileQuery.matches">
+  <mat-toolbar color="basic" class="ads-toolbar">
     <button mat-raised-button mat-icon-button
       (click)="snav.toggle()"
       ><mat-icon>menu</mat-icon></button>
     
-    <span class="ve-toolbar-logo"
+    <span class="ads-toolbar-logo"
       (click)="snav.close()"
       [routerLink]="'/' | localize"
       ><img src="/assets/icons/icon-72x72.png" alt="LivePics master" /></span>
-    <h1 class="ve-toolbar-title">
+    <h1
+      class="ads-toolbar-title"
+      matBadgePosition="above before"
+      matBadge="β" matBadgeColor="warn">
       {{ 'MAIN.PAGETITLE' | translate }}
       <span> {{ pageTitle | lowercase }}</span>
     </h1>
-    <span class="ve-toolbar-spacer"></span>
-    <span class="ve-toolbar-langs">
+    <span class="ads-toolbar-spacer"></span>
+    <span class="ads-toolbar-langs">
       {{ 'LANGUAGES.TITLE' | translate }}:
       <button
         mat-button
@@ -25,7 +28,7 @@
     </span>
   </mat-toolbar>
 
-  <mat-sidenav-container class="ve-sidenav-container"
+  <mat-sidenav-container class="ads-sidenav-container"
                          [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
     <mat-sidenav #snav [mode]="mobileQuery.matches ? 'over' : 'side'"
                  [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
@@ -47,7 +50,7 @@
     </mat-sidenav>
 
     <mat-sidenav-content>
-      <div class="ve-content-wrapper">
+      <div class="ads-content-wrapper">
         <router-outlet></router-outlet>
       </div>
 
@@ -55,4 +58,4 @@
   </mat-sidenav-container>
 </div>
 
-<ve-loader></ve-loader>
+<ads-loader></ads-loader>

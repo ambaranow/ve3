@@ -16,6 +16,9 @@
     "EXTRACTMP3": "Extract MP3",
     "REMOVE": "Remove",
     "REMOVEAUDIO": "Remove audio",
+    "CONVERT": "Convert",
+    "RESIZE": "Resize",
+    "ROTATE": "Rotate",
     "DOWNLOAD": "Download",
     "UPLOADAREA": "Drop video file, or click here"
   },
