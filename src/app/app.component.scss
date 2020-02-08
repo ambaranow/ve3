@@ -29,9 +29,10 @@ button {
   background-color: #fff;
   border-bottom: 1px solid rgba(0,0,0,0.1);
   .ads-toolbar {
+    background-color: #fff;
     &-title {
       margin-left: 8px;
-      color: rgba(12, 142, 89, 1);
+      color: #333333;
       font: 400 18px/24px 'PT Sans', sans-serif;
     }
     &-logo {

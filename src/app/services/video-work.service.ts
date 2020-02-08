@@ -35,6 +35,7 @@ export class VideoWorkService {
     const start = (new Date()).getTime();
     const { createWorker } = window['FFmpeg'];
     this.worker = createWorker({
+      workerPath: '/assets/ffmpeg/worker/worker.min.js',
       corePath: '/assets/ffmpeg/ffmpeg-core.js',
       logger: (res) => {
         // this.log(res);

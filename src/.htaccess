@@ -1,8 +1,26 @@
 <IfModule mod_rewrite.c>
 RewriteEngine On
+RewriteCond %{SERVER_PORT} !^443$
+RewriteRule .* https://%{SERVER_NAME}%{REQUEST_URI} [R,L]
 RewriteBase /
 RewriteRule ^index\.html$ - [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule . /index.html [L]
+</IfModule>
+
+AddType application/manifest+json .webmanifest
+
+
+<ifModule mod_headers.c>
+Header always append X-Frame-Options DENY
+Header set X-Content-Type-Options nosniff
+#week
+<FilesMatch "\.(js|css|txt)$">
+  Header set Cache-Control "max-age=604800"
+</FilesMatch>
+#month
+<FilesMatch "\.(ttf|woff|woff2|otf|svg|flv|swf|ico|gif|jpg|jpeg|png)$">
+  Header set Cache-Control "max-age=2592000"
+</FilesMatch>
 </IfModule>

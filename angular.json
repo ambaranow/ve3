@@ -26,6 +26,8 @@
             "assets": [
               "src/favicon.ico",
               "src/.htaccess",
+              "src/ads.txt",
+              "src/robots.txt",
               "src/assets",
               "src/manifest.webmanifest"
             ],
@@ -33,7 +35,7 @@
               "src/styles.scss"
             ],
             "scripts": [
-              "./node_modules/@ffmpeg/ffmpeg/dist/ffmpeg.min.js"
+              "src/assets/ffmpeg/worker/ffmpeg.min.js"
             ],
             "webWorkerTsConfig": "tsconfig.worker.json"
           },
@@ -99,6 +101,8 @@
             "assets": [
               "src/favicon.ico",
               "src/.htaccess",
+              "src/ads.txt",
+              "src/robots.txt",
               "src/assets",
               "src/manifest.webmanifest"
             ],
@@ -106,7 +110,7 @@
               "src/styles.scss"
             ],
             "scripts": [
-              "./node_modules/@ffmpeg/ffmpeg/dist/ffmpeg.min.js"
+              "src/assets/ffmpeg/worker/ffmpeg.min.js"
             ]
           }
         },

@@ -1,7 +1,7 @@
 {
-  "name": "ve",
-  "short_name": "ve",
-  "theme_color": "#1976d2",
+  "name": "LivePics.su",
+  "short_name": "LivePics",
+  "theme_color": "#ffcc2d",
   "background_color": "#fafafa",
   "display": "standalone",
   "scope": "/",
