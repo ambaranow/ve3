@@ -18,6 +18,7 @@ import {MatGridListModule} from '@angular/material/grid-list';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatSliderModule} from '@angular/material/slider';
+import { ExtractMp3Component } from './extract-mp3/extract-mp3.component';
 
 
 @NgModule({
@@ -29,6 +30,7 @@ import {MatSliderModule} from '@angular/material/slider';
     VideoReverseComponent,
     DownloadLinkComponent,
     VideoControlsComponent,
+    ExtractMp3Component,
   ],
   imports: [
     CommonModule,

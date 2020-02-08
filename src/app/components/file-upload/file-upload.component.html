@@ -4,8 +4,8 @@
     #veFilePicker="ngxFilePicker"
     [accept]="acceptType"
     [readMode]="readModeType"
-    (readStart)="onReadStart($event)"
-    (readEnd)="onReadEnd($event)"
+    (readStart)="onReadStart()"
+    (readEnd)="onReadEnd()"
     (filePick)="onFilePicked($event)"
     (fileDrop)="onFilePicked($event)">
     <span *ngIf="!fileUploadProgress">{{ title }}

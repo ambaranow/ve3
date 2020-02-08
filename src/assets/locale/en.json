@@ -3,7 +3,8 @@
     "VIDEO": "Video"
   },
   "MAIN": {
-    "PAGETITLE": "online converter"
+    "PAGETITLE": "online converter",
+    "COMINGSOON": "Coming soon!"
   },
   "VIDEOPAGE": {
     "PAGETITLE": "Video"
@@ -12,6 +13,9 @@
     "REVERSE": "Reverse",
     "CUT": "Cut",
     "CUTFRAGMENT": "Cut fragment",
+    "EXTRACTMP3": "Extract MP3",
+    "REMOVE": "Remove",
+    "REMOVEAUDIO": "Remove audio",
     "DOWNLOAD": "Download",
     "UPLOADAREA": "Drop video file, or click here"
   },
@@ -25,10 +29,10 @@
   },
   "GREETING": {
     "TRYNOW": "Try it now!",
-    "0": "This web application will help you cut a fragment from a small video file directly in your browser. It does not require installation.",
     "READFILE": "Select a file!",
-    "1": "Your files are not sent to the server, processed only by your computer in your browser and are available only to you.",
     "CHECKOUT": "Check out!",
+    "0": "This web application will help you cut a fragment from a small video file directly in your browser. It does not require installation.",
+    "1": "Your files are not sent to the server, processed only by your computer in your browser and are available only to you.",
     "2": "The application interface is very simple. You can easily master it, read the file from the disk and get a link to the finished video.",
     "3": "Processing speed depends on the size and resolution of the video, as well as the power of your computer and browser.",
     "4": "The web application works with a large number of video formats. If the file does not open, it is probably damaged or too large.",

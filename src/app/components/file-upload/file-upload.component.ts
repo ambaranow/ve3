@@ -26,7 +26,7 @@ export class FileUploadComponent implements ControlValueAccessor {
   private pickedFile: ReadFile;
   private propagateChange: (value) => void;
   private onTouched: () => void;
-  private fileUploadProgress = false;
+  public fileUploadProgress = false;
 
   @Input() title: string;
 

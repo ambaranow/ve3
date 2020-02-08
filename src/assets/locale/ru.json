@@ -3,7 +3,8 @@
     "VIDEO": "Видео"
   },
   "MAIN": {
-    "PAGETITLE": "онлайн конвертер"
+    "PAGETITLE": "онлайн конвертер",
+    "COMINGSOON": "Скоро будет!"
   },
   "VIDEOPAGE": {
     "PAGETITLE": "Видео"
@@ -12,6 +13,9 @@
     "REVERSE": "Наоборот",
     "CUT": "Вырезать",
     "CUTFRAGMENT": "Вырезать",
+    "EXTRACTMP3": "Извлечь MP3",
+    "REMOVE": "Убрать",
+    "REMOVEAUDIO": "Убрать звук",
     "DOWNLOAD": "Скачать",
     "UPLOADAREA": "Перетащите файл сюда или кликайте"
   },

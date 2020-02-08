@@ -48,7 +48,7 @@ export class VideoCutterComponent implements OnInit, OnDestroy {
     private videoWorkService: VideoWorkService,
     private videoFileService: VideoFileService,
     private videoPlayerService: VideoPlayerService,
-    private helpersService: HelpersService,
+    public helpersService: HelpersService,
   ) {
     this.progressBinded = this.setPlayProgress.bind(this);
   }
