@@ -1,25 +1,25 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ViewService } from '@services/view.service';
-import { VideoFileService } from '@services/video-file.service';
-import { HelpersService } from '@services/helpers.service';
 import { Subscription } from 'rxjs';
 import { SafeUrl } from '@angular/platform-browser';
+import { ViewService } from '@services/view.service';
 import { VideoWorkService } from '@services/video-work.service';
+import { VideoFileService } from '@services/video-file.service';
 import { VideoPlayerService } from '@services/video-player.service';
+import { HelpersService } from '@services/helpers.service';
 
 @Component({
-  selector: 'ads-remove-audio',
-  templateUrl: './remove-audio.component.html',
-  styleUrls: ['./remove-audio.component.scss']
+  selector: 'ads-extract-audio',
+  templateUrl: './extract-audio.component.html',
+  styleUrls: ['./extract-audio.component.scss']
 })
-export class RemoveAudioComponent implements OnInit, OnDestroy {
+export class ExtractAudioComponent implements OnInit, OnDestroy {
 
   fileInfo: any = {};
   fileInfoSubs: Subscription;
   subs: Subscription[] = [];
   keyFrames: SafeUrl[] = [];
   disabled = false;
-  removeProgress = 0;
+  extractProgress = 0;
   player = undefined;
   isPaused = true;
   playProgress = {
@@ -80,18 +80,18 @@ export class RemoveAudioComponent implements OnInit, OnDestroy {
     );
   }
 
-  async actionRemoveAudio() {
+  async actionExtractAudio() {
     this.viewService.loaderOn();
-    this.removeProgress = 0;
+    this.extractProgress = 0;
     this.videoFileService.setTargetPreview(undefined);
     const tps = this.videoWorkService.progress.subscribe(v => {
-      this.removeProgress = v;
+      this.extractProgress = v;
     });
     this.subs.push(tps);
-    await this.videoWorkService.removeAudio();
+    await this.videoWorkService.extractAudio();
     tps.unsubscribe();
     setTimeout(() => {
-      this.removeProgress = 0;
+      this.extractProgress = 0;
     }, 1);
     this.viewService.loaderOff();
   }

@@ -19,7 +19,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatSliderModule} from '@angular/material/slider';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { ExtractMp3Component } from './extract-mp3/extract-mp3.component';
+import { ExtractAudioComponent } from './extract-audio/extract-audio.component';
 import { GreetingModule } from '@components/greeting/greeting.module';
 import { RemoveAudioComponent } from './remove-audio/remove-audio.component';
 
@@ -33,7 +33,7 @@ import { RemoveAudioComponent } from './remove-audio/remove-audio.component';
     VideoReverseComponent,
     DownloadLinkComponent,
     VideoControlsComponent,
-    ExtractMp3Component,
+    ExtractAudioComponent,
     RemoveAudioComponent,
   ],
   imports: [

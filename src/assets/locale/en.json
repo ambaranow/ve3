@@ -13,7 +13,7 @@
     "REVERSE": "Reverse",
     "CUT": "Cut",
     "CUTFRAGMENT": "Cut fragment",
-    "EXTRACTMP3": "Extract MP3",
+    "EXTRACTAUDIO": "Extract audio",
     "REMOVE": "Remove",
     "REMOVEAUDIO": "Remove audio",
     "CONVERT": "Convert",

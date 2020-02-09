@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ExtractMp3Component } from './extract-mp3.component';
+import { AudioPreviewComponent } from './audio-preview.component';
 
-describe('ExtractMp3Component', () => {
-  let component: ExtractMp3Component;
-  let fixture: ComponentFixture<ExtractMp3Component>;
+describe('AudioPreviewComponent', () => {
+  let component: AudioPreviewComponent;
+  let fixture: ComponentFixture<AudioPreviewComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ExtractMp3Component ]
+      declarations: [ AudioPreviewComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ExtractMp3Component);
+    fixture = TestBed.createComponent(AudioPreviewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

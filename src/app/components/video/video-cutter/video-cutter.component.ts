@@ -179,7 +179,7 @@ export class VideoCutterComponent implements OnInit, OnDestroy {
           const ind = Math.round(this.fileInfo.durationMs / 10);
           for (let i = 0; i < this.fileInfo.durationMs; i++) {
             if (i % ind === 0) {
-              n.push(Math.round(i / 1000));
+              n.push(Math.floor(i / 1000));
             }
           }
           this.videoWorkService.getKeyFrames(n).then((res: SafeUrl[]) => {

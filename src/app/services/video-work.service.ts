@@ -6,7 +6,8 @@ import { HelpersService } from './helpers.service';
 import { VideoObj } from '@models/video-obj';
 import { VideoPlayerService } from './video-player.service';
 import { ViewService } from './view.service';
-
+import { AudioFileService } from './audio-file.service';
+// https://gist.github.com/protrolium/e0dbd4bb0f1a396fcb55
 @Injectable({
   providedIn: 'root'
 })
@@ -22,6 +23,7 @@ export class VideoWorkService {
   constructor(
     private sanitizer: DomSanitizer,
     private videoFileService: VideoFileService,
+    private audioFileService: AudioFileService,
     private videoPlayerService: VideoPlayerService,
     private viewService: ViewService,
     private helpersService: HelpersService,
@@ -29,7 +31,7 @@ export class VideoWorkService {
 
 
   log(mess) {
-    console.log(mess);
+    // console.log(mess);
   }
   async init() {
     const start = (new Date()).getTime();
@@ -40,7 +42,7 @@ export class VideoWorkService {
       logger: (res) => {
         // this.log(res);
         // if (res.message && !res.type || res.type !== 'stderr') {
-        // this.log(res.message);
+        this.log(res.message);
         //   // this.mess += res.message + '\n';
         this.message.next(res);
         // }
@@ -283,7 +285,7 @@ export class VideoWorkService {
       ${isCopy} \
       ${outputFileName}
       `;
-    this.log(command.replace(/\s+/g, ' '))
+    // this.log(command.replace(/\s+/g, ' '));
     await this.worker.run(command.replace(/\s+/g, ' '));
     setTimeout(async () => {
       const tFile = await this.worker.read(outputFileName);
@@ -314,4 +316,37 @@ export class VideoWorkService {
     }, 1000);
   }
 
+
+  async extractAudio() {
+    const start = (new Date()).getTime();
+    if (!this.isInited) {
+      await this.init();
+    }
+    this.audioFileService.setDownloadLink(undefined); // reset donwload link
+    const inputFileName = this.helpersService.getSourceFileName(this.videoFileService.sourceVideo.file.name);
+    const outputFileName = this.videoFileService.originalFile.name + '_audio.m4a';
+    const outputFileType = 'audio/aac';
+    // -y \
+    // -loglevel info \
+    const command = `
+      -i ${inputFileName} \
+      -c:a aac -q:a 2 \
+      ${outputFileName}
+      `;
+    // await this.worker.run('-encoders');
+    this.log(command.replace(/\s+/g, ' '))
+    await this.worker.run(command.replace(/\s+/g, ' '));
+    setTimeout(async () => {
+      const tFile = await this.worker.read(outputFileName);
+      const targetFile = {
+        data: tFile.data,
+        type: outputFileType,
+        name: outputFileName
+      };
+      this.audioFileService.setTarget(targetFile);
+      const end = (new Date()).getTime();
+      this.log('Duration extractAudio() = ' + this.helpersService.ms2TimeString(end - start));
+      this.progress.next(100);
+    }, 1000);
+  }
 }

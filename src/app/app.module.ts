@@ -21,6 +21,7 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { GreetingModule } from '@components/greeting/greeting.module';
+import { AudioModule } from '@components/audio/audio.module';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { GreetingModule } from '@components/greeting/greeting.module';
     HttpClientModule,
     MatProgressSpinnerModule,
     VideoModule,
+    AudioModule,
     MatIconModule,
     MatSidenavModule,
     MatToolbarModule,
