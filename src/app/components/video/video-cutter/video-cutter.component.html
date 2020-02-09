@@ -18,7 +18,12 @@
   </mat-grid-tile>
 </mat-grid-list>
 
-<div class="cut">
+<div class="work-progress">
+  <mat-progress-bar style="width:100%" class="work-progress-bar" *ngIf="cutProgress" mode="determinate" color="primary"
+    [value]="cutProgress"></mat-progress-bar>
+</div>
+
+<div class="cut keyFrames">
   <mat-progress-bar
     [ngStyle]="{left: playProgress.left, width: playProgress.width}"
     class="cut-play-progress"
@@ -37,6 +42,7 @@
     class="cut-min"
     *ngIf="fileInfo.durationMs && keyFrames.length"
     thumbLabel="true"
+    [disabled]="disabled"
     min="0"
     [max]="fileInfo.durationMs"
     [step]="1"
@@ -49,6 +55,7 @@
     class="cut-max"
     *ngIf="fileInfo.durationMs && keyFrames.length"
     thumbLabel="true"
+    [disabled]="disabled"
     min="0"
     [max]="fileInfo.durationMs"
     [step]="1"
@@ -65,19 +72,26 @@
   cols="2"
   rowHeight="70px"
   *ngIf="fileInfo.durationMs && keyFrames.length">
-
   <mat-grid-tile class="actions-cut">
     <div
       *ngIf="cut.max < fileInfo.durationMs || cut.min > 0"
       class="actions-cut__block">
       <div class="actions-cut__buttons">
         <button
+          [disabled]="disabled"
           mat-raised-button
           (click)="actionCut($event, true)"
           color="accent"
-          ><span>{{ 'BUTTONS.CUT' | translate }}</span>
+          ><span>{{ 'BUTTONS.CUTFRAGMENT' | translate }}</span>
           <i class="material-icons">skip_next</i><span>&#8230;</span>
           <i class="material-icons">skip_previous</i></button>
+        <mat-slide-toggle class="actions-cut_an"
+          color="warn"
+          [checked]="removeAudio"
+          (change)="changeRemoveAudio($event)"
+          [disabled]="disabled">
+          {{ 'BUTTONS.REMOVEAUDIO' | translate }}
+        </mat-slide-toggle>
       </div>
     </div>
   </mat-grid-tile>
@@ -86,5 +100,3 @@
   </mat-grid-tile>
 </mat-grid-list>
 
-<mat-progress-bar style="width:100%" class="cut-work-progress" *ngIf="cutProgress"
-  mode="determinate" color="primary" [value]="cutProgress"></mat-progress-bar>

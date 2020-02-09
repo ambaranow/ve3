@@ -26,6 +26,7 @@ export class VideoReverseComponent implements OnInit, OnDestroy {
     time: 0
   };
   reverseProgress = 0;
+  disabled = false;
 
   isRemoveAudio = false;
 
@@ -51,6 +52,11 @@ export class VideoReverseComponent implements OnInit, OnDestroy {
       }
     });
     this.subs.push(this.fileInfoSubs);
+    this.subs.push(
+      this.viewService.loaderSubj.subscribe(r => {
+        this.disabled = r;
+      })
+    );
   }
 
   ngOnDestroy() {

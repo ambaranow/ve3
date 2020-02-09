@@ -21,6 +21,7 @@ export class VideoComponent implements OnInit, OnDestroy, OnChanges, AfterViewIn
   isPreviewReady = false;
   isTargetReady = false;
   subs: Subscription[] = [];
+  disabled = false;
 
   constructor(
     private viewService: ViewService,
@@ -55,6 +56,12 @@ export class VideoComponent implements OnInit, OnDestroy, OnChanges, AfterViewIn
         this.isTargetReady = f && f.src ? true : false;
       })
     );
+    this.subs.push(
+      this.viewService.loaderSubj.subscribe(r => {
+        this.disabled = r;
+      })
+    );
+
     // this.subs.push(
     //   this.translateService.get('VIDEOPAGE.PAGETITLE', { value: 'world' }).subscribe((res: string) => {
     //     this.metaService.setMeta({ pageTitle: res });

@@ -207,7 +207,7 @@ export class VideoWorkService {
       this.videoFileService.setTargetPreview(previewFile);
 
       const end = (new Date()).getTime();
-      this.log('Duration cut() = ' + this.helpersService.ms2TimeString(end - start));
+      this.log('Duration reverse() = ' + this.helpersService.ms2TimeString(end - start));
       this.progress.next(100);
     }, 1000);
 
@@ -224,8 +224,13 @@ export class VideoWorkService {
     const outputFileName = this.helpersService.getTargetFileName(n);
     const targetPreviewFileName = this.helpersService.getTargetPreviewFileName();
     const outputFileType = this.videoFileService.sourceVideo.file.type;
-    const noAudio = params.noAudio ? '-an' : '';
-    await this.worker.trim(inputFileName, outputFileName, params.ss, params.to);
+    const noAudio = params.noAudio ? ' -an' : '';
+    await this.worker.trim(
+        inputFileName,
+        outputFileName,
+        params.ss,
+        params.to,
+        `${noAudio}`);
     setTimeout(async () => {
       const tFile = await this.worker.read(outputFileName);
       const targetFile = {
@@ -255,8 +260,7 @@ export class VideoWorkService {
     }, 1000);
   }
 
-
-  async cut__(params: { ss: string | number, to: string | number, t: string | number, accurate: boolean, noAudio: boolean}) {
+  async removeAudio() {
     const start = (new Date()).getTime();
     if (!this.isInited) {
       await this.init();
@@ -267,44 +271,21 @@ export class VideoWorkService {
     const outputFileName = this.helpersService.getTargetFileName(n);
     const targetPreviewFileName = this.helpersService.getTargetPreviewFileName();
     const outputFileType = this.videoFileService.sourceVideo.file.type;
-    const noAudio = params.noAudio ? '-an' : '';
-
-    // https://stackoverflow.com/questions/55866736/ffmpeg-ss-option-is-not-accurate
-    // 3*AV_TIME_BASE / 23
-    // https://superuser.com/questions/459313/how-to-cut-at-exact-frames-using-ffmpeg
-    // fast
-    let command = '';
-    if (!params.accurate) {
-      command = `
-      -y \
-      -ss ${params.ss} \
-      -i ${inputFileName} \
-      -to ${params.to} \
-      -loglevel info \
-      -c copy -async 1 \
-      -avoid_negative_ts 1 \
-      ${noAudio} \
-      ${outputFileName}
-      `;
-      this.log(command.replace(/\s+/g, ' '))
-      await this.worker.run(command.replace(/\s+/g, ' '));
-    } else {
-      // accurate
-      command = `
+    const isCopy = 
+      this.helpersService.getExtension(outputFileName).toLowerCase() ===
+      this.helpersService.getExtension(inputFileName).toLowerCase() ?
+                                                                '-c copy' : '';
+    const command = `
       -y \
       -i ${inputFileName} \
-      -ss ${params.ss} \
-      -to ${params.to} \
       -loglevel info \
-      ${noAudio} \
+      -an \
+      ${isCopy} \
       ${outputFileName}
       `;
-      this.log(command.replace(/\s+/g, ' '))
-      await this.worker.run(command.replace(/\s+/g, ' '));
-    }
-
-    // -avoid_negative_ts 1 или -copyts
-    setTimeout (async () => {
+    this.log(command.replace(/\s+/g, ' '))
+    await this.worker.run(command.replace(/\s+/g, ' '));
+    setTimeout(async () => {
       const tFile = await this.worker.read(outputFileName);
       const targetFile = {
         data: tFile.data,
@@ -312,12 +293,12 @@ export class VideoWorkService {
         name: outputFileName
       };
       this.videoFileService.setTarget(targetFile);
-      const isCopy = this.helpersService.getExtension(outputFileName) === 'mp4' ?
-                    '-c copy' : '';
+      const isCopyP = this.helpersService.getExtension(outputFileName) === 'mp4' ?
+        '-c copy' : '';
       await this.worker.run(`
         -i ${outputFileName} \
         -loglevel debug \
-        ${isCopy} \
+        ${isCopyP} \
         -y ${targetPreviewFileName}
       `);
       const pFile = await this.worker.read(targetPreviewFileName);
@@ -327,10 +308,10 @@ export class VideoWorkService {
         name: targetPreviewFileName
       };
       this.videoFileService.setTargetPreview(previewFile);
-
       const end = (new Date()).getTime();
-      this.log('Duration cut() = ' + this.helpersService.ms2TimeString(end - start));
+      this.log('Duration removeAudio() = ' + this.helpersService.ms2TimeString(end - start));
       this.progress.next(100);
     }, 1000);
   }
+
 }

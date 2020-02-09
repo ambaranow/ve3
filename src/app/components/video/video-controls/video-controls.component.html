@@ -1,6 +1,7 @@
 <div class="video-controls" *ngIf="player">
   <button
     mat-raised-button
+    [disabled]="disabled"
     color="primary"
     (click)="controlPlayPause()"
     class="actions-source__play"><i

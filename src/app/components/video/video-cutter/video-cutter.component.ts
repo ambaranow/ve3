@@ -38,10 +38,10 @@ export class VideoCutterComponent implements OnInit, OnDestroy {
   };
   progressBinded: any;
   subs: Subscription[] = [];
+  disabled = false;
+  removeAudio = false;
 
   cutProgress: number;
-
-  isRemoveAudio = false;
 
   constructor(
     private viewService: ViewService,
@@ -66,6 +66,11 @@ export class VideoCutterComponent implements OnInit, OnDestroy {
       }
     });
     this.subs.push(this.fileInfoSubs);
+    this.subs.push(
+      this.viewService.loaderSubj.subscribe(r => {
+        this.disabled = r;
+      })
+    );
   }
 
   ngOnDestroy() {
@@ -102,11 +107,15 @@ export class VideoCutterComponent implements OnInit, OnDestroy {
     }
     this.shadowCut.min = (this.cut.min * 100 / this.fileInfo.durationMs) + '%';
     this.shadowCut.max = 100 - (this.cut.max * 100 / this.fileInfo.durationMs) + '%';
-    this.cut.duration = this.helpersService.ms2TimeStringNoMs(this.cut.max - this.cut.min);
+    this.cut.duration = this.helpersService.ms2TimeString(this.cut.max - this.cut.min);
   }
 
   shadowSize(key: string) {
     return this.shadowCut[key];
+  }
+
+  changeRemoveAudio($event) {
+    this.removeAudio = $event.checked;
   }
 
   async actionCut($event, accurate = false) {
@@ -114,7 +123,7 @@ export class VideoCutterComponent implements OnInit, OnDestroy {
     const params = {
       // ss: this.helpersService.ms2TimeString(this.cut.min),
       // to: this.helpersService.ms2TimeString(this.cut.max),
-      noAudio: this.isRemoveAudio,
+      noAudio: this.removeAudio,
       ss: '' + this.cut.min / 1000, // start point
       to: '' + this.cut.max / 1000, // end point
       t: '' + (this.cut.max - this.cut.min) / 1000, // duration

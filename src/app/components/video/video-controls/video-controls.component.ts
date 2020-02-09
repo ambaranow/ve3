@@ -2,6 +2,7 @@ import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { VideoPlayerService } from '@services/video-player.service';
 import { Subscription } from 'rxjs';
 import { HelpersService } from '@services/helpers.service';
+import { ViewService } from '@services/view.service';
 
 @Component({
   selector: 'ads-video-controls',
@@ -15,10 +16,12 @@ export class VideoControlsComponent implements OnInit, OnDestroy {
   playedSubj: Subscription;
   timeUpdateBinded;
   subs: Subscription[] = [];
+  disabled = false;
 
   constructor(
     private videoPlayerService: VideoPlayerService,
     private helpersService: HelpersService,
+    private viewService: ViewService,
   ) {
     this.timeUpdateBinded = this.timeUpdate.bind(this);
   }
@@ -79,7 +82,7 @@ export class VideoControlsComponent implements OnInit, OnDestroy {
           if (this.player) {
             if (!this.duration) {
               this.subs.push(
-                this.videoPlayerService.player[this.preview].durationSubj.subscribe(duration => {
+                this.videoPlayerService.player[this.preview].durationSubj.subscribe((duration: number) => {
                   this.duration = this.helpersService.ms2TimeStringNoMs(duration * 1000);
                 })
               );
@@ -92,6 +95,11 @@ export class VideoControlsComponent implements OnInit, OnDestroy {
         })
       );
     }
+    this.subs.push(
+      this.viewService.loaderSubj.subscribe(r => {
+        this.disabled = r;
+      })
+    );
   }
 
   ngOnInit() {

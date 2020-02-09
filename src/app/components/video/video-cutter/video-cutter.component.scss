@@ -1,5 +1,4 @@
 .cut {
-  margin: 20px 40px;
   position: relative;
   min-height: 67px;
   .mat-slider {
@@ -150,6 +149,7 @@
     &__buttons {
       display: inline-flex;
       flex-direction: row;
+      align-items: center;
       button {
         margin: 0 5px;
       }

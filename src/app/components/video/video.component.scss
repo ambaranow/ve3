@@ -29,3 +29,18 @@
     vertical-align: middle;
   }
 }
+.keyFrames {
+  margin: 20px 40px;
+}
+.work {
+  position: relative;
+  width: 100%;
+  margin-top: -15px;
+  margin-bottom: 14px;
+  height: 1px;
+  &-progress.mat-progress-bar {
+    position: absolute;
+    width: 100%;
+    z-index: 1;
+  }
+}

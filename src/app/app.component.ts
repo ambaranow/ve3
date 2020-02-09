@@ -6,6 +6,7 @@ import { LocalizeRouterService } from '@components/localize-router/localize-rout
 import { Subscription } from 'rxjs';
 import { MetaService } from '@services/meta.service';
 import { MetaObj } from '@models/meta-obj.js';
+import { ViewService } from '@services/view.service.js';
 
 @Component({
   selector: 'app-root',
@@ -19,6 +20,7 @@ export class AppComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
   lang: string;
   languages: {id: string, title: string}[] = [];
   settings = locales['default'];
+  disabled = false;
 
   subs: Subscription[] = [];
   mobileQuery: MediaQueryList;
@@ -30,6 +32,7 @@ export class AppComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
     private translateService: TranslateService,
     private localize: LocalizeRouterService,
     private metaService: MetaService,
+    private viewService: ViewService,
     ) {
     this.mobileQuery = media.matchMedia('(max-width: 1023px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
@@ -42,6 +45,11 @@ export class AppComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
 
   ngOnInit() {
     this.init();
+    this.subs.push(
+      this.viewService.loaderSubj.subscribe(r => {
+        this.disabled = r;
+      })
+    );
   }
 
   ngOnDestroy(): void {

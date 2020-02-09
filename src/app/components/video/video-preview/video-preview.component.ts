@@ -134,14 +134,5 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
         }, 1);
       })
     );
-    // this.subs.push(
-    //   this.videoWorkService.progress.subscribe(res => {
-    //     if (typeof res === 'number' && (res > 0 || res < 100)) {
-    //       this.progress = res;
-    //     } else {
-    //       this.progress = 0;
-    //     }
-    //   })
-    // );
   }
 }
