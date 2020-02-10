@@ -330,7 +330,11 @@ export class VideoWorkService {
     // -loglevel info \
     const command = `
       -i ${inputFileName} \
+      -y \
+      -loglevel info \
+      -vn \
       -c:a aac -q:a 2 \
+      -af loudnorm \
       ${outputFileName}
       `;
     // await this.worker.run('-encoders');

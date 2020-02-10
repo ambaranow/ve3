@@ -111,7 +111,7 @@ export class AudioFileService {
 
   setDownloadLink(targetAudio) {
     if (targetAudio) {
-      const fileName = this.videoFileService.originalFile.name + '.' + this.helpersService.getExtension(targetAudio.name);
+      const fileName = this.videoFileService.originalFile.name + '(livepics.su).' + this.helpersService.getExtension(targetAudio.name);
       const dwnld = { src: this.targetAudio.src, fileName };
       this.downloadLinkSubj.next(dwnld);
     } else {

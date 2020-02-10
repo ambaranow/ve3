@@ -29,6 +29,7 @@
     "@ngx-translate/core": "^12.0.0",
     "@ngx-translate/http-loader": "^4.0.0",
     "hammerjs": "^2.0.8",
+    "ng2-adsense": "^7.0.0",
     "ngx-file-helpers": "^3.0.0",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",

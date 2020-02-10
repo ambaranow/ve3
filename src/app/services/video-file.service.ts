@@ -109,7 +109,7 @@ export class VideoFileService {
 
   setDownloadLink(targetVideo) {
     if (targetVideo) {
-      const fileName = this.originalFile.name + '.' + this.helpersService.getExtension(targetVideo.name);
+      const fileName = this.originalFile.name + '(livepics.su).' + this.helpersService.getExtension(targetVideo.name);
       const dwnld = {src: this.targetVideo.src, fileName};
       this.downloadLinkSubj.next(dwnld);
     } else {
