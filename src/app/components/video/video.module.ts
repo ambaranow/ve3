@@ -25,6 +25,7 @@ import { RemoveAudioComponent } from './remove-audio/remove-audio.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
 import { LocalizeRouterModule } from '@components/localize-router/localize-router.module';
+import { AdsenseModule } from 'ng2-adsense';
 
 
 @NgModule({
@@ -62,6 +63,12 @@ import { LocalizeRouterModule } from '@components/localize-router/localize-route
         useFactory: HttpLoaderFactory,
         deps: [HttpClient],
       },
+    }),
+    AdsenseModule.forRoot({
+      adClient: 'ca-pub-7377476947438260',
+      adSlot: 9205888442,
+      adFormat: 'auto',
+      display: 'block'
     }),
   ],
   exports: [VideoComponent]

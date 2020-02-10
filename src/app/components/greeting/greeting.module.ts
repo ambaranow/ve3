@@ -9,6 +9,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { LocalizeRouterModule } from '@components/localize-router/localize-router.module';
 import { RouterModule } from '@angular/router';
+import { AdsenseModule } from 'ng2-adsense';
 
 
 
@@ -32,7 +33,13 @@ import { RouterModule } from '@angular/router';
         useFactory: HttpLoaderFactory,
         deps: [HttpClient],
       },
-    })
+    }),
+    AdsenseModule.forRoot({
+      adClient: 'ca-pub-7377476947438260',
+      adSlot: 9205888442,
+      adFormat: 'auto',
+      display: 'block'
+    }),
   ]
 })
 export class GreetingModule { }
