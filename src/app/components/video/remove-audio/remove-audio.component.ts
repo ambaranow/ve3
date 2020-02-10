@@ -70,12 +70,18 @@ export class RemoveAudioComponent implements OnInit, OnDestroy {
       this.videoPlayerService.player.source.playerSubj.subscribe(player => {
         if (player) {
           this.player = player;
-          this.videoWorkService.keyFramesSubj.subscribe(f => {
-            if (f) {
-              this.keyFrames.push(f);
-            }
-          });
+          this.viewService.loaderOff();
         }
+      })
+    );
+    this.videoWorkService.keyFrameSubj.subscribe(f => {
+      if (f) {
+        this.keyFrames.push(f);
+      }
+    });
+    this.subs.push(
+      this.videoWorkService.keyFramesFinalSubj.subscribe(kfs => {
+          this.keyFrames = kfs;
       })
     );
   }

@@ -22,6 +22,9 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ExtractAudioComponent } from './extract-audio/extract-audio.component';
 import { GreetingModule } from '@components/greeting/greeting.module';
 import { RemoveAudioComponent } from './remove-audio/remove-audio.component';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { Router, RouterModule } from '@angular/router';
+import { LocalizeRouterModule } from '@components/localize-router/localize-router.module';
 
 
 @NgModule({
@@ -48,6 +51,10 @@ import { RemoveAudioComponent } from './remove-audio/remove-audio.component';
     MatButtonModule,
     MatSlideToggleModule,
     ReactiveFormsModule,
+    MatToolbarModule,
+    LocalizeRouterModule,
+    // Router,
+    RouterModule,
     GreetingModule,
     TranslateModule.forRoot({
       loader: {

@@ -7,6 +7,9 @@ import { VideoPlayerService } from '@services/video-player.service';
 import { Subscription } from 'rxjs';
 import { MetaService } from '@services/meta.service';
 import { TranslateService } from '@ngx-translate/core';
+import { Router } from '@angular/router';
+import { LocalizeRouterService } from '@components/localize-router/localize-router.service';
+import { SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-video',
@@ -22,6 +25,10 @@ export class VideoComponent implements OnInit, OnDestroy, OnChanges, AfterViewIn
   isTargetReady = false;
   subs: Subscription[] = [];
   disabled = false;
+  navLinks: any[];
+  activeLinkIndex = -1;
+  fileInfo: any = {};
+  fileInfoSubs: Subscription;
 
   constructor(
     private viewService: ViewService,
@@ -29,6 +36,8 @@ export class VideoComponent implements OnInit, OnDestroy, OnChanges, AfterViewIn
     private videoWorkService: VideoWorkService,
     private videoPlayerService: VideoPlayerService,
     private metaService: MetaService,
+    private router: Router,
+    private localize: LocalizeRouterService,
     private translateService: TranslateService,
   ) { }
 
@@ -36,6 +45,28 @@ export class VideoComponent implements OnInit, OnDestroy, OnChanges, AfterViewIn
   }
 
   ngOnInit() {
+    this.navLinks = [
+      {
+          label: 'BUTTONS.CUTFRAGMENT',
+          link: '/video/cut',
+          index: 0
+      }, {
+          label: 'BUTTONS.EXTRACTAUDIO',
+          link: '/video/extract-audio',
+          index: 1
+        }, {
+          label: 'BUTTONS.REVERSE',
+          link: '/video/reverse',
+          index: 2
+        }, {
+          label: 'BUTTONS.REMOVEAUDIO',
+          link: '/video/remove-audio',
+          index: 3
+      },
+    ];
+    this.router.events.subscribe((res) => {
+      this.activeLinkIndex = this.navLinks.indexOf(this.navLinks.find(tab => tab.link === '.' + this.router.url));
+    });
     this.generateForm();
     this.subs.push(
       this.videoWorkService.progress.subscribe(res => {
@@ -49,6 +80,17 @@ export class VideoComponent implements OnInit, OnDestroy, OnChanges, AfterViewIn
     this.subs.push(
       this.videoPlayerService.player.source.playerSubj.subscribe(player => {
         this.isPreviewReady = player ? true : false;
+        if (player) {
+          this.fileInfoSubs = this.videoFileService.sourceFileInfoSubj.subscribe(info => {
+            if (info && info.durationMs) {
+              if (this.fileInfoSubs) {
+                this.fileInfoSubs.unsubscribe();
+              }
+              this.fileInfo = info;
+              this.getKeyFrames();
+            }
+          });
+        }
       })
     );
     this.subs.push(
@@ -72,6 +114,21 @@ export class VideoComponent implements OnInit, OnDestroy, OnChanges, AfterViewIn
   ngAfterViewInit() {
   }
 
+  getKeyFrames() {
+    const n = [];
+    const ind = Math.round(this.fileInfo.durationMs / 10);
+    for (let i = 0; i < this.fileInfo.durationMs; i++) {
+      if (i % ind === 0) {
+        n.push(Math.floor(i / 1000));
+      }
+    }
+    this.videoWorkService.getKeyFrames(n).then((res: SafeUrl[]) => {
+      // this.keyFrames = res;
+      setTimeout(() => {
+        this.videoPlayerService.player.source.currentTimeSubj.next(0);
+      });
+    });
+  }
 
   ngOnDestroy() {
     this.metaService.setMeta(undefined);

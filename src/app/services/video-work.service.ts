@@ -17,7 +17,8 @@ export class VideoWorkService {
   isInited = false;
   progress: BehaviorSubject<number> = new BehaviorSubject<number>(-1);
   message: BehaviorSubject<any> = new BehaviorSubject<any>(null);
-  keyFramesSubj: BehaviorSubject<SafeUrl> = new BehaviorSubject<SafeUrl>(null);
+  keyFrameSubj: BehaviorSubject<SafeUrl> = new BehaviorSubject<SafeUrl>(null);
+  keyFramesFinalSubj: BehaviorSubject<SafeUrl[]> = new BehaviorSubject<SafeUrl[]>([]);
   id = String((new Date()).getTime());
 
   constructor(
@@ -66,7 +67,7 @@ export class VideoWorkService {
     this.videoFileService.setSourcePreview(undefined);
     this.videoFileService.setTarget(undefined);
     this.videoFileService.setTargetPreview(undefined);
-    this.keyFramesSubj.next([]);
+    this.keyFrameSubj.next([]);
     this.videoFileService.setFileInfo({});
   }
 
@@ -135,7 +136,7 @@ export class VideoWorkService {
         if (src) {
           const sanSrc = this.sanitizer.bypassSecurityTrustUrl(src);
           keyFrames.push(sanSrc);
-          this.keyFramesSubj.next(sanSrc);
+          this.keyFrameSubj.next(sanSrc);
         }
         runnerIndex++;
         if (runnerIndex < n.length) {
@@ -148,6 +149,7 @@ export class VideoWorkService {
           this.viewService.loaderOff();
           const end = (new Date()).getTime();
           this.log('Duration getKeyFrames() = ' + this.helpersService.ms2TimeString(end - start));
+          this.keyFramesFinalSubj.next(keyFrames);
           resolve(keyFrames);
         }
       };

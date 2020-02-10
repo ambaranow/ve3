@@ -155,7 +155,7 @@ export class VideoCutterComponent implements OnInit, OnDestroy {
   }
 
   async init() {
-    if (this.processKeyFrames || !this.fileInfo.durationMs) {
+    if (!this.fileInfo.durationMs) {
       return;
     }
 
@@ -167,28 +167,20 @@ export class VideoCutterComponent implements OnInit, OnDestroy {
           this.player.addEventListener('timeupdate', this.progressBinded);
           this.setRange({value: this.fileInfo.durationMs}, 'max', 'init');
           this.videoPlayerService.player.source.currentTimeSubj.next(0);
-
-          this.subs.push(
-            this.videoWorkService.keyFramesSubj.subscribe(f => {
-              if (f) {
-                this.keyFrames.push(f);
-              }
-            })
-          );
-          const n = [];
-          const ind = Math.round(this.fileInfo.durationMs / 10);
-          for (let i = 0; i < this.fileInfo.durationMs; i++) {
-            if (i % ind === 0) {
-              n.push(Math.floor(i / 1000));
-            }
-          }
-          this.videoWorkService.getKeyFrames(n).then((res: SafeUrl[]) => {
-            this.keyFrames = res;
-            setTimeout(() => {
-              this.videoPlayerService.player.source.currentTimeSubj.next(0);
-            });
-          });
+          this.viewService.loaderOff();
         }
+      })
+    );
+    this.subs.push(
+      this.videoWorkService.keyFrameSubj.subscribe(f => {
+        if (f) {
+          this.keyFrames.push(f);
+        }
+      })
+    );
+    this.subs.push(
+      this.videoWorkService.keyFramesFinalSubj.subscribe(kfs => {
+          this.keyFrames = kfs;
       })
     );
   }

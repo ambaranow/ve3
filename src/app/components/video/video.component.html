@@ -49,8 +49,16 @@
 
 
 
+<nav mat-tab-nav-bar *ngIf="isPreviewReady">
+  <a mat-tab-link
+  *ngFor="let link of navLinks"
+  [routerLink]="link.link | localize"
+  routerLinkActive #rla="routerLinkActive"
+  [active]="rla.isActive">{{link.label | translate}}</a>
+</nav>
+<router-outlet></router-outlet>
 
-<mat-tab-group *ngIf="isPreviewReady" animationDuration="0">
+<!-- <mat-tab-group *ngIf="isPreviewReady" animationDuration="0">
   <mat-tab label="{{'BUTTONS.CUTFRAGMENT' | translate}}">
     <ads-video-cutter></ads-video-cutter>
   </mat-tab>
@@ -63,6 +71,6 @@
   <mat-tab label="{{'BUTTONS.REMOVEAUDIO' | translate}}">
     <ads-remove-audio></ads-remove-audio>
   </mat-tab>
-</mat-tab-group>
+</mat-tab-group> -->
 
 
