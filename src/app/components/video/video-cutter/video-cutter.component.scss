@@ -20,7 +20,7 @@
           height: auto;
           transform: rotate(-90deg);
           padding: 0 2px;
-          top: 31px;
+          top: 27px;
           box-shadow: 0px 0px 1px rgba(0,0,0,.7);
           background-color: #ffcc0b;
           min-width: 70px;
@@ -57,7 +57,7 @@
         height: 70px;
         transform: none;
         bottom: auto;
-        top: 4px;
+        top: 0;
         right: -20px;
         background-color: #ffcc0b;
         border: 0;
@@ -110,9 +110,9 @@
   }
   &-shadow {
     position: absolute;
-    top: 4px;
+    top: 0;
     width: 0;
-    height: calc(100% - 4px);
+    height: 100%;
     z-index: 1;
     background-color: rgba(255,215,45,.4);
     &__min {
@@ -122,7 +122,7 @@
       right: 0;
     }
   }
-  &-play-progress {
+  &-play-progress.mat-progress-bar {
     position: absolute;
     bottom: 100%;
     z-index: 1;

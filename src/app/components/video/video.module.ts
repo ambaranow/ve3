@@ -23,7 +23,7 @@ import { ExtractAudioComponent } from './extract-audio/extract-audio.component';
 import { GreetingModule } from '@components/greeting/greeting.module';
 import { RemoveAudioComponent } from './remove-audio/remove-audio.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { LocalizeRouterModule } from '@components/localize-router/localize-router.module';
 
 
@@ -62,7 +62,7 @@ import { LocalizeRouterModule } from '@components/localize-router/localize-route
         useFactory: HttpLoaderFactory,
         deps: [HttpClient],
       },
-    })
+    }),
   ],
   exports: [VideoComponent]
 })

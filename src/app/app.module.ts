@@ -22,6 +22,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { GreetingModule } from '@components/greeting/greeting.module';
 import { AudioModule } from '@components/audio/audio.module';
+import { AdsenseModule } from 'ng2-adsense';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,13 @@ import { AudioModule } from '@components/audio/audio.module';
         deps: [HttpClient],
       },
     }),
+    AdsenseModule.forRoot({
+      adClient: 'ca-pub-7377476947438260',
+      adSlot: 9205888442,
+      adFormat: 'auto',
+      display: 'block'
+    }),
+
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
   providers: [],

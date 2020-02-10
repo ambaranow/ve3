@@ -12,6 +12,11 @@
     </mat-grid-tile>
   </mat-grid-list>
 
+  <div class="work-progress">
+    <mat-progress-bar style="width:100%" class="work-progress-bar" *ngIf="reverseProgress" mode="determinate"
+      color="warn" [value]="reverseProgress"></mat-progress-bar>
+  </div>
+
   <div class="keyFrames">
     <ads-keyframes-line
       *ngIf="keyFrames.length"
@@ -36,4 +41,9 @@
       <app-download-link></app-download-link>
     </mat-grid-tile>
   </mat-grid-list>
+  
+  <div class="goo">
+    <ng-adsense></ng-adsense>
+  </div>
+
 </div>

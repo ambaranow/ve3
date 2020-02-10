@@ -1,102 +1,108 @@
-<mat-grid-list
-  class="actions"
-  cols="2"
-  rowHeight="70px"
-  *ngIf="fileInfo.durationMs && keyFrames.length">
-  <mat-grid-tile class="actions-source">
-    <ads-video-controls
-      preview="source"
-      [duration]="cut.duration"
-      [start]="cut.min"
-      [end]="cut.max"
-      ></ads-video-controls>
-  </mat-grid-tile>
-  <mat-grid-tile>
-    <ads-video-controls
-      preview="target"
-      ></ads-video-controls>
-  </mat-grid-tile>
-</mat-grid-list>
+<div *ngIf="fileInfo.durationMs">
+  <mat-grid-list
+    class="actions"
+    cols="2"
+    rowHeight="70px"
+    *ngIf="fileInfo.durationMs">
+    <mat-grid-tile class="actions-source">
+      <ads-video-controls
+        preview="source"
+        [duration]="cut.duration"
+        [start]="cut.min"
+        [end]="cut.max"
+        ></ads-video-controls>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <ads-video-controls
+        preview="target"
+        ></ads-video-controls>
+    </mat-grid-tile>
+  </mat-grid-list>
 
-<div class="work-progress">
-  <mat-progress-bar style="width:100%" class="work-progress-bar" *ngIf="cutProgress" mode="determinate" color="warn"
-    [value]="cutProgress"></mat-progress-bar>
-</div>
+  <div class="work-progress">
+    <mat-progress-bar style="width:100%" class="work-progress-bar" *ngIf="cutProgress" mode="determinate" color="warn"
+      [value]="cutProgress"></mat-progress-bar>
+  </div>
 
-<div class="cut keyFrames">
-  <mat-progress-bar
-    [ngStyle]="{left: playProgress.left, width: playProgress.width}"
-    class="cut-play-progress"
-    mode="determinate"
-    color="accent"
-    [value]="playProgress.time"
-    ></mat-progress-bar>
-  <ads-keyframes-line
-    *ngIf="keyFrames.length"
-    [keyFrames]="keyFrames"></ads-keyframes-line>
+  <div class="cut keyFrames"
+    *ngIf="fileInfo.durationMs && keyFrames.length">
+    <mat-progress-bar
+      [ngStyle]="{left: playProgress.left, width: playProgress.width}"
+      class="cut-play-progress"
+      mode="determinate"
+      color="accent"
+      [value]="playProgress.time"
+      ></mat-progress-bar>
+    <ads-keyframes-line
+      [keyFrames]="keyFrames"></ads-keyframes-line>
 
-  <div class="cut-shadow cut-shadow__min" [ngStyle]="{width: shadowSize('min')}"></div>
-  <div class="cut-shadow cut-shadow__max" [ngStyle]="{width: shadowSize('max')}"></div>
+    <div class="cut-shadow cut-shadow__min" [ngStyle]="{width: shadowSize('min')}"></div>
+    <div class="cut-shadow cut-shadow__max" [ngStyle]="{width: shadowSize('max')}"></div>
 
-  <mat-slider
-    class="cut-min"
-    *ngIf="fileInfo.durationMs && keyFrames.length"
-    thumbLabel="true"
-    [disabled]="disabled"
-    min="0"
-    [max]="fileInfo.durationMs"
-    [step]="1"
-    [(ngModel)]="cut.min"
-    (input)="setRange($event, 'min', 'input')"
-    (change)="setRange($event, 'min', 'change')"
-    [displayWith]="helpersService.ms2TimeStringNoMs"
-    ></mat-slider>
-  <mat-slider
-    class="cut-max"
-    *ngIf="fileInfo.durationMs && keyFrames.length"
-    thumbLabel="true"
-    [disabled]="disabled"
-    min="0"
-    [max]="fileInfo.durationMs"
-    [step]="1"
-    [(ngModel)]="cut.max"
-    (input)="setRange($event, 'max', 'input')"
-    (change)="setRange($event, 'max', 'change')"
-    [displayWith]="helpersService.ms2TimeStringNoMs"
-    ></mat-slider>
-</div>
+    <mat-slider
+      class="cut-min"
+      *ngIf="fileInfo.durationMs && keyFrames.length"
+      thumbLabel="true"
+      [disabled]="disabled"
+      min="0"
+      [max]="fileInfo.durationMs"
+      [step]="1"
+      [(ngModel)]="cut.min"
+      (input)="setRange($event, 'min', 'input')"
+      (change)="setRange($event, 'min', 'change')"
+      [displayWith]="helpersService.ms2TimeStringNoMs"
+      ></mat-slider>
+    <mat-slider
+      class="cut-max"
+      *ngIf="fileInfo.durationMs && keyFrames.length"
+      thumbLabel="true"
+      [disabled]="disabled"
+      min="0"
+      [max]="fileInfo.durationMs"
+      [step]="1"
+      [(ngModel)]="cut.max"
+      (input)="setRange($event, 'max', 'input')"
+      (change)="setRange($event, 'max', 'change')"
+      [displayWith]="helpersService.ms2TimeStringNoMs"
+      ></mat-slider>
+  </div>
 
 
-<mat-grid-list 
-  class="actions"
-  cols="2"
-  rowHeight="70px"
-  *ngIf="fileInfo.durationMs && keyFrames.length">
-  <mat-grid-tile class="actions-cut">
-    <div
-      *ngIf="cut.max < fileInfo.durationMs || cut.min > 0"
-      class="actions-cut__block">
-      <div class="actions-cut__buttons">
-        <button
-          [disabled]="disabled"
-          mat-raised-button
-          (click)="actionCut($event, true)"
-          color="accent"
-          ><span>{{ 'BUTTONS.CUTFRAGMENT' | translate }}</span>
-          <i class="material-icons">skip_next</i><span>&#8230;</span>
-          <i class="material-icons">skip_previous</i></button>
-        <mat-slide-toggle class="actions-cut_an"
-          color="warn"
-          [checked]="removeAudio"
-          (change)="changeRemoveAudio($event)"
-          [disabled]="disabled">
-          {{ 'BUTTONS.REMOVEAUDIO' | translate }}
-        </mat-slide-toggle>
+  <mat-grid-list 
+    class="actions"
+    cols="2"
+    rowHeight="70px"
+    *ngIf="fileInfo.durationMs && keyFrames.length">
+    <mat-grid-tile class="actions-cut">
+      <div
+        *ngIf="cut.max < fileInfo.durationMs || cut.min > 0"
+        class="actions-cut__block">
+        <div class="actions-cut__buttons">
+          <button
+            [disabled]="disabled"
+            mat-raised-button
+            (click)="actionCut($event, true)"
+            color="accent"
+            ><span>{{ 'BUTTONS.CUTFRAGMENT' | translate }}</span>
+            <i class="material-icons">skip_next</i><span>&#8230;</span>
+            <i class="material-icons">skip_previous</i></button>
+          <mat-slide-toggle class="actions-cut_an"
+            color="warn"
+            [checked]="removeAudio"
+            (change)="changeRemoveAudio($event)"
+            [disabled]="disabled">
+            {{ 'BUTTONS.REMOVEAUDIO' | translate }}
+          </mat-slide-toggle>
+        </div>
       </div>
-    </div>
-  </mat-grid-tile>
-  <mat-grid-tile>
-    <app-download-link></app-download-link>
-  </mat-grid-tile>
-</mat-grid-list>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <app-download-link></app-download-link>
+    </mat-grid-tile>
+  </mat-grid-list>
 
+  <div class="goo">
+    <ng-adsense></ng-adsense>
+  </div>
+
+</div>
