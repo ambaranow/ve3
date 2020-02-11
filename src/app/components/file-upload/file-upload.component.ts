@@ -4,7 +4,8 @@ import {
   EventEmitter,
   forwardRef,
   Input,
-  ViewChild
+  ViewChild,
+  OnInit
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ReadFile, FilePickerDirective } from 'ngx-file-helpers';
@@ -20,7 +21,7 @@ import { ViewService } from '@services/view.service';
     multi: true
   }],
 })
-export class FileUploadComponent implements ControlValueAccessor {
+export class FileUploadComponent implements ControlValueAccessor, OnInit {
   private disabled: boolean;
   private file: File;
   private pickedFile: ReadFile;
@@ -63,6 +64,10 @@ export class FileUploadComponent implements ControlValueAccessor {
     this.disabled = isDisabled;
   }
 
+
+  ngOnInit() {
+    this.viewService.loaderOff();
+  }
 
   onReadStart() {
     // console.log('onReadStart')

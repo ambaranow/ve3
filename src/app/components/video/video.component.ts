@@ -10,6 +10,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import { LocalizeRouterService } from '@components/localize-router/localize-router.service';
 import { SafeUrl } from '@angular/platform-browser';
+import { ResetService } from '@services/reset.service';
 
 @Component({
   selector: 'app-video',
@@ -19,7 +20,6 @@ import { SafeUrl } from '@angular/platform-browser';
 })
 export class VideoComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
   form: FormGroup;
-  fileUploaded = false;
   progress: number = undefined;
   isPreviewReady = false;
   isTargetReady = false;
@@ -37,6 +37,7 @@ export class VideoComponent implements OnInit, OnDestroy, OnChanges, AfterViewIn
     private videoPlayerService: VideoPlayerService,
     private metaService: MetaService,
     private router: Router,
+    private resetService: ResetService,
     private localize: LocalizeRouterService,
     private translateService: TranslateService,
   ) { }
@@ -90,6 +91,7 @@ export class VideoComponent implements OnInit, OnDestroy, OnChanges, AfterViewIn
               this.getKeyFrames();
             }
           });
+          this.subs.push(this.fileInfoSubs);
         }
       })
     );
@@ -136,7 +138,8 @@ export class VideoComponent implements OnInit, OnDestroy, OnChanges, AfterViewIn
     for (const subs of this.subs) {
       subs.unsubscribe();
     }
-    this.viewService.loaderOff();
+    // this.viewService.loaderOff();
+    this.resetService.resetAll();
   }
 
 
@@ -146,9 +149,13 @@ export class VideoComponent implements OnInit, OnDestroy, OnChanges, AfterViewIn
     });
   }
 
+  fileUploaded(){
+    return this.videoFileService.fileUploaded;
+  };
+
   onFilePicked($event) {
     this.viewService.loaderOn();
-    this.fileUploaded = true;
+    this.videoFileService.fileUploaded = true;
     this.videoFileService.setSource($event);
     this.videoWorkService.getFileInfo(this.videoFileService.getSource()).then(r => {
       this.viewService.loaderOff();

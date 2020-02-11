@@ -97,10 +97,7 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
 
   reset() {
     // reset player
-    this.videoPlayerService.pause(this.id);
-    this.videoPlayerService.setPlayer(undefined, this.id);
-    this.videoPlayerService.player[this.id].durationSubj.next(undefined);
-    this.videoPlayerService.player[this.id].currentTimeSubj.next(0);
+    this.videoPlayerService.reset(this.id);
     this.player = undefined;
     this.previewVideo = null;
     this.duration = undefined;

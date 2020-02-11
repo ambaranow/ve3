@@ -60,4 +60,12 @@ export class VideoPlayerService {
     this.volumeSubj.next(val);
   }
 
+  reset(id) {
+    this.player[id].el = undefined;
+    this.pause(id);
+    this.setPlayer(undefined, id);
+    this.player[id].currentTimeSubj.next(0);
+    this.player[id].durationSubj.next(0);
+  }
+
 }

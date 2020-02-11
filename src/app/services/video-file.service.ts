@@ -15,6 +15,7 @@ export class VideoFileService {
     ext: string,
     type: string
   }
+  fileUploaded = false;
   sourceVideo: VideoObj;
   sourceVideoSubj: BehaviorSubject<VideoObj> = new BehaviorSubject<VideoObj>(null);
   sourcePreviewVideo: VideoObj;
@@ -68,8 +69,10 @@ export class VideoFileService {
           ),
         type: sourceVideo.type
       };
-      this.sourceVideoSubj.next(this.sourceVideo);
+    } else {
+      this.sourceVideo = undefined;
     }
+    this.sourceVideoSubj.next(this.sourceVideo);
   }
 
   setSourcePreview(sourcePreviewVideo: { data: any; type: string; name?: string; }) {
