@@ -1,4 +1,14 @@
 
+<div class="goo" *ngIf="!fileUploaded">
+  <ng-adsense
+    adClient="ca-pub-7640562161899788"
+    adSlot="4902298468"
+    display="block"
+    adFormat="link"
+  ></ng-adsense>
+</div>
+
+
 <form [formGroup]="form" class="upload-form">
   <!-- Загрузка файла -->
   <app-file-upload class="file-upload__ctrl"
@@ -9,8 +19,6 @@
     [title]="'BUTTONS.UPLOADAREA' | translate">
   </app-file-upload>
 </form>
-
-<ads-greeting hideButtons="true" *ngIf="!fileUploaded"></ads-greeting>
 
 <mat-grid-list
   cols="13"
@@ -58,3 +66,4 @@
 </nav>
 <router-outlet></router-outlet>
 
+<ads-greeting hideButtons="true"></ads-greeting>

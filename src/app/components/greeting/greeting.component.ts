@@ -7,6 +7,19 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class GreetingComponent implements OnInit {
 
+  cards = [
+    'CUT',
+    'REVERSE',
+    'EXTRACTAUDIO',
+    'MUTE',
+    'SECURE',
+    'INTERFACE',
+    'SPEED',
+    'FORMATS',
+    'FUNCTIONS',
+    'HOWIT',
+    'FREE'
+  ]
   constructor() { }
 
   @Input()

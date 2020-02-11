@@ -80,6 +80,7 @@ export class VideoCutterComponent implements OnInit, OnDestroy {
     for (const subs of this.subs) {
       subs.unsubscribe();
     }
+    this.viewService.loaderOff();
   }
 
   setRange($event: any, type: string, from: string) {

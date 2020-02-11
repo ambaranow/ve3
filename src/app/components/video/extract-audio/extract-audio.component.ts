@@ -59,6 +59,7 @@ export class ExtractAudioComponent implements OnInit, OnDestroy {
     for (const subs of this.subs) {
       subs.unsubscribe();
     }
+    this.viewService.loaderOff();
   }
 
   init() {

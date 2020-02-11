@@ -12,12 +12,14 @@ import { VideoCutterComponent } from '@components/video/video-cutter/video-cutte
 import { ExtractAudioComponent } from '@components/video/extract-audio/extract-audio.component';
 import { VideoReverseComponent } from '@components/video/video-reverse/video-reverse.component';
 import { RemoveAudioComponent } from '@components/video/remove-audio/remove-audio.component';
+import { GreetingComponent } from '@components/greeting/greeting.component';
 
 export function HttpLoaderFactory(translate: TranslateService, location: Location, settings: LocalizeRouterSettings, http: HttpClient) {
   return new LocalizeRouterHttpLoader(translate, location, settings, http);
 }
 const routes: Routes = [
-  { path: '', redirectTo: '/video/cut', pathMatch: 'full'},
+  // { path: '', redirectTo: '/video/cut', pathMatch: 'full'},
+  { path: '', component: GreetingComponent},
   { path: 'video', component: VideoComponent, children: [
     {path: 'cut', component: VideoCutterComponent },
     {path: 'extract-audio', component: ExtractAudioComponent },

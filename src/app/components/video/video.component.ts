@@ -136,6 +136,7 @@ export class VideoComponent implements OnInit, OnDestroy, OnChanges, AfterViewIn
     for (const subs of this.subs) {
       subs.unsubscribe();
     }
+    this.viewService.loaderOff();
   }
 
 

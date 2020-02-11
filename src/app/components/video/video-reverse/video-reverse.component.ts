@@ -63,6 +63,7 @@ export class VideoReverseComponent implements OnInit, OnDestroy {
     for (const subs of this.subs) {
       subs.unsubscribe();
     }
+    this.viewService.loaderOff();
   }
 
   async actionReverse($event) {
