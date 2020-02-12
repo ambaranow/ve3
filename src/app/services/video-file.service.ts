@@ -166,4 +166,14 @@ export class VideoFileService {
     return u8arr;
   }
 
+  reset() {
+    this.fileUploaded = false;
+    this.setSource(undefined);
+    this.setSourcePreview(undefined);
+    this.setTarget(undefined);
+    this.setTargetPreview(undefined);
+    this.setDownloadLink(undefined);
+    this.originalFile = null;
+    this.setFileInfo({});
+  }
 }

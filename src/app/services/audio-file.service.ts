@@ -165,4 +165,12 @@ export class AudioFileService {
     return u8arr;
   }
 
+  reset() {
+    this.setSource(undefined);
+    this.setSourcePreview(undefined);
+    this.setTarget(undefined);
+    this.setTargetPreview(undefined);
+    this.setDownloadLink(undefined);
+    this.originalFile = null;
+  }
 }

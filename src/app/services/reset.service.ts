@@ -17,24 +17,10 @@ export class ResetService {
   ) { }
 
   resetAll() {
-    this.videoWorkService.keyFramesFinalSubj.next([]);
-    this.videoWorkService.keyFrameSubj.next(undefined);
 
-    this.videoFileService.fileUploaded = false;
-    this.videoFileService.setSource(undefined);
-    this.videoFileService.setSourcePreview(undefined);
-    this.videoFileService.setTarget(undefined);
-    this.videoFileService.setTargetPreview(undefined);
-    this.videoFileService.setDownloadLink(undefined);
-    this.videoFileService.originalFile = null;
-    this.videoFileService.setFileInfo({});
-
-    this.audioFileService.setSource(undefined);
-    this.audioFileService.setSourcePreview(undefined);
-    this.audioFileService.setTarget(undefined);
-    this.audioFileService.setTargetPreview(undefined);
-    this.audioFileService.setDownloadLink(undefined);
-    this.audioFileService.originalFile = null;
+    this.videoWorkService.reset();
+    // this.videoFileService.reset(); // сбрасывается в videoWorkService.reset()
+    this.audioFileService.reset();
 
     for (const key in this.videoPlayerService.player) {
       if (this.videoPlayerService.player.hasOwnProperty(key)) {

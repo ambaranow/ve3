@@ -149,12 +149,13 @@ export class VideoComponent implements OnInit, OnDestroy, OnChanges, AfterViewIn
     });
   }
 
-  fileUploaded(){
+  fileUploaded() {
     return this.videoFileService.fileUploaded;
   };
 
   onFilePicked($event) {
     this.viewService.loaderOn();
+    this.videoWorkService.reset();
     this.videoFileService.fileUploaded = true;
     this.videoFileService.setSource($event);
     this.videoWorkService.getFileInfo(this.videoFileService.getSource()).then(r => {

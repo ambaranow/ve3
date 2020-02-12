@@ -30,6 +30,11 @@ export class VideoWorkService {
     private helpersService: HelpersService,
   ) { }
 
+  reset() {
+    this.videoFileService.reset(); // reset donwload link
+    this.keyFrameSubj.next([]);
+    this.keyFramesFinalSubj.next([]);
+  }
 
   log(mess) {
     // console.log(mess);
@@ -62,19 +67,9 @@ export class VideoWorkService {
     this.log('Duration init() = ' + this.helpersService.ms2TimeString(end - start));
   }
 
-  reset() {
-    this.videoFileService.setDownloadLink(undefined); // reset donwload link
-    this.videoFileService.setSourcePreview(undefined);
-    this.videoFileService.setTarget(undefined);
-    this.videoFileService.setTargetPreview(undefined);
-    this.keyFrameSubj.next([]);
-    this.videoFileService.setFileInfo({});
-  }
-
   async getFileInfo(f: VideoObj) {
     // this.log('getFileInfo')
     const start = (new Date()).getTime();
-    this.reset();
     const previewFileName = this.helpersService.getSourcePreviewFileName();
     if (!this.isInited) {
       await this.init();
