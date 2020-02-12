@@ -48,21 +48,24 @@ export class VideoComponent implements OnInit, OnDestroy, OnChanges, AfterViewIn
   ngOnInit() {
     this.navLinks = [
       {
-          label: 'BUTTONS.CUTFRAGMENT',
-          link: '/video/cut',
-          index: 0
-      }, {
-          label: 'BUTTONS.EXTRACTAUDIO',
-          link: '/video/extract-audio',
-          index: 1
-        }, {
-          label: 'BUTTONS.REVERSE',
-          link: '/video/reverse',
-          index: 2
-        }, {
-          label: 'BUTTONS.REMOVEAUDIO',
-          link: '/video/remove-audio',
-          index: 3
+        label: 'BUTTONS.CUTFRAGMENT',
+        link: '/video/cut',
+        index: 0
+      },
+      {
+        label: 'BUTTONS.REVERSE',
+        link: '/video/reverse',
+        index: 1
+      },
+      {
+        label: 'BUTTONS.EXTRACTAUDIO',
+        link: '/video/extract-audio',
+        index: 2
+      },
+      {
+        label: 'BUTTONS.REMOVEAUDIO',
+        link: '/video/remove-audio',
+        index: 3
       },
     ];
     this.router.events.subscribe((res) => {

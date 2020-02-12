@@ -28,7 +28,7 @@ export class VideoReverseComponent implements OnInit, OnDestroy {
   reverseProgress = 0;
   disabled = false;
 
-  isRemoveAudio = false;
+  removeAudio = false;
 
   constructor(
     private viewService: ViewService,
@@ -66,6 +66,10 @@ export class VideoReverseComponent implements OnInit, OnDestroy {
     this.viewService.loaderOff();
   }
 
+  changeRemoveAudio($event) {
+    this.removeAudio = $event.checked;
+  }
+
   async actionReverse($event) {
     this.viewService.loaderOn();
     this.reverseProgress = 0;
@@ -75,7 +79,7 @@ export class VideoReverseComponent implements OnInit, OnDestroy {
     });
     this.subs.push(tps);
     const params = {
-      noAudio: this.isRemoveAudio
+      noAudio: this.removeAudio
     };
     await this.videoWorkService.reverse(params);
     tps.unsubscribe();

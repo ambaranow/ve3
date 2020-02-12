@@ -28,7 +28,7 @@
     cols="2"
     rowHeight="70px"
     *ngIf="fileInfo.durationMs && keyFrames.length">
-    <mat-grid-tile>
+    <mat-grid-tile class="actions-reverse">
       <button
         [disabled]="disabled"
         mat-raised-button
@@ -36,6 +36,13 @@
         color="accent"
         >Reverse
         <i class="material-icons">rv_hookup</i></button>
+      <mat-slide-toggle class="actions-reverse_an"
+        color="warn"
+        [checked]="removeAudio"
+        (change)="changeRemoveAudio($event)"
+        [disabled]="disabled">
+        {{ 'BUTTONS.REMOVEAUDIO' | translate }}
+        </mat-slide-toggle>
     </mat-grid-tile>
     <mat-grid-tile>
       <app-download-link></app-download-link>
