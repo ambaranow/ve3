@@ -7,6 +7,9 @@ import { Subscription } from 'rxjs';
 import { MetaService } from '@services/meta.service';
 import { MetaObj } from '@models/meta-obj.js';
 import { ViewService } from '@services/view.service.js';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { GdprComponent } from '@components/gdpr/gdpr.component.js';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -29,10 +32,12 @@ export class AppComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
   constructor(
     changeDetectorRef: ChangeDetectorRef,
     media: MediaMatcher,
+    private sanitizer: DomSanitizer,
     private translateService: TranslateService,
     private localize: LocalizeRouterService,
     private metaService: MetaService,
     private viewService: ViewService,
+    private _snackBar: MatSnackBar,
     ) {
     this.mobileQuery = media.matchMedia('(max-width: 1023px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
@@ -61,7 +66,6 @@ export class AppComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
 
   init() {
     this.lang = this.translateService.currentLang;
-
     this.translateService.get(this.settings.locales.map(x => `LANGUAGES.${x.toUpperCase()}`))
       .subscribe(translations => {
         // init dropdown list with TRANSLATED list of languages from config
@@ -81,6 +85,7 @@ export class AppComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
         }
       })
     );
+    this.openSnackBar();
   }
 
   ngAfterViewInit() {
@@ -91,4 +96,14 @@ export class AppComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
     this.localize.changeLanguage(lang);
   }
 
+  openSnackBar() {
+    this.translateService.get('GDPR.BAR').subscribe(message => {
+      this._snackBar.openFromComponent(GdprComponent, {
+        duration: 30 * 24 * 60 * 60 * 1000,
+        data: {
+          message: this.sanitizer.bypassSecurityTrustHtml(message)
+        }
+      });
+    });
+  }
 }

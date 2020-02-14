@@ -23,11 +23,16 @@ import { environment } from '../environments/environment';
 import { GreetingModule } from '@components/greeting/greeting.module';
 import { AudioModule } from '@components/audio/audio.module';
 import { AdsenseModule } from 'ng2-adsense';
+import { GdprComponent } from './components/gdpr/gdpr.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { PrivacyPageComponent } from './components/gdpr/privacy-page/privacy-page.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoaderComponent
+    LoaderComponent,
+    GdprComponent,
+    PrivacyPageComponent
   ],
   imports: [
     BrowserModule,
@@ -44,6 +49,7 @@ import { AdsenseModule } from 'ng2-adsense';
     MatCardModule,
     MatButtonModule,
     MatBadgeModule,
+    MatSnackBarModule,
     AppRoutingModule,
     GreetingModule,
     TranslateModule.forRoot({
@@ -62,7 +68,12 @@ import { AdsenseModule } from 'ng2-adsense';
 
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [
+  ],
+  exports: [
+    TranslateModule,
+    MatSnackBarModule
+  ],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }

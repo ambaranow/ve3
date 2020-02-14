@@ -13,6 +13,7 @@ import { ExtractAudioComponent } from '@components/video/extract-audio/extract-a
 import { VideoReverseComponent } from '@components/video/video-reverse/video-reverse.component';
 import { RemoveAudioComponent } from '@components/video/remove-audio/remove-audio.component';
 import { GreetingComponent } from '@components/greeting/greeting.component';
+import { PrivacyPageComponent } from '@components/gdpr/privacy-page/privacy-page.component';
 
 export function HttpLoaderFactory(translate: TranslateService, location: Location, settings: LocalizeRouterSettings, http: HttpClient) {
   return new LocalizeRouterHttpLoader(translate, location, settings, http);
@@ -20,6 +21,7 @@ export function HttpLoaderFactory(translate: TranslateService, location: Locatio
 const routes: Routes = [
   // { path: '', redirectTo: '/video/cut', pathMatch: 'full'},
   { path: '', component: GreetingComponent},
+  { path: 'privacy', component: PrivacyPageComponent },
   { path: 'video', component: VideoComponent, children: [
     {path: 'cut', component: VideoCutterComponent },
     {path: 'extract-audio', component: ExtractAudioComponent },

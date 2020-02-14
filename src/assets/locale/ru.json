@@ -92,6 +92,11 @@
     "TRYNOW": "Попробуйте!",
     "READFILE": "Выберите файл!",
     "CHECKOUT": "Проверьте!"
+  },
+  "GDPR": {
+    "BAR": "We use cookies to make interactions with our websites and services easy and meaningful, to better understand how they are used and to tailor advertising. You can read more and make your cookie choices <a href=\"/ru/privacy\">here</a>. By continuing to use this site you are giving us your consent to do this.",
+    "TITLE": "Privacy policy and use of cookies",
+    "TEXT": "<p>This website uses cookies to analyse traffic (only anonymized and aggregated data using Google Analytics and Yandex Metrika), remember your preferences, and serve advertisments (using Google Adsense, non-personalized ads are used in EU). If you would like to change your preferences you may do so by following the instructions here.</p><p>We don't knowingly collect or store any personal information on our servers.<br />If you think we are hosting something containing your personal data or content belonging to you and would like to get it removed, please let me know.</p><p>Your files or data are not sent to the server, processed only by your computer in your browser and are available only to you.</p>"
   }
 
 }
