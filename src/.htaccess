@@ -4,6 +4,7 @@ RewriteCond %{SERVER_PORT} !^443$
 RewriteRule .* https://%{SERVER_NAME}%{REQUEST_URI} [R,L]
 RewriteBase /
 RewriteRule ^index\.html$ - [L]
+RewriteRule ^ru(/?)(.*) index_ru.html [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule . /index.html [L]
@@ -27,3 +28,4 @@ Header set X-Content-Type-Options nosniff
   Header set Cache-Control "max-age=2592000"
 </FilesMatch>
 </IfModule>
+
