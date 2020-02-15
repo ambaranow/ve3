@@ -96,14 +96,25 @@ export class AppComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
     this.localize.changeLanguage(lang);
   }
 
+  closeSnackBar() {
+    localStorage.setItem('gdprAgree','true');
+    this._snackBar.dismiss();
+  }
+
   openSnackBar() {
-    this.translateService.get('GDPR.BAR').subscribe(message => {
-      this._snackBar.openFromComponent(GdprComponent, {
-        duration: 30 * 24 * 60 * 60 * 1000,
-        data: {
-          message: this.sanitizer.bypassSecurityTrustHtml(message)
-        }
+    const isAgree = localStorage.getItem('gdprAgree');
+    if (!isAgree) {
+      this.translateService.get('GDPR.BAR').subscribe(message => {
+        this._snackBar.openFromComponent(GdprComponent, {
+          duration: 30 * 24 * 60 * 60 * 1000,
+          data: {
+            message: this.sanitizer.bypassSecurityTrustHtml(message),
+            close: () => {
+              this.closeSnackBar();
+            }
+          }
+        });
       });
-    });
+    }
   }
 }

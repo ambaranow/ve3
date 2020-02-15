@@ -42,11 +42,10 @@
             class="material-icons">
             home
           </i></a> -->
-        <a
-          mat-list-item
-          (click)="snav.close()"
-          [routerLinkActive]="['router-link-active']"
+        <a mat-list-item (click)="snav.close()" [routerLinkActive]="['router-link-active']"
           [routerLink]="'/video' | localize">{{ 'NAV.VIDEO' | translate }}</a>
+        <a mat-list-item (click)="snav.close()" [routerLinkActive]="['router-link-active']"
+          [routerLink]="'/privacy' | localize">{{ 'NAV.PRIVACY' | translate }}</a>
       </mat-nav-list>
     </mat-sidenav>
 

@@ -15,4 +15,8 @@ export class GdprComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  close() {
+    this.data.close();
+  }
+
 }

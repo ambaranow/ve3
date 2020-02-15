@@ -26,13 +26,15 @@ import { AdsenseModule } from 'ng2-adsense';
 import { GdprComponent } from './components/gdpr/gdpr.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { PrivacyPageComponent } from './components/gdpr/privacy-page/privacy-page.component';
+import { ArticleComponent } from './components/article/article.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoaderComponent,
     GdprComponent,
-    PrivacyPageComponent
+    PrivacyPageComponent,
+    ArticleComponent
   ],
   imports: [
     BrowserModule,

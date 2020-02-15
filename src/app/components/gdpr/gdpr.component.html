@@ -1,1 +1,12 @@
-<div [innerHTML]="data.message"></div>
+<div class="gdpr">
+  <button mat-raised-button
+    class="gdpr-button"
+    (click)="close()"
+  >
+    OK
+  </button>
+
+  <div
+    class="gdpr-text" 
+    [innerHTML]="data.message"></div>
+</div>

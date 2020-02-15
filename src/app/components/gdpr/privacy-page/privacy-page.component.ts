@@ -20,10 +20,10 @@ export class PrivacyPageComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.translateService.stream(['GDPR.TITLE','GDPR.TEXT']).subscribe(gdpr => {
-      this.title = gdpr['GDPR.TITLE'];
-      this.text = this.sanitizer.bypassSecurityTrustHtml(gdpr['GDPR.TEXT']);
-    });
+      this.translateService.stream(['GDPR.TITLE', 'GDPR.TEXT']).subscribe(gdpr => {
+        this.title = gdpr['GDPR.TITLE'];
+        this.text = this.sanitizer.bypassSecurityTrustHtml(gdpr['GDPR.TEXT']);
+      });
   }
 
 }

@@ -1,0 +1,25 @@
+.article-card {
+  margin: 30px auto 50px auto;
+  // width: 80vw;
+
+  .mat-card-content {
+    font-size: 16px;
+    h2 {
+      font-size: 19px;
+    }
+    h3 {
+      font-size: 18px;
+    }
+    h4 {
+      font-size: 17px;
+    }
+  }
+
+  .mat-card-header-text {
+    margin: 0;
+  }
+  .mat-card-title h1 {
+    margin: 0;
+    font-size: inherit;
+  }
+}

@@ -116,9 +116,15 @@ button {
     padding: 7px 20px;
     min-height: 24px;
     transform-origin: center;
-    background-color: #fff;
-    color: #333;
+    background-color: #222;
+    color: #fff;
     font-size: 14px;
     line-height: 1.5;
+    a, a:link, a:visited {
+      color: #ffcc0b;
+    }
+    a:hover, a:active {
+      color: #f44336;
+    }
   }
 }
