@@ -8,7 +8,14 @@
     "COMINGSOON": "Coming soon!"
   },
   "VIDEOPAGE": {
-    "PAGETITLE": "Video"
+    "PAGETITLE": "Video",
+    "PAGE": {
+      "CUT": "In this section you can cut a fragment from a small video. Select the beginning and end of the fragment. If necessary, you can remove the sound from the video. Press the big yellow button, wait until the work is completed. Get a link to a file with a fragment of your video, click the big green button.",
+      "REVERSE": "In this section, you can make a short video play backwards. It can be fun. If necessary, you can remove the sound from the video. Press the big yellow button, wait until the work is completed. Get a link to a file with a fragment of your video, click the big green button.",
+      "EXTRACTAUDIO": "In this section, you can extract the audio track from the video. Press the large yellow button, wait until the work is completed. Get a link to the file with the audio track from your video, click the big green button.",
+      "REMOVEAUDIO": "In this section, you can remove the audio track from the video. Press the large yellow button, wait until the work is completed. Get a link to a copy of your video without an audio track, click the big green button.",
+      "REMEMBER": "Remember: your files are not sent to any server, all conversions occur only in your browser: open the file, choose what you want to do, start processing, get a link to a new file."
+    }
   },
   "BUTTONS": {
     "REVERSE": "Reverse",
