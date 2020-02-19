@@ -37,7 +37,7 @@ export class VideoWorkService {
   }
 
   log(mess) {
-    // console.log(mess);
+    console.log(mess);
   }
   async init() {
     const start = (new Date()).getTime();
@@ -67,7 +67,9 @@ export class VideoWorkService {
     this.log('Duration init() = ' + this.helpersService.ms2TimeString(end - start));
   }
 
-  async getFileInfo(f: VideoObj) {
+  async getFileInfo(f: VideoObj, forceDecode=false) {
+    // forceDecode - если видео-проигрыватель не может получить файл
+    // принудительно декодируем его в mp4
     // this.log('getFileInfo')
     const start = (new Date()).getTime();
     const previewFileName = this.helpersService.getSourcePreviewFileName();
@@ -76,23 +78,20 @@ export class VideoWorkService {
       // write source
     }
     await this.worker.write(f.file.name, f.file);
-
     let result: any = {};
     const messSubscriber = this.message.subscribe(res => {
       if (res) {
         const resObj = this.helpersService.parseMessageToJson(res.message);
-        // this.log(res)
         result = {...result, ...resObj};
       }
     });
-    const isCopy = this.helpersService.getExtension(f.file.name) === 'mp4' ?
-                  '-c copy -async 1' : '';
-    // this.log('isCopy = ' + isCopy)
-    // this.log('outputFileName = ' + outputFileName)
+    const isCopy = this.helpersService.getExtension(f.file.name) === 'mp4' && !forceDecode ?
+                  '-c copy' : '';
     await this.worker.run(`
       -i ${f.file.name} \
       -hide_banner \
       -loglevel info \
+      -async 1 \
       ${isCopy} \
       -y ${previewFileName}
       `);

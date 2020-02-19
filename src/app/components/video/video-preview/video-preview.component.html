@@ -3,10 +3,11 @@
   <div class="video-preview">
     <div class="video-wrapper">
       <mat-progress-bar
-        *ngIf="progress > 0 && progress < 100 && previewVideo?.src"
+        *ngIf="progress > 0 && progress < 100"
         class="video-load"
         mode="determinate"
         [value]="progress"
+        color="warn"
         ></mat-progress-bar>
 
       <p *ngIf="!previewVideo?.src"

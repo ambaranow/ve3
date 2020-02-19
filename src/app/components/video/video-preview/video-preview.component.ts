@@ -4,6 +4,8 @@ import { VideoObj } from '@models/video-obj';
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { VideoPlayerService } from '@services/video-player.service';
+import { ViewService } from '@services/view.service';
+import { VideoWorkService } from '@services/video-work.service';
 
 @Component({
   selector: 'ads-video-preview',
@@ -15,10 +17,12 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
 
   previewVideo: VideoObj;
   player;
+  playerInited = false;
   subs: Subscription[] = [];
   duration: number = undefined;
   progress: number = undefined;
 
+  loadStartBinded;
   setPlayerBinded;
   setDurationBinded;
   timeUpdateBinded;
@@ -29,9 +33,12 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
   @Input() controls = true;
 
   constructor(
+    private viewService: ViewService,
     private videoFileService: VideoFileService,
     private videoPlayerService: VideoPlayerService,
+    private videoWorkService: VideoWorkService,
   ) {
+    this.loadStartBinded = this.loadStart.bind(this);
     this.setPlayerBinded = this.setPlayer.bind(this);
     this.setDurationBinded = this.setDuration.bind(this);
     this.timeUpdateBinded = this.timeUpdate.bind(this);
@@ -62,7 +69,6 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
   timeUpdate(e) {
     const t = e.target.currentTime;
     this.progress = t * 100 / this.duration;
-    // console.log('timeUpdate ' + t + ' | duration' + this.duration + ' | progress ' + this.progress)
   }
 
   pauseEvent(e) {
@@ -84,6 +90,8 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
           this.player.currentTime = t;
         })
     );
+    this.playerInited = true;
+    this.viewService.loaderOff();
   }
 
   setDuration(e) {
@@ -104,6 +112,25 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
     this.progress = undefined;
   }
 
+  loadStart() {
+    // началась загрузка файла
+    this.viewService.loaderOn();
+    setTimeout(() => {
+      if (!this.playerInited) {
+        // проигрыватель не получил metadata и не ответил в течение 10 сек.
+        // наверное, битый mp4, пересоберем его
+        this.previewVideo = undefined
+        this.videoWorkService.progress.subscribe(res => {
+          this.progress = res;
+        })
+        this.videoWorkService.getFileInfo(this.videoFileService.getSource(), true).then(r => {
+          this.viewService.loaderOff();
+        }).finally(() => {
+        });
+      }
+    }, 10000);
+  }
+
   init() {
     this.subs.push(
       this.videoFileService[this.id + 'PreviewVideoSubj'].subscribe(f => {
@@ -116,8 +143,30 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
             setTimeout(() => {
               this.player = this.videoParent.nativeElement.querySelector('video');
               if (this.player) {
+                // this.player.addEventListener('error', () => {
+                //   console.log('>>> error')
+                // });
+                // this.player.addEventListener('stalled', () => {
+                //   console.log('>>> stalled')
+                // });
+                // this.player.addEventListener('suspend', () => {
+                //   console.log('>>> suspend')
+                // });
+                // this.player.addEventListener('waiting', () => {
+                //   console.log('>>> waiting')
+                // });
+                // this.player.addEventListener('abort', () => {
+                //   console.log('>>> abort')
+                // });
+                // this.player.addEventListener('encrypted', () => {
+                //   console.log('>>> encrypted')
+                // });
+                // this.player.addEventListener('loadstart', () => {
+                //   console.log('>>> loadstart')
+                // });
+                this.player.addEventListener('loadstart', this.loadStartBinded);
                 this.player.addEventListener('durationchange', this.setDurationBinded);
-                this.player.addEventListener('loadeddata', this.setPlayerBinded);
+                this.player.addEventListener('loadedmetadata', this.setPlayerBinded);
                 this.player.addEventListener('timeupdate', this.timeUpdateBinded);
                 this.player.addEventListener('pause', this.pauseEventBinded);
                 this.subs.push(
