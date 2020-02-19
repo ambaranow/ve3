@@ -71,6 +71,8 @@ export class ExtractAudioComponent implements OnInit, OnDestroy {
       this.videoPlayerService.player.source.playerSubj.subscribe(player => {
         if (player) {
           this.player = player;
+          this.videoPlayerService.player.source.currentTimeSubj.next(0);
+          this.videoPlayerService.pause('source');
           this.viewService.loaderOff();
         }
       })

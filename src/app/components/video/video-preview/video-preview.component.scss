@@ -19,6 +19,21 @@
       top: 0;
       color: #fff;
     }
+    &__console {
+      position: absolute;
+      width: 100%;
+      height: calc(100% - 3em);
+      top: 2em;
+      left: 0;
+      overflow-x: hidden;
+      overflow-y: auto;
+      background-color: #000;
+      color: #04e489;
+      font-size: 11px;
+      pre {
+        margin: 0 2px;
+      }
+    }
   }
   &-wrapper {
     padding-bottom: 56.25%;

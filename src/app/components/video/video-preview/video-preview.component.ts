@@ -21,6 +21,7 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
   subs: Subscription[] = [];
   duration: number = undefined;
   progress: number = undefined;
+  console = '';
 
   loadStartBinded;
   setPlayerBinded;
@@ -47,6 +48,10 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
 
   @ViewChild('videoEl', {static: false})
   private videoParent: ElementRef;
+
+  @ViewChild('consoleEl', {static: false})
+  private consoleEl: ElementRef;
+
 
   ngOnInit() {
     this.init();
@@ -110,6 +115,7 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
     this.previewVideo = null;
     this.duration = undefined;
     this.progress = undefined;
+    this.console = '';
   }
 
   loadStart() {
@@ -119,7 +125,8 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
       if (!this.playerInited) {
         // проигрыватель не получил metadata и не ответил в течение 10 сек.
         // наверное, битый mp4, пересоберем его
-        this.previewVideo = undefined
+        this.previewVideo = undefined;
+        this.reset();
         this.videoWorkService.progress.subscribe(res => {
           this.progress = res;
         })
@@ -131,7 +138,26 @@ export class VideoPreviewComponent implements OnInit, OnDestroy {
     }, 10000);
   }
 
+
+  formatConsole(text) {
+    text = text.trim();
+    const res = text.match(/.{1,80}/g);
+    return res.join('\n');
+  }
+
   init() {
+    this.console = '';
+    this.subs.push(
+      this.videoWorkService.message.subscribe(res => {
+        if (res) {
+          this.console += this.formatConsole(res.message) + '\n';
+          if (this.consoleEl) {
+            this.consoleEl.nativeElement.scrollTop =
+            this.consoleEl.nativeElement.scrollHeight - this.consoleEl.nativeElement.clientHeight;
+          }
+        }
+      })
+    );
     this.subs.push(
       this.videoFileService[this.id + 'PreviewVideoSubj'].subscribe(f => {
         if (this.player) {

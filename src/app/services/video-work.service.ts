@@ -37,7 +37,7 @@ export class VideoWorkService {
   }
 
   log(mess) {
-    console.log(mess);
+    // console.log(mess);
   }
   async init() {
     const start = (new Date()).getTime();

@@ -10,11 +10,6 @@
         color="warn"
         ></mat-progress-bar>
 
-      <p *ngIf="!previewVideo?.src"
-        class="video-preview__read">
-        {{ 'PREVIEW.STILLREAD' | translate }}...
-      </p>
-
       <div #videoEl class="video-parent">
         <video
           *ngIf="previewVideo && previewVideo.src"
@@ -28,6 +23,19 @@
             [src]="previewVideo.src"
             type="{{previewVideo.type}}" />
         </video>
+      </div>
+
+      <div
+        *ngIf="1==1 || !previewVideo?.src">
+        <p
+          class="video-preview__read">
+          {{ 'PREVIEW.STILLREAD' | translate }}...
+        </p>
+        <div #consoleEl class="video-preview__console">
+          <pre>
+            {{ console }}
+          </pre>
+        </div>
       </div>
 
     </div>
